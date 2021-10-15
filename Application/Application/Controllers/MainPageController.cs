@@ -8,7 +8,8 @@ namespace Application.Controllers
         public ActionResult Index()  => View();
         
         [HttpPost]
-        public string GetHoursInfo(List<StudyHoursInfo> model) => "Oтправлено";
-        
+        public ActionResult GetEntitiesInfo(List<StudyHoursInfo> model) => Connect();
+
+        public ActionResult Connect() => View();
     }
 }
