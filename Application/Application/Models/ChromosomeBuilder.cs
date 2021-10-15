@@ -14,7 +14,7 @@ namespace Application
         public string CourseId { get; set; }
         public string PlaceId { get; set; }
         public string TeacherId { get; set; }
-        public List<string> Students { get; set; }
+        public List<string> Groups { get; set; }
         public int Day { get; set; }
     }
     
@@ -55,7 +55,7 @@ namespace Application
                 {
                     yield return new TimeSlotChromosome()
                     {
-                        Students = course.Students.Select(student => student.StudentId).ToList(),
+                        Groups = course.Students.Select(student => student.StudentId).ToList(),
                         CourseId = course.Id,
                         StartAt = RandomStartTime(),
                         PlaceId = _dataContext.Places.OrderBy(place => Guid.NewGuid()).FirstOrDefault().Id,
@@ -125,7 +125,7 @@ namespace Application
                     score -= overLaps.GroupBy(slot => slot.TeacherId).Sum(x=>x.Count()-1);
                     score -= overLaps.GroupBy(slot => slot.PlaceId).Sum(x => x.Count()-1);
                     score -= overLaps.GroupBy(slot => slot.CourseId).Sum(x => x.Count()-1);
-                    score -= overLaps.Sum(item => item.Students.Intersect(value.Students).Count());
+                    score -= overLaps.Sum(item => item.Groups.Intersect(value.Groups).Count());
                 }
 
                 score -= values.GroupBy(v => v.Day).Count() * 0.5;
