@@ -10,9 +10,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Application
 {
-    class DemoProgram
+    public class GeneticAlgorithm : ITimetableMaker
     {
-        static void DemoMain(string[] args) //Demo чтобы не было ошибок, а так это потенциальный main для алгоритмов
+        public void Start()  //(string[] args) Demo чтобы не было ошибок, а так это потенциальный main для алгоритмов
         {
 
             using (var dataContext = new DataContext())
@@ -44,8 +44,6 @@ namespace Application
                 dataContext.TimeSlots.AddRange(timetable);
                 dataContext.SaveChanges();
             }
-
-
         }
     }
 }

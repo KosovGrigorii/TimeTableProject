@@ -25,10 +25,9 @@ namespace Application
         public List<TimeSlot> TimeSlots { get; set; }
     }
 
-    public class Student : Entity
+    public class Group : Entity
     {
         public string Name { get; set; }
-        public string Email { get; set; }
         public List<StudentCourse> Courses { get; set; }
         public List<TimeSlot> TimeSlots { get; set; }
     }
@@ -38,7 +37,7 @@ namespace Application
         public string CourseId { get; set; }
         public string StudentId { get; set; }
 
-        public Student Student { get; set; }
+        public Group Group { get; set; }
         public Course Course { get; set; }
 
     }
@@ -58,6 +57,6 @@ namespace Application
         public Place Place { get; set; }
         public string CourseId { get; set; }
         public Course Course { get; set; }
-        public List<Student> Students { get; set; }
+        public List<Group> Groups { get; set; }
     }
 }
