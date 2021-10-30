@@ -1,8 +1,8 @@
-namespace Application
+namespace TimetableApplication
 {
     public interface IOutputFormatter
     {
         void ReadTimeslots();
-        void UploadOutputFile();
+        byte[] GetOutputFile();
     }
 }

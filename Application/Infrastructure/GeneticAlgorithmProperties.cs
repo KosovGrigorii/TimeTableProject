@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 
 
-namespace Application
+namespace Infrastructure
 {
-    public class Entity
+    public class DbEntity
     {
         public string Id { get; set; }
     }
 
-    public class Course : Entity
+    public class Course : DbEntity
     {
         public string Title { get; set; }
         public List<TimeSlot> Slots { get; set; }
@@ -19,13 +19,13 @@ namespace Application
 
     }
 
-    public class Place : Entity
+    public class Place : DbEntity
     {
         public string Name { get; set; }
         public List<TimeSlot> TimeSlots { get; set; }
     }
 
-    public class Group : Entity
+    public class Group : DbEntity
     {
         public string Name { get; set; }
         public List<StudentCourse> Courses { get; set; }
@@ -42,13 +42,13 @@ namespace Application
 
     }
 
-    public class Teacher : Entity
+    public class Teacher : DbEntity
     {
         public List<Course> Courses { get; set; }
         public string Name { get; set; }
     }
 
-    public class TimeSlot : Entity
+    public class TimeSlot : DbEntity
     {
         public DayOfWeek Day { get; set; }
         public TimeSpan Start { get; set; }

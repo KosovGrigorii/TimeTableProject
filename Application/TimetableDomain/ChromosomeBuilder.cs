@@ -5,26 +5,14 @@ using Accord.Genetic;
 using Microsoft.EntityFrameworkCore;
 
 
-namespace Application
+namespace TimetableDomain
 {
-    struct TimeSlotChromosome
-    {
-        public TimeSpan StartAt { get; set; }
-        public TimeSpan EndAt => StartAt.Add(TimeSpan.FromHours(3));
-        public string CourseId { get; set; }
-        public string PlaceId { get; set; }
-        public string TeacherId { get; set; }
-        public List<string> Groups { get; set; }
-        public int Day { get; set; }
-    }
-    
-    
-    class TimeTableChromosome:ChromosomeBase
+    class TimeTableChromosome : ChromosomeBase
     {
         private readonly DataContext _dataContext;
         static Random Random=new Random();
 
-        static TimeSpan  RandomStartTime()
+        static TimeSpan RandomStartTime()
         {
             return TimeSpan.FromMilliseconds(Random.Next((int) TimeSpan.FromHours(9).TotalMilliseconds,
                 (int) TimeSpan.FromHours(17).TotalMilliseconds));
