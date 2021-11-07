@@ -1,0 +1,6 @@
+@using (Html.BeginForm())
+{
+    @Html.DropDownList(
+        "filter",
+        new SelectList(new []{"One", "Two"}))
+}

@@ -1,12 +1,43 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using TimetableApplication;
 
-namespace PreviousVersion.Controllers
+namespace UserInterface
 {
     public class MainPageController : Controller
     {
         public ActionResult Index()  => View();
+
+        [HttpGet]
+        public IActionResult FiltersInput()
+        {
+            var filterTypes = new List<string>
+            {
+                "Whole university", 
+                "Teacher", 
+                "Group"
+            };
+            ViewBag.FilterTypres = new SelectList(filterTypes);
+            return View();
+        }
+        
+        [HttpPost]
+        public IActionResult OnFilterTypeInput(string filterType)
+        {
+            var typeToFilter = new Dictionary<string, SelectList>
+            {
+                {"Teacher", new SelectList(new[] {"T1", "T2", "T3"})},
+                {"Group", new SelectList(new[] {"First", "Second", "Third"})}
+            };
+            return PartialView("FiltersInput", typeToFilter[filterType]);
+        }
+
+        [HttpGet]
+        public void GetSpecifiedFilters(string filterType)
+        {
+            ViewBag.Filters = new SelectList(new [] {"One", "Oopsie", "Outro"});
+        }
 
             //[HttpPost]
         public string GetHoursInfo() //input

@@ -1,0 +1,30 @@
+@page
+@using System.Web.Mvc.Ajax
+
+@{
+    Layout = "_Layout";
+    var ajaxOptions = new AjaxOptions
+    {
+        HttpMethod = "POST",
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "specifiedFilter"
+    };
+}
+
+<div>
+    <h1>Add limitations of working hours</h1>
+    <div>
+        <div>
+            @using (Html.BeginForm("OnFilterTypeInput", "MainPage"))
+                    {
+                        @Html.DropDownList(
+                            "filterType",
+                            ViewBag.FilterTypres as SelectList,
+                            "Choose filter type",
+                            new {onchange = "this.form.submit()"})
+                    }
+        </div>
+        <div id="specifiedFilter">
+        </div>
+    </div>
+</div>
