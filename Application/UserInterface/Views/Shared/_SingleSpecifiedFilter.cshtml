@@ -1,6 +1,14 @@
-@using (Html.BeginForm())
-{
-    @Html.DropDownList(
-        "filter",
-        new SelectList(new []{"One", "Two"}))
-}
+@model IEnumerable<string>
+
+<div>
+    <input list="filtered" type="text" placeholder="Name"/>
+    <datalist id="filtered">
+        @foreach (var item in Model)
+        {
+            <option value="@item"></option>
+        }
+    </datalist>
+</div>
+<div>
+    <input type="text" placeholder="Hours amount"/>
+</div>

@@ -18,28 +18,22 @@ namespace UserInterface
                 "Teacher", 
                 "Group"
             };
-            ViewBag.FilterTypres = new SelectList(filterTypes);
+            ViewBag.FilterTypes = new SelectList(filterTypes);
             return View();
         }
-        
+
         [HttpPost]
-        public IActionResult OnFilterTypeInput(string filterType)
+        public PartialViewResult GetFiltersInputField(string filterKey)
         {
-            var typeToFilter = new Dictionary<string, SelectList>
+            var typeToFilter = new Dictionary<string, List<string>>
             {
-                {"Teacher", new SelectList(new[] {"T1", "T2", "T3"})},
-                {"Group", new SelectList(new[] {"First", "Second", "Third"})}
+                {"Teacher", new List<string>{"T1", "T2", "T3"}},
+                {"Group", new List<string>{"First", "Second", "Third"}}
             };
-            return PartialView("FiltersInput", typeToFilter[filterType]);
+            return PartialView("_SingleSpecifiedFilter", typeToFilter[filterKey]);
         }
 
-        [HttpGet]
-        public void GetSpecifiedFilters(string filterType)
-        {
-            ViewBag.Filters = new SelectList(new [] {"One", "Oopsie", "Outro"});
-        }
-
-            //[HttpPost]
+        //[HttpPost]
         public string GetHoursInfo() //input
         {
             var inputTime = new byte[] {};
