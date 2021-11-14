@@ -22,6 +22,18 @@ namespace UserInterface
             return View();
         }
 
+        public PartialViewResult GetFiltersInputForm(string elementId)
+        {
+            var filterTypes = new List<string>
+            {
+                "Whole university", 
+                "Teacher", 
+                "Group"
+            };
+            ViewBag.FilterTypes = new SelectList(filterTypes);
+            return PartialView("_SingleFilter", elementId);
+        }
+
         [HttpPost]
         public PartialViewResult GetFiltersInputField(string filterKey)
         {

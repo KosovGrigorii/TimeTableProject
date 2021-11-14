@@ -6,29 +6,37 @@
 
 <div>
     <h1>Add limitations of working hours</h1>
-    <div>
-        <form>
-            <div>
-                @Html.DropDownList(
-                    "filterType",
-                    ViewBag.FilterTypes as SelectList,
-                    "Choose filter type",
-                    new {onchange = "filterInputField('specifiedFilter', this.value)"})
-            </div>
-            <div id="specifiedFilter"></div>
-        </form>
-    </div>
+    <form id="filters"></form>
+    <input type="button" onclick="AddInputDiv()" value="+"/>
 </div>
 
 <script>
-function filterInputField(divToInsert, input) {
-        $.ajax({
-            url: '@Url.Action("GetFiltersInputField", "MainPage")',
-            data: {filterKey: input},
-            type: "POST",
-            success: function(data) {
-                $('#' + divToInsert).html(data);
-            }
-        })
-    }
+function filterInputField(div_to_insert, input) {
+    $.ajax({
+        url: '@Url.Action("GetFiltersInputField", "MainPage")',
+        data: {filterKey: input},
+        type: "POST",
+        success: function(data) {
+            $('#' + div_to_insert).html(data);
+        }
+    })
+}
+    
+function AddInputDiv(){
+    var filterForm = document.getElementById('filters');
+    var div = document.createElement('div');
+    var insert_id = filterForm.childElementCount.toString();
+    div.id = insert_id;
+    filterForm.appendChild(div);
+    $.ajax({
+        url: '@Url.Action("GetFiltersInputForm", "MainPage")',
+        data: {elementId: insert_id},
+        success: function (data) {  
+            $('#' + insert_id).html(data);  
+        }  
+    })
+    return false;
+}
+
+$(window).ready(AddInputDiv());
 </script>
