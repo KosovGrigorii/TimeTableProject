@@ -1,15 +1,13 @@
-@model string
-
 @{
-    var dropdownId = "filterType" + Model;
-    var filterId = "specifiedFilter" + Model;
+    var filterId = "specifiedFilter" + ViewBag.Index;
+    var modelPartId = "filters[" + ViewBag.Index + "].Category";
 }
 
 <div>
     @Html.DropDownList(
-        dropdownId,
+        modelPartId,
         ViewBag.FilterTypes as SelectList,
         "Choose filter type",
-        new {onchange = "filterInputField('" + filterId + "', this.value)"})
+        new {onchange = "filterInputField('" + filterId + "', this.value, " + ViewBag.Index + ")"})
 </div>
 <div id="@filterId"></div>

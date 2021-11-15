@@ -1,4 +1,6 @@
 @page
+@using TimetableApplication
+@model Filter
 
 @{
     Layout = "_Layout";
@@ -6,15 +8,19 @@
 
 <div>
     <h1>Add limitations of working hours</h1>
-    <form id="filters"></form>
-    <input type="button" onclick="AddInputDiv()" value="+"/>
+    @using (Html.BeginForm("GetFilters", "MainPage", FormMethod.Post))
+    {
+        <div id="filtersForm"></div>
+        <input type="button" onclick="AddInputDiv()" value="+"/>
+        <div><input type="submit" value="Submit"/></div>
+    }
 </div>
 
 <script>
-function filterInputField(div_to_insert, input) {
+function filterInputField(div_to_insert, input, insert_index) {
     $.ajax({
         url: '@Url.Action("GetFiltersInputField", "MainPage")',
-        data: {filterKey: input},
+        data: {filterKey: input, elementId: insert_index},
         type: "POST",
         success: function(data) {
             $('#' + div_to_insert).html(data);
@@ -23,7 +29,7 @@ function filterInputField(div_to_insert, input) {
 }
     
 function AddInputDiv(){
-    var filterForm = document.getElementById('filters');
+    var filterForm = document.getElementById('filtersForm');
     var div = document.createElement('div');
     var insert_id = filterForm.childElementCount.toString();
     div.id = insert_id;
@@ -38,5 +44,5 @@ function AddInputDiv(){
     return false;
 }
 
-$(window).ready(AddInputDiv());
+(window).ready(AddInputDiv());
 </script>
