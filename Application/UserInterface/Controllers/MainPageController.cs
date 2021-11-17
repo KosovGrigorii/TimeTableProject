@@ -57,9 +57,10 @@ namespace UserInterface
             timetableMaker.StartMakingTimeTable(filters);
         }
 
-        public string GetResultTimetable()
+        [HttpPost]
+        public void PostOutputFormat(string format)
         {
-            return "View4 - result"; //файл из хранилища
+            //Return partial view with file.
         }
     }
 }
