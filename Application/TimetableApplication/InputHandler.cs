@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Infrastructure;
+using TimetableDomain;
 
 namespace TimetableApplication
 {
@@ -12,8 +13,8 @@ namespace TimetableApplication
             var parser = new XlsxInputParser(); //inputFormat
             //var entities = 
             parser.ParseFile(input);
-            var entities = new List<DbEntity>();
-            DBShell.Input(entities);
+            var entities = new List<Entity>();
+            //DBShell.Input(entities); добавить в базу сущностей 
         }
     }
 }

@@ -10,7 +10,8 @@ namespace TimetableDomain
         public string CourseId { get; set; }
         public string PlaceId { get; set; }
         public string TeacherId { get; set; }
-        public List<string> Groups { get; set; }
+        
+        public int Group { get; set; }
         public int Day { get; set; }
     }
 }

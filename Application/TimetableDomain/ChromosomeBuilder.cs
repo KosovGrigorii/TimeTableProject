@@ -9,8 +9,11 @@ namespace TimetableDomain
 {
     class TimeTableChromosome : ChromosomeBase
     {
-        private readonly DataContext _dataContext;
+        //private readonly IEnumerable<Entity> _dataContext;
         static Random Random=new Random();
+        private DbSet<Course> dataCourses;
+        private DbSet<Class> dataClasses;
+        
 
         static TimeSpan RandomStartTime()
         {
@@ -21,32 +24,34 @@ namespace TimetableDomain
 
         public List<TimeSlotChromosome> Value;
 
-        public TimeTableChromosome(DataContext dataContext)
+        public TimeTableChromosome(DbSet<Course> courses, DbSet<Class> classes)
         {
-            _dataContext = dataContext;
+            dataCourses = courses;
+            dataClasses = classes;
             Generate();
         }
-        public TimeTableChromosome(List<TimeSlotChromosome> slots, DataContext dataContext)
+        public TimeTableChromosome(List<TimeSlotChromosome> slots, DbSet<Course> courses, DbSet<Class> classes)
         {
-            _dataContext = dataContext;
+            dataCourses = courses;
+            dataClasses = classes;
             Value = slots.ToList();
         }
         public override void Generate()
         {
             IEnumerable<TimeSlotChromosome> generateRandomSlots()
             {
-                var courses = _dataContext.Courses
+                var courses = dataCourses
                     .Include(course => course.Teacher)
-                    .Include(course => course.Students).ToList();
+                    .Include(course => course.Groups).ToList();
 
                 foreach (var course in courses)
                 {
                     yield return new TimeSlotChromosome()
                     {
-                        Groups = course.Students.Select(student => student.StudentId).ToList(),
+                        Group = course.Groups.OrderBy(group => Guid.NewGuid()).FirstOrDefault().GroupNumber,
                         CourseId = course.Id,
                         StartAt = RandomStartTime(),
-                        PlaceId = _dataContext.Places.OrderBy(place => Guid.NewGuid()).FirstOrDefault().Id,
+                        PlaceId = dataClasses.OrderBy(_class => Guid.NewGuid()).FirstOrDefault().Id,
                         TeacherId = course.Teacher.Id,
                         Day=Random.Next(1,5)
                     };
@@ -59,14 +64,14 @@ namespace TimetableDomain
 
         public override IChromosome CreateNew()
         {
-            var timeTableChromosome = new TimeTableChromosome(_dataContext);
+            var timeTableChromosome = new TimeTableChromosome(dataCourses, dataClasses);
             timeTableChromosome.Generate();
             return timeTableChromosome;
         }
 
         public override IChromosome Clone()
         {
-            return new TimeTableChromosome(Value,_dataContext);
+            return new TimeTableChromosome(Value, dataCourses, dataClasses);
         }
 
         public override void Mutate()
@@ -113,7 +118,8 @@ namespace TimetableDomain
                     score -= overLaps.GroupBy(slot => slot.TeacherId).Sum(x=>x.Count()-1);
                     score -= overLaps.GroupBy(slot => slot.PlaceId).Sum(x => x.Count()-1);
                     score -= overLaps.GroupBy(slot => slot.CourseId).Sum(x => x.Count()-1);
-                    score -= overLaps.Sum(item => item.Groups.Intersect(value.Groups).Count());
+                    score -= overLaps.GroupBy(slot => slot.Group).Sum(x => x.Count()-1);
+                    //score -= overLaps.Sum(item => item.Group.Intersect(value.Groups).Count());
                 }
 
                 score -= values.GroupBy(v => v.Day).Count() * 0.5;

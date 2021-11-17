@@ -1,15 +1,16 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure
 {
     public class DBShell
     {
-        public static void Input(IEnumerable<DbEntity> content)
-        {
+        //public static void Input(IEnumerable<Entity> content)
+        //{
             //Добавление в базу
-            throw new NotImplementedException();
-        }
+        //    throw new NotImplementedException();
+        //}
 
         public static IEnumerable<string> GetGroups()
         {
@@ -21,10 +22,10 @@ namespace Infrastructure
             throw new NotImplementedException();
         }
 
-        public static IEnumerable<DbEntity> GetAll()
-        {
-            throw new NotImplementedException();
-        }
+        //public static DataContext GetAll()
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public static void AddFilters()
         {
