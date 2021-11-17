@@ -9,4 +9,8 @@
       <ProjectReference Include="..\TimetableDomain\TimetableDomain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="EPPlus" Version="5.8.2" />
+    </ItemGroup>
+
 </Project>
