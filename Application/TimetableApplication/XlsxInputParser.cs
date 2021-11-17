@@ -4,7 +4,7 @@ namespace TimetableApplication
 {
     public class XlsxInputParser : IInputParser
     {
-        public void ParseFile(byte[] input)
+        public void ParseFile()
         {
             throw new System.NotImplementedException();
         }

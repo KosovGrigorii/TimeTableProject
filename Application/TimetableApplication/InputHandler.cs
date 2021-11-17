@@ -11,10 +11,9 @@ namespace TimetableApplication
         public static void ParseInput(byte[] input, string inputFormat)
         {
             var parser = new XlsxInputParser(); //inputFormat
-            //var entities = 
-            parser.ParseFile(input);
-            var entities = new List<Entity>();
-            //DBShell.Input(entities); добавить в базу сущностей 
+            parser.ParseFile(); //input передать в аргументы
+            //? Либо база заполняется чразу IInputParser'ом, либо он возвращает
+            //много сущностей, которыми заполняется база
         }
     }
 }

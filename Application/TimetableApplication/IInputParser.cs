@@ -4,6 +4,6 @@ namespace TimetableApplication
 {
     public interface IInputParser
     {
-        void ParseFile(byte[] input); //IEnumerable<> сущностей для заполнения базы
+        void ParseFile(); //IEnumerable<> сущностей для заполнения базы, принимаемый тип: выяснить, что возможно вернуть, не сохраняя файл
     }
 }

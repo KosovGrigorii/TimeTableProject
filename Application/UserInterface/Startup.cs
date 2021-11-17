@@ -34,7 +34,7 @@ namespace UserInterface
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=MainPage}/{action=FiltersInput}/{id?}");
+                    pattern: "{controller=MainPage}/{action=Index}/{id?}");
             });
         }
     }

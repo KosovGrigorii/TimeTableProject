@@ -1,6 +1,4 @@
 ﻿@page
-@using TimetableApplication
-@model StudyHoursInfo
 
 @{
     Layout = "_Layout";
@@ -11,38 +9,15 @@
 <html>
 <head>
     <title>Timetable creator</title>
-    <script type="text/javascript">
-    function GetDinamicRow(rowIndex){
-        return '<td><input type="text" required name="model[' + rowIndex + '].Group"/>' +
-        '</td><td><input type="text" required name="model[' + rowIndex + '].Teacher"/>' +
-        '</td><td><input type="text" required name="model[' + rowIndex + '].Subject"/>' +
-        '</td><td><input type="text" required name="model[' + rowIndex + '].Hours"/></td>'
-        }
-    function AddInputRow(){
-        var table = document.getElementById("hoursTable");
-        var tr = document.createElement('TR');
-        tr.innerHTML = GetDinamicRow(table.rows.length - 1);
-        table.appendChild(tr);
-    }
-    </script>
 </head>
 <body>
-<form method="post" action="/MainPage/GetHoursInfo">
-    <input type="hidden" name="HoursItem" />
-    <table id="hoursTable">
-        <tr><td><p>Номер группы</p></td>
-            <td><p>Имя преподавателя</p></td>
-            <td><p>Предмет</p></td>
-            <td><p>Кол-во часов в неделю</p></td></tr>
-        <tr>
-            <td><input type="text" required name="model[0].Group"/> </td>
-            <td><input type="text" required name="model[0].Teacher"/> </td>
-            <td><input type="text" required name="model[0].Subject"/> </td>
-            <td><input type="text" required name="model[0].Hours"/> </td>
-        </tr>
-    </table>
-    <div><input type="button" onclick="AddInputRow()" value="+"/></div>
-    <div><input type="submit" value="Отправить" /></div>
-</form>
+
+@using (Html.BeginForm("GetExcelInput", "MainPage", FormMethod.Post))
+    {
+        <div id="filtersForm"></div>
+        <input type="file" id="ExcelFileUpload" class="file" accept=".xlsx">  
+        <input type="submit" value="Submit"/>
+    }
+
 </body>
 </html>
