@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using TimetableApplication;
 
-namespace PreviousVersion.Controllers
+namespace UserInterface
 {
     public class MainPageController : Controller
     {
         public ActionResult Index()  => View();
-
-            //[HttpPost]
-        public string GetHoursInfo() //input
+        
+        public IActionResult GetHoursInfo() //input
         {
             var inputTime = new byte[] {};
             var format = ".sthg";
@@ -20,15 +20,42 @@ namespace PreviousVersion.Controllers
             //var inputHandler = new InputHandler();
             InputHandler.ParseInput(inputTime, format);
             
-            return "View2 - filters"; //View2()
+            return FiltersInput();
         }
 
-        public string GetFilters()
+        [HttpGet]
+        public IActionResult FiltersInput()
         {
-            FilterChecker.GetFilterInfo();
-            FilterChecker.AddFilters(new List<Filter>());
-            return "View3 - process";
+            return View();
         }
+
+        public PartialViewResult GetFiltersInputForm(string elementId)
+        {
+            var filterTypes = new List<string>
+            {
+                "Whole university", 
+                "Teacher", 
+                "Group"
+            };
+            ViewBag.FilterTypes = new SelectList(filterTypes);
+            ViewBag.Index = elementId;
+            return PartialView("_SingleFilter");
+        }
+
+        [HttpPost]
+        public PartialViewResult GetFiltersInputField(string filterKey, string elementId)
+        {
+            var typeToFilter = new Dictionary<string, List<string>>
+            {
+                {"Teacher", new List<string>{"T1", "T2", "T3"}},
+                {"Group", new List<string>{"First", "Second", "Third"}}
+            };
+            ViewBag.Index = elementId;
+            return PartialView("_SingleSpecifiedFilter", typeToFilter[filterKey]);
+        }
+        
+        [HttpPost]
+        public string GetFilters(IEnumerable<Filter> filters) => "Oтправлено";
 
         public void StartMakingTimetable()
         {
