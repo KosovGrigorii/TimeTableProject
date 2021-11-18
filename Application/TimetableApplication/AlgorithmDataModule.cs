@@ -29,7 +29,7 @@ namespace Infrastructure
             modelBuilder.Entity<Course>().HasMany(course => course.Groups);
             //modelBuilder.Entity<Course>().HasMany(course => course.Teachers);
             //modelBuilder.Entity<Group>().HasMany<TimeSlot>(group => group.TimeSlots);
-            //modelBuilder.Entity<TimeSlot>().HasMany<Group>(slot => slot.Groups);
+            modelBuilder.Entity<TimeSlot>().HasMany<Group>(slot => slot.Groups);
 
             base.OnModelCreating(modelBuilder);
         }

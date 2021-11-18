@@ -11,7 +11,7 @@ namespace TimetableDomain
     public class Course : Entity
     {
         public string Title { get; set; }
-        public List<TimeSlot> Slots { get; set; }// хз нужны ли
+        //public List<TimeSlot> Slots { get; set; }// хз нужны ли
         //public List<Teacher> Teachers { get; set; }
         public Teacher Teacher { get; set; }
         public List<Group> Groups { get; set; }
@@ -20,12 +20,12 @@ namespace TimetableDomain
     public class Class : Entity
     {
         public int RoomNumber { get; set; }
-        public List<TimeSlot> TimeSlots { get; set; }// промежутки доступа класса тоже под вопросом
+        //public List<TimeSlot> TimeSlots { get; set; }// промежутки доступа класса тоже под вопросом
     }
         
     public class Group : Entity
     {
-        public int GroupNumber { get; set; }
+        public string GroupNumber { get; set; }
         public List<Course> Courses { get; set; }
         //public List<TimeSlot> TimeSlots { get; set; }
     }
@@ -45,6 +45,6 @@ namespace TimetableDomain
         public Class Place { get; set; }
         //public string CourseId { get; set; }
         public Course Course { get; set; }
-        public Group Group { get; set; }
+        public List<Group> Groups { get; set; }
     }
 }

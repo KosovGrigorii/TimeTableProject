@@ -48,7 +48,7 @@ namespace TimetableDomain
                 {
                     yield return new TimeSlotChromosome()
                     {
-                        Group = course.Groups.OrderBy(group => Guid.NewGuid()).FirstOrDefault().GroupNumber,
+                        Groups = course.Groups.Select(group => group.GroupNumber).ToList(),
                         CourseId = course.Id,
                         StartAt = RandomStartTime(),
                         PlaceId = dataClasses.OrderBy(_class => Guid.NewGuid()).FirstOrDefault().Id,
@@ -118,7 +118,7 @@ namespace TimetableDomain
                     score -= overLaps.GroupBy(slot => slot.TeacherId).Sum(x=>x.Count()-1);
                     score -= overLaps.GroupBy(slot => slot.PlaceId).Sum(x => x.Count()-1);
                     score -= overLaps.GroupBy(slot => slot.CourseId).Sum(x => x.Count()-1);
-                    score -= overLaps.GroupBy(slot => slot.Group).Sum(x => x.Count()-1);
+                    score -= overLaps.Sum(item => item.Groups.Intersect(value.Groups).Count());
                     //score -= overLaps.Sum(item => item.Group.Intersect(value.Groups).Count());
                 }
 
