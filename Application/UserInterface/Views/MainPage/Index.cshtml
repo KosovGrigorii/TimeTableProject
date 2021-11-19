@@ -1,0 +1,24 @@
+﻿@page
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Timetable creator</title>
+</head>
+<body>
+<div>
+    <h3>Загрузите .xlsx файл(ы) с информацией об учебных часах, расписании пар и аудиториях, заполненные по образцу</h3>
+    <img/>
+    <form asp-controller="MainPage" asp-action="GetExcelInput" enctype="multipart/form-data" method="post">
+        <input type="file" name="hoursFile" accept=".xlsx"/>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+</body>
+</html>

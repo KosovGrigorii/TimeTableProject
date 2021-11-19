@@ -1,6 +1,0 @@
-{
-  "ConnectionStrings":
-  {
-    "DefaultConnection": "Server=(localdb)\\ProjectsV13;Database=TimeTableDb;Integrated Security=True"
-  }
-}
