@@ -9,4 +9,9 @@
       <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.11" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="FilesStorage" />
+      <Folder Include="Views\Images" />
+    </ItemGroup>
+
 </Project>

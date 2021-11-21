@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using TimetableApplication;
-using NPOI.HSSF.UserModel;
-using NPOI.XSSF.UserModel;
-using NPOI.SS.UserModel;
 using System.IO;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Filter = TimetableApplication.Filter;
 
 
 namespace UserInterface
@@ -15,10 +14,14 @@ namespace UserInterface
         public ActionResult Index()  => View();
 
         [HttpPost]
-        public IActionResult GetExcelInput()
+        public IActionResult FileFormUpload(IFormFile file)
         {
-            // InputHandler.ParseInput(input, inputFormat)
-            return FiltersInput();
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            var extension = Path.GetExtension(file.FileName);
+            var stream = new MemoryStream();
+            file.CopyTo(stream);
+            InputHandler.ParseInput(stream, extension);
+            return RedirectToAction("FiltersInput");
         }
 
         [HttpGet]
