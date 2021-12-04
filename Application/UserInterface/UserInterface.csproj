@@ -13,4 +13,21 @@
       <PackageReference Include="NPOI" Version="2.5.5" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Views\Output\Output.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="wwwroot\" />
+      <Content Remove="wwwroot\css\" />
+      <Content Remove="wwwroot\js\" />
+      <Content Remove="wwwroot\lib\" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Files" />
+      <Folder Include="wwwroot\" />
+      <Folder Include="wwwroot\css\" />
+      <Folder Include="wwwroot\js\" />
+      <Folder Include="wwwroot\lib\" />
+    </ItemGroup>
 </Project>

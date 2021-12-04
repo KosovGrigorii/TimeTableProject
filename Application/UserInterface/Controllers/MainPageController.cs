@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Hosting;
 using TimetableApplication;
 using NPOI.HSSF.UserModel;
 using NPOI.XSSF.UserModel;
 using NPOI.SS.UserModel;
 using System.IO;
+using System.Linq;
 
 
 namespace UserInterface
@@ -46,10 +48,19 @@ namespace UserInterface
         [HttpPost]
         public IActionResult GetFilters(IEnumerable<Filter> filters)
         {
-            MakeTimeTable(filters);
+            //MakeTimeTable(filters);
                 //Асинхронно?
             return View("Loading");
         }
+        
+        /*[HttpPost]
+        public IActionResult ToOutput()
+        {
+            return RedirectToRoute("default", new
+            {
+                controller = "Output", action = "Index"
+            });
+        }*/
 
         private void MakeTimeTable(IEnumerable<Filter> filters)
         {
@@ -57,10 +68,19 @@ namespace UserInterface
             timetableMaker.StartMakingTimeTable(filters);
         }
 
+        // [HttpPost]
+        // public void PostOutputFormat(string format)
+        // {
+        //     //Return partial view with file.
+        // }
+        
         [HttpPost]
-        public void PostOutputFormat(string format)
+        public IActionResult ToOutput()
         {
-            //Return partial view with file.
+            return RedirectToRoutePermanent("default", new
+            {
+                controller = "Output", action = "Index"
+            });
         }
     }
 }

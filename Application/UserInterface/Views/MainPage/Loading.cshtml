@@ -2,7 +2,7 @@
 @model UserInterface.Views.MainPage.Loading
 
 @{
-    Layout = null;
+    Layout = "_Layout";
 }
 
 <!DOCTYPE html>
@@ -13,7 +13,10 @@
 </head>
 <body>
 <div>
-    
+    @using (Html.BeginForm("ToOutput", "MainPage"))
+    {
+        <input type="submit" value="Submit"/>
+    }
 </div>
 </body>
 </html>

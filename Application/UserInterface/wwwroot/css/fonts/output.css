@@ -1,0 +1,32 @@
+div.output {
+    background: #3E92CC;
+    color: #FFFAFF;
+    border-radius: 1em;
+    padding: 1em;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+}
+div.output table {
+    margin: 1em;
+}
+div.output th {
+    font-size: 30pt;
+    font-family: Montserrat;
+    font-weight: 700;
+    font-style: normal;
+}
+div.output td.name {
+    font-size:  20pt;
+    font-family: Montserrat;
+    font-weight: 300;
+    font-style: normal;
+}
+div.output td.download {
+    font-size:  20pt;
+    font-family: Montserrat;
+    font-weight: 100;
+    font-style: italic;
+}
