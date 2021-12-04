@@ -13,7 +13,7 @@ namespace TimetableDomain
 {
     public class GeneticAlgorithm : ITimetableMaker
     {
-        public List<TimeSlot> Start(DbSet<Course> cources, DbSet<Class> classes)  //(string[] args) Demo чтобы не было ошибок, а так это потенциальный main для алгоритмов
+        public List<TimeSlot> Start(List<Course> cources, List<Class> classes)  //(string[] args) Demo чтобы не было ошибок, а так это потенциальный main для алгоритмов
         {
             Population population = new Population(1000, new TimeTableChromosome(cources, classes),
                 new TimeTableChromosome.FitnessFunction(), new EliteSelection());
@@ -32,8 +32,8 @@ namespace TimetableDomain
             var timetable = (population.BestChromosome as TimeTableChromosome).Value.Select(chromosome =>
                 new TimeSlot()
                 {
-                    //CourseId = chromosome.CourseId, вот нужны ли эти айдишные поля я не понимаю до конца
-                    //PlaceId = chromosome.PlaceId,
+                    Course = chromosome.CourseId, 
+                    Place = chromosome.PlaceId,
                     Day = (DayOfWeek) chromosome.Day,
                     Start = chromosome.StartAt, End = chromosome.EndAt,
                     Id = Guid.NewGuid().ToString()

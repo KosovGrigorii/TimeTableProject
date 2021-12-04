@@ -1,6 +1,9 @@
 
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using TimetableDomain;
 
 namespace TimetableApplication
 {
@@ -8,7 +11,6 @@ namespace TimetableApplication
     {
         public static IEnumerable<string> GetFilterTypes()
         {
-            //Запрос к базе на типы фильтров
             var filterTypes = new List<string>
             {
                 "Teacher", 
@@ -19,13 +21,11 @@ namespace TimetableApplication
 
         public static IEnumerable<string> GetFiltersOfType(string filterType)
         {
-            //Запросить у базы и кэшировать список всех имён по ключу
-            var typeToFilter = new Dictionary<string, List<string>>
-            {
-                {"Teacher", new List<string>{"T1", "T2", "T3"}},
-                {"Group", new List<string>{"First", "Second", "Third"}}
-            };
-            return typeToFilter[filterType];
+            if (filterType == "Teacher")
+                return DB.Slots.Select(x => x.Teacher);
+            else if(filterType == "Group")
+                return DB.Slots.Select(x => x.Group);
+            throw new ArgumentException("No such filter");
         }
     }
 }

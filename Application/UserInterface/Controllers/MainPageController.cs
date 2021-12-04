@@ -50,7 +50,6 @@ namespace UserInterface
         public IActionResult GetFilters(IEnumerable<Filter> filters)
         {
             MakeTimeTable(filters);
-                //Асинхронно?
             return View("Loading");
         }
 

@@ -11,8 +11,8 @@ namespace TimetableDomain
     {
         //private readonly IEnumerable<Entity> _dataContext;
         static Random Random=new Random();
-        private DbSet<Course> dataCourses;
-        private DbSet<Class> dataClasses;
+        private List<Course> dataCourses;
+        private List<Class> dataClasses;
         
 
         static TimeSpan RandomStartTime()
@@ -24,13 +24,13 @@ namespace TimetableDomain
 
         public List<TimeSlotChromosome> Value;
 
-        public TimeTableChromosome(DbSet<Course> courses, DbSet<Class> classes)
+        public TimeTableChromosome(List<Course> courses, List<Class> classes)
         {
             dataCourses = courses;
             dataClasses = classes;
             Generate();
         }
-        public TimeTableChromosome(List<TimeSlotChromosome> slots, DbSet<Course> courses, DbSet<Class> classes)
+        public TimeTableChromosome(List<TimeSlotChromosome> slots, List<Course> courses, List<Class> classes)
         {
             dataCourses = courses;
             dataClasses = classes;
@@ -40,19 +40,15 @@ namespace TimetableDomain
         {
             IEnumerable<TimeSlotChromosome> generateRandomSlots()
             {
-                var courses = dataCourses
-                    .Include(course => course.Teacher)
-                    .Include(course => course.Groups).ToList();
-
-                foreach (var course in courses)
+                foreach (var course in dataCourses)
                 {
                     yield return new TimeSlotChromosome()
                     {
-                        Groups = course.Groups.Select(group => group.GroupNumber).ToList(),
+                        Groups = course.Groups.ToList(),
                         CourseId = course.Id,
                         StartAt = RandomStartTime(),
                         PlaceId = dataClasses.OrderBy(_class => Guid.NewGuid()).FirstOrDefault().Id,
-                        TeacherId = course.Teacher.Id,
+                        TeacherId = course.Teacher, //Teacher themselves, but not id
                         Day=Random.Next(1,5)
                     };
                 }
@@ -92,7 +88,6 @@ namespace TimetableDomain
             {
                 Value[index] = otherChromsome.Value[index];
             }
-
         }
 
         public class FitnessFunction : IFitnessFunction
