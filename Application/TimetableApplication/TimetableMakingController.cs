@@ -33,10 +33,10 @@ namespace TimetableApplication
                     Teacher = x.Teacher,
                     Groups = new List<string>() {x.Group}
                 }).ToList();
-            var classes = DB.Slots.Select(x => new Class() {Id = x.Class}).ToList();
-            timeslots = algoithm.Start(courses, classes); // передать data
+            var classes = DB.Slots.Select(x => x.Class).ToList();
+            timeslots = algoithm.Start(courses, classes);
             DB.Timeslots = timeslots;
-            // dbData.TimeSlots.AddRange(timeslots);// нужен конвертер сущности таймслота в доменах в сущность базы
+            // dbData.TimeSlots.AddRange(timeslots);
             // dbData.SaveChanges();
         }
 

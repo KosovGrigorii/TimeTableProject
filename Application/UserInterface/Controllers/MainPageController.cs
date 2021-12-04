@@ -1,11 +1,9 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using TimetableApplication;
 using System.IO;
-using System.Linq;
 
 using Filter = TimetableApplication.Filter;
 
@@ -55,27 +53,12 @@ namespace UserInterface
             MakeTimeTable(filters);
             return View("Loading");
         }
-        
-        /*[HttpPost]
-        public IActionResult ToOutput()
-        {
-            return RedirectToRoute("default", new
-            {
-                controller = "Output", action = "Index"
-            });
-        }*/
 
         private void MakeTimeTable(IEnumerable<Filter> filters)
         {
             var timetableMaker = new TimetableMakingController();
             timetableMaker.StartMakingTimeTable(filters);
         }
-
-        // [HttpPost]
-        // public void PostOutputFormat(string format)
-        // {
-        //     //Return partial view with file.
-        // }
         
         [HttpPost]
         public IActionResult ToOutput()

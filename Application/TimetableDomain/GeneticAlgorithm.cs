@@ -13,7 +13,7 @@ namespace TimetableDomain
 {
     public class GeneticAlgorithm : ITimetableMaker
     {
-        public List<TimeSlot> Start(List<Course> cources, List<Class> classes)  //(string[] args) Demo чтобы не было ошибок, а так это потенциальный main для алгоритмов
+        public List<TimeSlot> Start(List<Course> cources, List<string> classes)  //(string[] args) Demo чтобы не было ошибок, а так это потенциальный main для алгоритмов
         {
             Population population = new Population(1000, new TimeTableChromosome(cources, classes),
                 new TimeTableChromosome.FitnessFunction(), new EliteSelection());
@@ -34,6 +34,7 @@ namespace TimetableDomain
                 {
                     Course = chromosome.CourseId, 
                     Place = chromosome.PlaceId,
+                    Teacher = chromosome.TeacherId,
                     Day = (DayOfWeek) chromosome.Day,
                     Start = chromosome.StartAt, End = chromosome.EndAt,
                     Id = Guid.NewGuid().ToString()

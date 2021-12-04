@@ -12,7 +12,7 @@ namespace TimetableDomain
         //private readonly IEnumerable<Entity> _dataContext;
         static Random Random=new Random();
         private List<Course> dataCourses;
-        private List<Class> dataClasses;
+        private List<string> dataClasses;
         
 
         static TimeSpan RandomStartTime()
@@ -24,13 +24,13 @@ namespace TimetableDomain
 
         public List<TimeSlotChromosome> Value;
 
-        public TimeTableChromosome(List<Course> courses, List<Class> classes)
+        public TimeTableChromosome(List<Course> courses, List<string> classes)
         {
             dataCourses = courses;
             dataClasses = classes;
             Generate();
         }
-        public TimeTableChromosome(List<TimeSlotChromosome> slots, List<Course> courses, List<Class> classes)
+        public TimeTableChromosome(List<TimeSlotChromosome> slots, List<Course> courses, List<string> classes)
         {
             dataCourses = courses;
             dataClasses = classes;
@@ -47,7 +47,7 @@ namespace TimetableDomain
                         Groups = course.Groups.ToList(),
                         CourseId = course.Id,
                         StartAt = RandomStartTime(),
-                        PlaceId = dataClasses.OrderBy(_class => Guid.NewGuid()).FirstOrDefault().Id,
+                        PlaceId = dataClasses.OrderBy(_class => Guid.NewGuid()).FirstOrDefault(),
                         TeacherId = course.Teacher, //Teacher themselves, but not id
                         Day=Random.Next(1,5)
                     };

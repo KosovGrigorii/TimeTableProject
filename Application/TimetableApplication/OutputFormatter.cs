@@ -13,13 +13,13 @@ namespace TimetableApplication
         protected (Dictionary<string, string[,]>, List<Tuple<TimeSpan, TimeSpan>>) ConvertTimeSlotsToDictionaries(
             List<TimeSlot> timeSlots)
         {
-            var teachers = new Dictionary<Teacher, List<TimeSlot>>();
-            var groups = new Dictionary<Group, List<TimeSlot>>();
+            var teachers = new Dictionary<string, List<TimeSlot>>();
+            var groups = new Dictionary<string, List<TimeSlot>>();
             var bellSet = new HashSet<Tuple<TimeSpan, TimeSpan>>();
             foreach (var timeSlot in timeSlots)
             {
                 bellSet.Add(Tuple.Create(timeSlot.Start, timeSlot.End));
-                var teacher = timeSlot.Course.Teacher;
+                var teacher = timeSlot.Teacher;
                 if (!teachers.ContainsKey(teacher))
                     teachers[teacher] = new List<TimeSlot>();
                 teachers[teacher].Add(timeSlot);
@@ -33,24 +33,24 @@ namespace TimetableApplication
             
             var bells = bellSet.OrderBy(tuple => tuple.Item1.TotalHours).ToList();
             var teachersSchedule = GetScheduleTable(teachers, bells,
-                teacher => teacher.Name,
-                slot => string.Join(", ", slot.Groups.Select(group => group.GroupNumber)));
+                slot => string.Join(", ", slot.Groups));
             var groupsSchedule = GetScheduleTable(groups, bells,
-                group => group.GroupNumber,
-                slot => slot.Course.Teacher.Name);
+                slot => slot.Teacher);
             var schedule = teachersSchedule
                 .Concat(groupsSchedule)
                 .ToDictionary(tuple => tuple.Key, tuple => tuple.Value);
             return (schedule, bells);
         }
     
-        private Dictionary<string, string[,]> GetScheduleTable<T>(Dictionary<T, List<TimeSlot>> dict,
-            IList<Tuple<TimeSpan, TimeSpan>> bells, Func<T, string> getCurrentName, Func<TimeSlot, string> getOtherName)
+        private Dictionary<string, string[,]> GetScheduleTable(
+            Dictionary<string, List<TimeSlot>> dict,
+            IList<Tuple<TimeSpan, TimeSpan>> bells, 
+            Func<TimeSlot, string> getOtherName)
         {
             var result = new Dictionary<string, string[,]>();
             foreach (var (entity, slots) in dict)
             {
-                var currentName = getCurrentName(entity);
+                var currentName = entity;
                 result[currentName] = new string[bells.Count, 7];
                 foreach (var slot in slots)
                 {
@@ -66,6 +66,6 @@ namespace TimetableApplication
     public static class TimeSlotExtension
     {
         public static string ToString(this TimeSlot slot, string name)
-            => $"{slot.Course.Title}\n{name}\n{slot.Place.RoomNumber}";
+            => $"{slot.Course}\n{name}\n{slot.Place}";
     }
 }

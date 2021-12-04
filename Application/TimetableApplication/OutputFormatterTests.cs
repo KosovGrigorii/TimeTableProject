@@ -16,7 +16,7 @@ namespace TimetableApplication
             var formatter = new XlsxOutputFormatter();
             var slots = GetSlots();
             var file = formatter.GetOutputFile(slots);
-            file.MoveTo("/Users/mediamarkt/Downloads/new_file.xlsx");
+            file.MoveTo(".../new_file.xlsx");
         }
 
         [Test]
@@ -57,44 +57,44 @@ namespace TimetableApplication
             return rows.Select(GetTimeSlot);
         }
 
-        private static readonly Dictionary<string, Group> Groups = new();
+        //private static readonly Dictionary<string, Group> Groups = new();
 
-        private static Group GetGroup(string groupNumber) => Groups.ContainsKey(groupNumber)
-            ? Groups[groupNumber]
-            : GetNewGroup(groupNumber, new List<Course>());
+        // private static Group GetGroup(string groupNumber) => Groups.ContainsKey(groupNumber)
+        //     ? Groups[groupNumber]
+        //     : GetNewGroup(groupNumber, new List<Course>());
 
-        private static Group GetNewGroup(string groupNumber, List<Course> courses)
-        {
-            var group = new Group { GroupNumber = groupNumber, Courses = courses };
-            Groups[groupNumber] = group;
-            foreach (var course in courses)
-                course.Groups.Add(group);
-            return group;
-        }
-
-        private static readonly Dictionary<string, Teacher> Teachers = new();
-
-        private static Teacher GetTeacher(string name) => Teachers.ContainsKey(name)
-            ? Teachers[name]
-            : GetNewTeacher(name, new List<Course>());
-
-        private static Teacher GetNewTeacher(string name, List<Course> courses)
-        {
-            var teacher = new Teacher { Name = name, Courses = courses };
-            Teachers[name] = teacher;
-            foreach (var course in courses)
-            {
-                course.Teacher = teacher;
-                Courses[Tuple.Create(course.Title, teacher.Name)] = course;
-            }
-            return teacher;
-        }
-
+        // private static Group GetNewGroup(string groupNumber, List<Course> courses)
+        // {
+        //     var group = new Group { GroupNumber = groupNumber, Courses = courses };
+        //     Groups[groupNumber] = group;
+        //     foreach (var course in courses)
+        //         course.Groups.Add(group);
+        //     return group;
+        // }
+        //
+        // private static readonly Dictionary<string, Teacher> Teachers = new();
+        //
+        // private static Teacher GetTeacher(string name) => Teachers.ContainsKey(name)
+        //     ? Teachers[name]
+        //     : GetNewTeacher(name, new List<Course>());
+        //
+        // private static Teacher GetNewTeacher(string name, List<Course> courses)
+        // {
+        //     var teacher = new Teacher { Name = name, Courses = courses };
+        //     Teachers[name] = teacher;
+        //     foreach (var course in courses)
+        //     {
+        //         course.Teacher = teacher;
+        //         Courses[Tuple.Create(course.Title, teacher.Name)] = course;
+        //     }
+        //     return teacher;
+        // }
+        //
         private static readonly Dictionary<Tuple<string, string>, Course> Courses = new();
-
-        private static Course GetCourse(string title, Teacher teacher, List<Group> groups)
+        
+        private static Course GetCourse(string title, string teacher, List<string> groups)
         {
-            var tuple = Tuple.Create(title, teacher.Name);
+            var tuple = Tuple.Create(title, teacher);
             if (!Courses.ContainsKey(tuple))
                 return GetNewCourse(title, teacher, groups);
             var course = Courses[tuple];
@@ -102,17 +102,12 @@ namespace TimetableApplication
                 course.Groups.Add(group);
             return course;
         }
-
-        private static Course GetNewCourse(string title, Teacher teacher, List<Group> groups)
+        
+        private static Course GetNewCourse(string title, string teacher, List<string> groups)
         {
             var course = new Course { Title = title, Teacher = teacher, Groups = groups };
             if (teacher != null)
-            {
-                Courses[Tuple.Create(title, teacher.Name)] = course;
-                teacher.Courses.Add(course);
-            }
-            foreach (var group in groups)
-                group.Courses.Add(course);
+                Courses[Tuple.Create(title, teacher)] = course;
             return course;
         }
         
@@ -122,14 +117,15 @@ namespace TimetableApplication
             var day = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), attributes[0]);
             var start = TimeSpan.Parse(attributes[1]);
             var end = TimeSpan.Parse(attributes[2]);
-            var place = new Class { RoomNumber = int.Parse(attributes[3]) };
+            var place = attributes[3];
             var title = attributes[4];
-            var teacher = GetTeacher(attributes[5]);
-            var groups = attributes.Skip(6).Select(GetGroup).ToList();
+            var teacher = attributes[5];
+            var groups = attributes.Skip(6).ToList();
+            //var groups = attributes.Skip(6).Select(GetGroup).ToList();
             var course = GetCourse(title, teacher, groups);
             return new TimeSlot
             {
-                Day = day, Start = start, End = end, Place = place, Course = course, Groups = groups
+                Day = day, Start = start, End = end, Place = place, Course = course.Title, Groups = groups
             };
         }
     }

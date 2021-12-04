@@ -5,6 +5,6 @@ namespace TimetableDomain
 {
     public interface ITimetableMaker
     {
-        List<TimeSlot> Start(List<Course> cources, List<Class> classes);
+        List<TimeSlot> Start(List<Course> cources, List<string> classes);
     }
 }
