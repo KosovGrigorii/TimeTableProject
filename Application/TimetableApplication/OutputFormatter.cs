@@ -34,9 +34,9 @@ namespace TimetableApplication
             var bells = bellSet.OrderBy(tuple => tuple.Item1.TotalHours).ToList();
             var teachersSchedule = GetScheduleTable(teachers, bells,
                 teacher => teacher.Name,
-                slot => string.Join(", ", slot.Groups.Select(group => group.Name)));
+                slot => string.Join(", ", slot.Groups.Select(group => group.GroupNumber)));
             var groupsSchedule = GetScheduleTable(groups, bells,
-                group => group.Name,
+                group => group.GroupNumber,
                 slot => slot.Course.Teacher.Name);
             var schedule = teachersSchedule
                 .Concat(groupsSchedule)
@@ -66,6 +66,6 @@ namespace TimetableApplication
     public static class TimeSlotExtension
     {
         public static string ToString(this TimeSlot slot, string name)
-            => $"{slot.Course.Title}\n{name}\n{slot.Place.Name ?? "nowhere"}";
+            => $"{slot.Course.Title}\n{name}\n{slot.Place.RoomNumber}";
     }
 }

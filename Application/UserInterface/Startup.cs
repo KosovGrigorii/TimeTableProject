@@ -29,6 +29,7 @@ namespace UserInterface
             }
 
             app.UseRouting();
+            app.UseStaticFiles();
 
             app.UseEndpoints(endpoints =>
             {
