@@ -43,7 +43,7 @@ namespace TimetableApplication
                 .ToDictionary(tuple => tuple.Key, tuple => tuple.Value);
             return (schedule, bells);
         }
-
+    
         private Dictionary<string, string[,]> GetScheduleTable<T>(Dictionary<T, List<TimeSlot>> dict,
             IList<Tuple<TimeSpan, TimeSpan>> bells, Func<T, string> getCurrentName, Func<TimeSlot, string> getOtherName)
         {
@@ -62,7 +62,7 @@ namespace TimetableApplication
             return result;
         } 
     }
-
+    
     public static class TimeSlotExtension
     {
         public static string ToString(this TimeSlot slot, string name)

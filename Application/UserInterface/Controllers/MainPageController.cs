@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using TimetableApplication;
-using NPOI.HSSF.UserModel;
-using NPOI.XSSF.UserModel;
-using NPOI.SS.UserModel;
 using System.IO;
 using System.Linq;
+
+using Filter = TimetableApplication.Filter;
 
 
 namespace UserInterface
@@ -17,10 +17,14 @@ namespace UserInterface
         public ActionResult Index()  => View();
 
         [HttpPost]
-        public IActionResult GetExcelInput()
+        public IActionResult FileFormUpload(IFormFile file)
         {
-            // InputHandler.ParseInput(input, inputFormat)
-            return FiltersInput();
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            var extension = Path.GetExtension(file.FileName);
+            var stream = new MemoryStream();
+            file.CopyTo(stream);
+            InputHandler.ParseInput(stream, extension);
+            return RedirectToAction("FiltersInput");
         }
 
         [HttpGet]
@@ -48,8 +52,7 @@ namespace UserInterface
         [HttpPost]
         public IActionResult GetFilters(IEnumerable<Filter> filters)
         {
-            //MakeTimeTable(filters);
-                //Асинхронно?
+            MakeTimeTable(filters);
             return View("Loading");
         }
         

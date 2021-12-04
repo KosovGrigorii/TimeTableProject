@@ -13,13 +13,13 @@ namespace TimetableDomain
         public string Title { get; set; }
         //public List<TimeSlot> Slots { get; set; }// хз нужны ли
         //public List<Teacher> Teachers { get; set; }
-        public Teacher Teacher { get; set; }
-        public List<Group> Groups { get; set; }
+        public string Teacher { get; set; }
+        public List<string> Groups { get; set; }
     }
         
     public class Class : Entity
     {
-        public int RoomNumber { get; set; }
+        //public int RoomNumber { get; set; }
         //public List<TimeSlot> TimeSlots { get; set; }// промежутки доступа класса тоже под вопросом
     }
         
@@ -32,8 +32,8 @@ namespace TimetableDomain
 
     public class Teacher : Entity
     {
-        public List<Course> Courses { get; set; }
-        public string Name { get; set; }
+        //public List<Course> Courses { get; set; }
+        //public string Name { get; set; }
     }
         
     public class TimeSlot : Entity

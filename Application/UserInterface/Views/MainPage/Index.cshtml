@@ -1,23 +1,18 @@
 ﻿@page
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
     Layout = "_Layout";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title>Timetable creator</title>
-</head>
-<body>
-
-@using (Html.BeginForm("GetExcelInput", "MainPage", FormMethod.Post))
-    {
-        <div id="filtersForm"></div>
-        <input type="file" id="ExcelFileUpload" class="file" accept=".xlsx">  
-        <input type="submit" value="Submit"/>
-    }
-
-</body>
-</html>
+<div>
+    <h3>Upload data files</h3>
+    <form asp-controller="MainPage" asp-action="FileFormUpload" method="post" enctype="multipart/form-data">
+        <div>
+            <input type="file" name="file" accept=".xlsx" multiple />
+        </div>
+        <div>
+             <input type="submit" value="Upload" />
+        </div>
+    </form>
+</div>
