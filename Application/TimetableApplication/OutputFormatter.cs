@@ -50,13 +50,12 @@ namespace TimetableApplication
             var result = new Dictionary<string, string[,]>();
             foreach (var (entity, slots) in dict)
             {
-                var currentName = entity;
-                result[currentName] = new string[bells.Count, 7];
+                result[entity] = new string[bells.Count, 7];
                 foreach (var slot in slots)
                 {
                     var start = bells.IndexOf(Tuple.Create(slot.Start, slot.End));
                     var day = (Convert.ToInt32(slot.Day) - 1) % 7;
-                    result[currentName][start, day] = slot.ToString(getOtherName(slot));
+                    result[entity][start, day] = slot.ToString(getOtherName(slot));
                 }
             }
             return result;
