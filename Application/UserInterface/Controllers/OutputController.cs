@@ -1,14 +1,19 @@
 using System.IO;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using TimetableApplication;
+using TimetableDomain;
 
 namespace UserInterface
 {
     public class OutputController: Controller
     {
         private readonly IWebHostEnvironment Environment;
+        private IEnumerable<TimeSlot> TimeSlots => DB.Timeslots;
 
         public OutputController(IWebHostEnvironment environment)
         {
@@ -16,34 +21,14 @@ namespace UserInterface
         }
         
         [HttpGet]
-        public IActionResult Index()
-        {
-            //Fetch all files in the Folder (Directory).
-            var filePaths = Directory.GetFiles(Path.Combine(Environment.ContentRootPath, "Files/"));
- 
-            //Copy File names to Model collection.
-            var files = filePaths.Select(filePath
-                => new FileModel { FileName = Path.GetFileName(filePath) }).ToList();
-            Thread.Sleep(5000);
+        public IActionResult Index() => View("Output");
 
-            return View("Output", files);
-        }
-        
-        public FileResult DownloadFile(string fileName)
+        public FileResult DownloadFile(XlsxOutputFormatter formatter)
         {
-            //Build the File Path.
-            var path = Path.Combine(Environment.ContentRootPath, "Files/") + fileName;
- 
-            //Read the File data into Byte Array.
+            var file = formatter.GetOutputFile(TimeSlots);
+            var path = file.FullName;
             var bytes = System.IO.File.ReadAllBytes(path);
- 
-            //Send the File to Download.
-            return File(bytes, "application/octet-stream", fileName);
+            return File(bytes, "application/octet-stream", file.Name);
         }
-    }
-    
-    public class FileModel
-    {
-        public string FileName { get; set; }
     }
 }

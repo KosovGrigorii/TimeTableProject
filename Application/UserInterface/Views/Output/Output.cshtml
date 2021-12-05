@@ -1,4 +1,4 @@
-@model List<UserInterface.FileModel>
+@using TimetableApplication
  
 @{
     Layout = "_Layout";
@@ -11,21 +11,10 @@
     </head>
     <body>
         <div class="output">
-            <table>
-                <tr>
-                    <th>File Name</th>
-                    <th>Link</th>
-                </tr>
-                @foreach (var file in Model)
-                {
-                    <tr>
-                        <td class="name">@file.FileName</td>
-                        <td class="download">
-                            @Html.ActionLink("Download", "DownloadFile", new { fileName = file.FileName })
-                        </td>
-                    </tr>
-                }
-            </table>
+            @using (Html.BeginForm("DownloadFile", "Output", new { formatter = new XlsxOutputFormatter()}))
+            {
+                <input type="submit" value="Download">
+            }
         </div>
     </body>
 </html>
