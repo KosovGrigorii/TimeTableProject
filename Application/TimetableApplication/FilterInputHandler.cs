@@ -22,9 +22,9 @@ namespace TimetableApplication
         public static IEnumerable<string> GetFiltersOfType(string filterType)
         {
             if (filterType == "Teacher")
-                return DB.Slots.Select(x => x.Teacher);
+                return DB.Slots.Select(x => x.Teacher).Distinct();
             else if(filterType == "Group")
-                return DB.Slots.Select(x => x.Group);
+                return DB.Slots.Select(x => x.Group).Distinct();
             throw new ArgumentException("No such filter");
         }
     }

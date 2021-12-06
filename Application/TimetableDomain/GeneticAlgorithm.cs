@@ -37,7 +37,8 @@ namespace TimetableDomain
                     Teacher = chromosome.TeacherId,
                     Day = (DayOfWeek) chromosome.Day,
                     Start = chromosome.StartAt, End = chromosome.EndAt,
-                    Id = Guid.NewGuid().ToString()
+                    Id = Guid.NewGuid().ToString(),
+                    Groups = chromosome.Groups
                 }
             ).ToList();
             return timetable;
