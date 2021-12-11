@@ -5,6 +5,7 @@ namespace TimetableApplication
 {
     public interface IInputParser
     {
-        IEnumerable<SlotInfo> ParseFile(MemoryStream stream);
+        string Extension {get;}
+        IEnumerable<SlotInfo> ParseFile(Stream stream);
     }
 }

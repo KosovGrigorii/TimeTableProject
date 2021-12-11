@@ -10,6 +10,13 @@ namespace TimetableApplication
 {
     public class XlsxOutputFormatter: OutputFormatter
     {
+        public override string Extension { get; }
+
+        public XlsxOutputFormatter()
+        {
+            Extension = ".xlsx";
+        }
+        
         public override FileInfo GetOutputFile(IEnumerable<TimeSlot> timeSlots)
         {
             var (schedule, bells) = ConvertTimeSlotsToDictionaries(timeSlots.ToList());

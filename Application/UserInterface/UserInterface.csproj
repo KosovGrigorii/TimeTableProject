@@ -9,10 +9,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.7" />
-    </ItemGroup>
-
-    <ItemGroup>
       <_ContentIncludedByDefault Remove="Views\Output\Output.cshtml" />
     </ItemGroup>
 
@@ -37,5 +33,9 @@
     </ItemGroup>
     <ItemGroup>
       <None Remove="Files\**" />
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="Ninject" Version="4.0.0-beta-0134" />
+      <PackageReference Include="Ninject.Extensions.Conventions" Version="3.3.0" />
     </ItemGroup>
 </Project>

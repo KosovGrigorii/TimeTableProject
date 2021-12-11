@@ -13,6 +13,13 @@ namespace TimetableDomain
 {
     public class GeneticAlgorithm : ITimetableMaker
     {
+        public string Name { get; }
+
+        public GeneticAlgorithm()
+        {
+            Name = "Genetic";
+        }
+        
         public List<TimeSlot> Start(List<Course> cources, List<string> classes)  //(string[] args) Demo чтобы не было ошибок, а так это потенциальный main для алгоритмов
         {
             Population population = new Population(1000, new TimeTableChromosome(cources, classes),
