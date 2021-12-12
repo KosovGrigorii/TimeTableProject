@@ -9,10 +9,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.7" />
-    </ItemGroup>
-
-    <ItemGroup>
       <_ContentIncludedByDefault Remove="Views\Output\Output.cshtml" />
     </ItemGroup>
 
@@ -21,21 +17,16 @@
       <Content Remove="wwwroot\css\" />
       <Content Remove="wwwroot\js\" />
       <Content Remove="wwwroot\lib\" />
-      <Content Remove="Files\**" />
     </ItemGroup>
     <ItemGroup>
+      <Folder Include="Files" />
       <Folder Include="wwwroot\" />
       <Folder Include="wwwroot\css\" />
       <Folder Include="wwwroot\js\" />
       <Folder Include="wwwroot\lib\" />
     </ItemGroup>
     <ItemGroup>
-      <Compile Remove="Files\**" />
-    </ItemGroup>
-    <ItemGroup>
-      <EmbeddedResource Remove="Files\**" />
-    </ItemGroup>
-    <ItemGroup>
-      <None Remove="Files\**" />
+      <PackageReference Include="Ninject" Version="4.0.0-beta-0134" />
+      <PackageReference Include="Ninject.Extensions.Conventions" Version="3.3.0" />
     </ItemGroup>
 </Project>

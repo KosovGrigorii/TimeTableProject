@@ -1,10 +1,11 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Http;
 using TimetableApplication;
 using System.IO;
-
+using UserInterface.Models;
 using Filter = TimetableApplication.Filter;
 
 
@@ -12,16 +13,20 @@ namespace UserInterface
 {
     public class MainPageController : Controller
     {
-        public ActionResult Index()  => View();
+        public ActionResult Index(string user)
+        {
+            Console.WriteLine(user);
+            return View(user);
+        }
 
         [HttpPost]
-        public IActionResult FileFormUpload(IFormFile file)
+        public IActionResult FileFormUpload()
         {
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-            var extension = Path.GetExtension(file.FileName);
-            var stream = new MemoryStream();
-            file.CopyTo(stream);
-            InputHandler.ParseInput(stream, extension);
+            var extension = Path.GetExtension(Request.Form.Files[0].FileName);
+            var stream = Request.Form.Files[0].OpenReadStream();
+            
+            ApplicationConfigurator.Configurator.Input(stream, extension);
             return RedirectToAction("FiltersInput");
         }
 
@@ -50,14 +55,8 @@ namespace UserInterface
         [HttpPost]
         public IActionResult GetFilters(IEnumerable<Filter> filters)
         {
-            MakeTimeTable(filters);
+            ApplicationConfigurator.Configurator.MakeTimetable(filters);
             return View("Loading");
-        }
-
-        private void MakeTimeTable(IEnumerable<Filter> filters)
-        {
-            var timetableMaker = new TimetableMakingController();
-            timetableMaker.StartMakingTimeTable(filters);
         }
         
         [HttpPost]
