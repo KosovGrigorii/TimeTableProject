@@ -10,11 +10,11 @@ namespace UserInterface.Models
         
         static ApplicationConfigurator()
         {
-            var container = new StandardKernel();
+            var container = new KernelConfiguration();
             container.Bind<IInputParser>().To<XlsxInputParser>();
             container.Bind<ITimetableMaker>().To<GeneticAlgorithm>();
             container.Bind<OutputFormatter>().To<XlsxOutputFormatter>();
-            Configurator = container.Get<Configurator>();
+            Configurator = container.BuildReadonlyKernel().Get<Configurator>();
         }
     }
 }

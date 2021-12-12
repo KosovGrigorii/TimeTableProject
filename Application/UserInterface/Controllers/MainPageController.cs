@@ -20,12 +20,11 @@ namespace UserInterface
         }
 
         [HttpPost]
-        public IActionResult FileFormUpload(IFormFile file)
+        public IActionResult FileFormUpload()
         {
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-            var extension = Path.GetExtension(file.FileName);
-            var stream = new MemoryStream();
-            file.CopyTo(stream);
+            var extension = Path.GetExtension(Request.Form.Files[0].FileName);
+            var stream = Request.Form.Files[0].OpenReadStream();
             
             ApplicationConfigurator.Configurator.Input(stream, extension);
             return RedirectToAction("FiltersInput");
@@ -63,10 +62,9 @@ namespace UserInterface
         [HttpPost]
         public IActionResult ToOutput()
         {
-            var guid = Guid.NewGuid();
             return RedirectToRoutePermanent("default", new
             {
-                controller = "Output", action = "Index" //передать guid
+                controller = "Output", action = "Index"
             });
         }
     }

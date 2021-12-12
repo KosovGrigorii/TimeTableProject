@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using TimetableDomain;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 
 namespace TimetableApplication
@@ -15,7 +16,7 @@ namespace TimetableApplication
         {
             var formatter = new XlsxOutputFormatter();
             var slots = GetSlots();
-            var file = formatter.GetOutputFile(slots);
+            var file = formatter.GetOutputFile("output.xlsx", slots);
             file.MoveTo(".../new_file.xlsx");
         }
 
@@ -25,7 +26,7 @@ namespace TimetableApplication
             var formatter = new XlsxOutputFormatter();
             var slots = GetSlots();
             var timer = Stopwatch.StartNew();
-            var file = formatter.GetOutputFile(slots);
+            var file = formatter.GetOutputFile("output.xlsx", slots);
             timer.Stop();
             file.Delete();
             Console.WriteLine($"На создание файла было затрачено {timer.ElapsedMilliseconds} миллисекунд.");

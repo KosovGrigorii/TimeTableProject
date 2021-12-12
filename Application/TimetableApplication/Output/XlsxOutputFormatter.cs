@@ -17,16 +17,14 @@ namespace TimetableApplication
             Extension = ".xlsx";
         }
         
-        public override FileInfo GetOutputFile(IEnumerable<TimeSlot> timeSlots)
+        public override FileInfo GetOutputFile(string filePath, IEnumerable<TimeSlot> timeSlots)
         {
             var (schedule, bells) = ConvertTimeSlotsToDictionaries(timeSlots.ToList());
             // в path нужно указать путь, где будет создан файл
             // если он пустой, то файл будет создан в папке проекта
             var path = "";
-            var file = new FileInfo(path + "my_xlsx_file.xlsx");
-            file.Create();
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            using (var package = new ExcelPackage(file))
+            using (var package = new ExcelPackage(filePath))
             {
                 foreach (var (name, table) in schedule)
                 {
@@ -44,7 +42,7 @@ namespace TimetableApplication
                 }
                 package.Save();
             }
-            return file;
+            return new FileInfo(filePath);
         }
     }
 }

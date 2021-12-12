@@ -33,10 +33,10 @@ namespace TimetableApplication
             TimetableMakingController.StartMakingTimeTable(algo);
         }
 
-        public void GetOutput()
+        public FileInfo GetOutputFile(string extention, string filePath, IEnumerable<TimeSlot> timeslots)
         {
-            var formatter = formatters[".xlsx"];
-            throw new NotImplementedException();
+            var formatter = formatters[extention];
+            return formatter.GetOutputFile(filePath, timeslots);
         }
     }
 }
