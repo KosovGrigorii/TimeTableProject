@@ -1,0 +1,75 @@
+﻿{
+  "version": "1.0.0",
+  "restore": {
+    "projectUniqueName": "/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/TimetableApplication/TimetableApplication.csproj",
+    "projectName": "TimetableApplication",
+    "projectPath": "/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/TimetableApplication/TimetableApplication.csproj",
+    "outputPath": "/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/TimetableApplication/obj/",
+    "projectStyle": "PackageReference",
+    "originalTargetFrameworks": [
+      "net50"
+    ],
+    "sources": {
+      "https://api.nuget.org/v3/index.json": {}
+    },
+    "frameworks": {
+      "netcoreapp5.0": {
+        "projectReferences": {
+          "/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/Infrastructure/Infrastructure.csproj": {
+            "projectPath": "/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/Infrastructure/Infrastructure.csproj"
+          },
+          "/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/TimetableDomain/TimetableDomain.csproj": {
+            "projectPath": "/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/TimetableDomain/TimetableDomain.csproj"
+          }
+        }
+      }
+    },
+    "warningProperties": {
+      "warnAsError": [
+        "NU1605"
+      ]
+    }
+  },
+  "frameworks": {
+    "netcoreapp5.0": {
+      "dependencies": {
+        "EPPlus": {
+          "target": "Package",
+          "version": "[5.8.3, )"
+        },
+        "ExcelDataReader": {
+          "target": "Package",
+          "version": "[3.7.0-develop00310, )"
+        },
+        "Microsoft.NET.Test.Sdk": {
+          "target": "Package",
+          "version": "[17.0.0, )"
+        },
+        "NUnit": {
+          "target": "Package",
+          "version": "[3.13.2, )"
+        },
+        "Ninject": {
+          "target": "Package",
+          "version": "[4.0.0-beta-0134, )"
+        }
+      },
+      "imports": [
+        "net461",
+        "net462",
+        "net47",
+        "net471",
+        "net472",
+        "net48"
+      ],
+      "assetTargetFallback": true,
+      "warn": true,
+      "frameworkReferences": {
+        "Microsoft.NETCore.App": {
+          "privateAssets": "all"
+        }
+      },
+      "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.201/RuntimeIdentifierGraph.json"
+    }
+  }
+}

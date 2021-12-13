@@ -1,0 +1,16 @@
+/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/TimetableDomain/bin/Debug/net5.0/Accord.dll.config
+/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/TimetableDomain/bin/Debug/net5.0/TimetableDomain.deps.json
+/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/TimetableDomain/bin/Debug/net5.0/TimetableDomain.dll
+/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/TimetableDomain/bin/Debug/net5.0/ref/TimetableDomain.dll
+/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/TimetableDomain/bin/Debug/net5.0/TimetableDomain.pdb
+/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/TimetableDomain/bin/Debug/net5.0/Infrastructure.dll
+/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/TimetableDomain/bin/Debug/net5.0/Infrastructure.pdb
+/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/TimetableDomain/obj/Debug/net5.0/TimetableDomain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/TimetableDomain/obj/Debug/net5.0/TimetableDomain.AssemblyInfoInputs.cache
+/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/TimetableDomain/obj/Debug/net5.0/TimetableDomain.AssemblyInfo.cs
+/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/TimetableDomain/obj/Debug/net5.0/TimetableDomain.csproj.CoreCompileInputs.cache
+/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/TimetableDomain/obj/Debug/net5.0/TimetableDomain.csproj.CopyComplete
+/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/TimetableDomain/obj/Debug/net5.0/TimetableDomain.dll
+/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/TimetableDomain/obj/Debug/net5.0/ref/TimetableDomain.dll
+/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/TimetableDomain/obj/Debug/net5.0/TimetableDomain.pdb
+/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/TimetableDomain/obj/Debug/net5.0/TimetableDomain.csprojAssemblyReference.cache
