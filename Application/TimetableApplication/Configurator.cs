@@ -27,7 +27,12 @@ namespace TimetableApplication
             InputHandler.ParseInput(stream, parser);
         }
 
-        public void MakeTimetable(IEnumerable<Filter> filters)
+        public IEnumerable<string> GetFilterTypes() => FilterInputHandler.GetFilterTypes();
+
+        public IEnumerable<string> GetFiltersOfType(string filterType)
+            => FilterInputHandler.GetFiltersOfType(filterType);
+        
+        public void MakeTimetable(IEnumerable<ValueTuple<string, string, int>> filters)
         {
             var algo = algorithms["Genetic"];
             TimetableMakingController.StartMakingTimeTable(algo);

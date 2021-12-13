@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Http;
-using TimetableApplication;
 using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using UserInterface.Models;
-using Filter = TimetableApplication.Filter;
 
 
 namespace UserInterface
@@ -38,7 +38,7 @@ namespace UserInterface
 
         public PartialViewResult GetFiltersInputForm(string elementId)
         {
-            var filterTypes = FilterInputHandler.GetFilterTypes();
+            var filterTypes = ApplicationConfigurator.Configurator.GetFilterTypes();
             ViewBag.FilterTypes = new SelectList(filterTypes);
             ViewBag.Index = elementId;
             return PartialView("_SingleFilter");
@@ -47,15 +47,16 @@ namespace UserInterface
         [HttpPost]
         public PartialViewResult GetFiltersInputField(string filterKey, string elementId)
         {
-            var specifiedFilters = FilterInputHandler.GetFiltersOfType(filterKey);
+            var specifiedFilters = ApplicationConfigurator.Configurator.GetFiltersOfType(filterKey);
             ViewBag.Index = elementId;
             return PartialView("_SingleSpecifiedFilter", specifiedFilters);
         }
 
         [HttpPost]
-        public IActionResult GetFilters(IEnumerable<Filter> filters)
+        public IActionResult GetFilters(IEnumerable<FilterUI> filters)
         {
-            ApplicationConfigurator.Configurator.MakeTimetable(filters);
+            ApplicationConfigurator.Configurator.MakeTimetable(filters
+                .Select(x => (x.Category, x.Name, x.Hours)));
             return View("Loading");
         }
         

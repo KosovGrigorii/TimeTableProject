@@ -27,7 +27,6 @@ namespace UserInterface
         {
             var path = Path.Combine(Environment.ContentRootPath, "Files", "output.xlsx");
             var file = ApplicationConfigurator.Configurator.GetOutputFile(".xlsx", path, TimeSlots);
-            //var path = file.FullName;
             var bytes = System.IO.File.ReadAllBytes(path);
             return File(bytes, "application/octet-stream", file.Name);
         }
