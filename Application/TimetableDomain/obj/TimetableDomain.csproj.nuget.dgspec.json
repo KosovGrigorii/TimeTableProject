@@ -1,25 +1,31 @@
 {
   "format": 1,
   "restore": {
-    "/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/TimetableDomain/TimetableDomain.csproj": {}
+    "D:\\Users\\Александра\\Desktop\\TimeTableProject\\Application\\TimetableDomain\\TimetableDomain.csproj": {}
   },
   "projects": {
-    "/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/Infrastructure/Infrastructure.csproj": {
+    "D:\\Users\\Александра\\Desktop\\TimeTableProject\\Application\\Infrastructure\\Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/Infrastructure/Infrastructure.csproj",
+        "projectUniqueName": "D:\\Users\\Александра\\Desktop\\TimeTableProject\\Application\\Infrastructure\\Infrastructure.csproj",
         "projectName": "Infrastructure",
-        "projectPath": "/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/Infrastructure/Infrastructure.csproj",
-        "packagesPath": "/Users/grigorijkosov/.nuget/packages/",
-        "outputPath": "/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/Infrastructure/obj/",
+        "projectPath": "D:\\Users\\Александра\\Desktop\\TimeTableProject\\Application\\Infrastructure\\Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\Alexandra\\.nuget\\packages\\",
+        "outputPath": "D:\\Users\\Александра\\Desktop\\TimeTableProject\\Application\\Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/grigorijkosov/.config/NuGet/NuGet.Config"
+          "C:\\Users\\Alexandra\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net5.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -62,34 +68,40 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.201/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/TimetableDomain/TimetableDomain.csproj": {
+    "D:\\Users\\Александра\\Desktop\\TimeTableProject\\Application\\TimetableDomain\\TimetableDomain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/TimetableDomain/TimetableDomain.csproj",
+        "projectUniqueName": "D:\\Users\\Александра\\Desktop\\TimeTableProject\\Application\\TimetableDomain\\TimetableDomain.csproj",
         "projectName": "TimetableDomain",
-        "projectPath": "/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/TimetableDomain/TimetableDomain.csproj",
-        "packagesPath": "/Users/grigorijkosov/.nuget/packages/",
-        "outputPath": "/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/TimetableDomain/obj/",
+        "projectPath": "D:\\Users\\Александра\\Desktop\\TimeTableProject\\Application\\TimetableDomain\\TimetableDomain.csproj",
+        "packagesPath": "C:\\Users\\Alexandra\\.nuget\\packages\\",
+        "outputPath": "D:\\Users\\Александра\\Desktop\\TimeTableProject\\Application\\TimetableDomain\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/grigorijkosov/.config/NuGet/NuGet.Config"
+          "C:\\Users\\Alexandra\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net5.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/Infrastructure/Infrastructure.csproj": {
-                "projectPath": "/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/Infrastructure/Infrastructure.csproj"
+              "D:\\Users\\Александра\\Desktop\\TimeTableProject\\Application\\Infrastructure\\Infrastructure.csproj": {
+                "projectPath": "D:\\Users\\Александра\\Desktop\\TimeTableProject\\Application\\Infrastructure\\Infrastructure.csproj"
               }
             }
           }
@@ -124,7 +136,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.201/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     }
