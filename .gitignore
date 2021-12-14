@@ -33,7 +33,7 @@ _UpgradeReport_Files/
 *.sqlite
 # OS generated files #
 ######################
-.DS_Store?
+.DS_Store
 ehthumbs.db
 Thumbs.db
 [Tt]est[Rr]esults
