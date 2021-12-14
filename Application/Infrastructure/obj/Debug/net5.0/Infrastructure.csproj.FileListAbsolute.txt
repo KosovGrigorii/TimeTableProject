@@ -9,3 +9,4 @@
 /Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/Infrastructure/obj/Debug/net5.0/Infrastructure.dll
 /Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/Infrastructure/obj/Debug/net5.0/ref/Infrastructure.dll
 /Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/Infrastructure/obj/Debug/net5.0/Infrastructure.pdb
+/Users/grigorijkosov/Documents/GitHub/TimeTableProject/Application/Infrastructure/obj/Debug/net5.0/Infrastructure.csprojAssemblyReference.cache

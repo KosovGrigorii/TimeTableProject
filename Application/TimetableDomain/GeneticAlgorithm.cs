@@ -20,10 +20,10 @@ namespace TimetableDomain
             Name = "Genetic";
         }
         
-        public List<TimeSlot> Start(List<Course> cources, List<string> classes, List<TimeSpan> lessonStarts)
+        public List<TimeSlot> Start(List<Course> cources, List<string> classes, IEnumerable<Teacher> teachers, List<TimeSpan> lessonStarts)
         {
             Population population = new Population(1000, new TimeTableChromosome(cources, classes, lessonStarts),
-                new FitnessFunction(), new EliteSelection());
+                new FitnessFunction(teachers), new EliteSelection());
 
             int i = 0;
             while (true)

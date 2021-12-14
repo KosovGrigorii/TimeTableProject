@@ -4,6 +4,6 @@ namespace TimetableApplication
     {
         public string Category { get; set; }
         public string Name { get; set; }
-        public int Hours { get; set; }
+        public int Days { get; set; }
     }
 }

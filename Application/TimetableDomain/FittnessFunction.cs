@@ -7,18 +7,35 @@ namespace TimetableDomain
 {
     public class FitnessFunction : IFitnessFunction
     {
+        private Dictionary<string, Teacher> Teachers;
+
+        public FitnessFunction(IEnumerable<Teacher> teachers)
+        {
+            Teachers = teachers.ToDictionary(x => x.Name);
+        }
+        
+        
         public double Evaluate(IChromosome chromosome)
         {
             double score = 1;
             var values = (chromosome as TimeTableChromosome).Value;
-            var GetoverLaps = new Func<TimeSlotChromosome, List<TimeSlotChromosome>>(current => values
+            
+            var getTimeOverLaps = new Func<TimeSlotChromosome, IEnumerable<TimeSlotChromosome>>(current => values
                 .Except(new[] { current })
-                .Where(slot => (slot.Day == current.Day && (slot.StartAt == current.StartAt
+                .Where(slot => slot.Day == current.Day && (slot.StartAt == current.StartAt
                                                            || slot.StartAt <= current.EndAt 
                                                            && slot.StartAt >= current.StartAt 
                                                            || slot.EndAt >= current.StartAt 
-                                                           && slot.EndAt <= current.EndAt)))
-                .ToList());
+                                                           && slot.EndAt <= current.EndAt)));
+            var teacherWorkDaysOverLaps = new Func<TimeSlotChromosome, IEnumerable<TimeSlotChromosome>>(current =>
+                values.Where(x => 
+                        Teachers.TryGetValue(x.TeacherId, out var teacher) 
+                                  && teacher.IsDayForbidden(x.Day)));
+            var GetoverLaps = new Func<TimeSlotChromosome, List<TimeSlotChromosome>>(current => 
+                getTimeOverLaps(current)
+                    .Concat(teacherWorkDaysOverLaps(current))
+                    .ToList()
+                );
 
 
 

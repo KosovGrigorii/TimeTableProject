@@ -64,7 +64,8 @@ namespace TimetableDomain
 
         public override IChromosome CreateNew()
         {
-            var timeTableChromosome = new TimeTableChromosome(dataCourses, dataClasses, lessonStarts);
+            var timeTableChromosome = new TimeTableChromosome(dataCourses, dataClasses,
+                lessonStarts);
             timeTableChromosome.Generate();
             return timeTableChromosome;
         }
