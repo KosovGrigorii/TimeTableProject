@@ -6,7 +6,7 @@ namespace TimetableDomain
     struct TimeSlotChromosome
     {
         public TimeSpan StartAt { get; set; }
-        public TimeSpan EndAt => StartAt.Add(TimeSpan.FromHours(3));
+        public TimeSpan EndAt => StartAt.Add(TimeSpan.FromHours(1.5));
         public string CourseId { get; set; }
         public string PlaceId { get; set; }
         public string TeacherId { get; set; }

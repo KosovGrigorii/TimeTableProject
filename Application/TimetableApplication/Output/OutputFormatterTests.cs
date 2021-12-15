@@ -91,7 +91,8 @@ namespace TimetableApplication
         //     return teacher;
         // }
         //
-        private static readonly Dictionary<Tuple<string, string>, Course> Courses = new();
+        private static readonly Dictionary<Tuple<string, string>, Course> Courses = 
+            new Dictionary<Tuple<string, string>, Course>();
         
         private static Course GetCourse(string title, string teacher, List<string> groups)
         {
