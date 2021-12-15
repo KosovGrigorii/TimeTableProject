@@ -14,7 +14,6 @@ namespace TimetableDomain
         private List<Course> dataCourses;
         private List<string> dataClasses;
         private List<TimeSpan> lessonStarts;
-
         
 
         private TimeSpan RandomStartTime()

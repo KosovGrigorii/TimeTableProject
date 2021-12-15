@@ -37,9 +37,6 @@ namespace TimetableDomain
                     .ToList()
                 );
 
-
-
-
             foreach (var value in values)
             {
                 var overLaps = GetoverLaps(value);
