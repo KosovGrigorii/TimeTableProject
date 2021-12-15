@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimetableDomain", "Timetabl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{D836FE96-D843-4CDA-88CD-227F3274D4BE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimetableCommonClasses", "TimetableCommonClasses\TimetableCommonClasses.csproj", "{373E2440-40DD-4548-AEF0-CF153CB3AF84}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{D836FE96-D843-4CDA-88CD-227F3274D4BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D836FE96-D843-4CDA-88CD-227F3274D4BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D836FE96-D843-4CDA-88CD-227F3274D4BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{373E2440-40DD-4548-AEF0-CF153CB3AF84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{373E2440-40DD-4548-AEF0-CF153CB3AF84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{373E2440-40DD-4548-AEF0-CF153CB3AF84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{373E2440-40DD-4548-AEF0-CF153CB3AF84}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

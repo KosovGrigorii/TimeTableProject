@@ -5,6 +5,7 @@ using TimetableDomain;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using TimetableCommonClasses;
 
 namespace TimetableApplication
 {
@@ -57,40 +58,7 @@ namespace TimetableApplication
             };
             return rows.Select(GetTimeSlot);
         }
-
-        //private static readonly Dictionary<string, Group> Groups = new();
-
-        // private static Group GetGroup(string groupNumber) => Groups.ContainsKey(groupNumber)
-        //     ? Groups[groupNumber]
-        //     : GetNewGroup(groupNumber, new List<Course>());
-
-        // private static Group GetNewGroup(string groupNumber, List<Course> courses)
-        // {
-        //     var group = new Group { GroupNumber = groupNumber, Courses = courses };
-        //     Groups[groupNumber] = group;
-        //     foreach (var course in courses)
-        //         course.Groups.Add(group);
-        //     return group;
-        // }
-        //
-        // private static readonly Dictionary<string, Teacher> Teachers = new();
-        //
-        // private static Teacher GetTeacher(string name) => Teachers.ContainsKey(name)
-        //     ? Teachers[name]
-        //     : GetNewTeacher(name, new List<Course>());
-        //
-        // private static Teacher GetNewTeacher(string name, List<Course> courses)
-        // {
-        //     var teacher = new Teacher { Name = name, Courses = courses };
-        //     Teachers[name] = teacher;
-        //     foreach (var course in courses)
-        //     {
-        //         course.Teacher = teacher;
-        //         Courses[Tuple.Create(course.Title, teacher.Name)] = course;
-        //     }
-        //     return teacher;
-        // }
-        //
+        
         private static readonly Dictionary<Tuple<string, string>, Course> Courses = 
             new Dictionary<Tuple<string, string>, Course>();
         
@@ -125,10 +93,7 @@ namespace TimetableApplication
             var groups = attributes.Skip(6).ToList();
             //var groups = attributes.Skip(6).Select(GetGroup).ToList();
             var course = GetCourse(title, teacher, groups);
-            return new TimeSlot
-            {
-                Day = day, Start = start, End = end, Place = place, Course = course.Title, Groups = groups
-            };
+            return new TimeSlot(day, start, end, place, course.Title, course.Teacher, groups);
         }
     }
 }

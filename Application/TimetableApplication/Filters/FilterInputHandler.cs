@@ -23,7 +23,7 @@ namespace TimetableApplication
         {
             if (filterType == "Teacher")
                 return DB.Slots.Select(x => x.Teacher).Distinct();
-            else if(filterType == "Group")
+            if(filterType == "Group")
                 return DB.Slots.Select(x => x.Group).Distinct();
             throw new ArgumentException("No such filter");
         }

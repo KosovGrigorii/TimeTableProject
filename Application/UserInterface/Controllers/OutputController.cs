@@ -13,7 +13,7 @@ namespace UserInterface
     public class OutputController: Controller
     {
         private readonly IWebHostEnvironment Environment;
-        private IEnumerable<TimeSlot> TimeSlots => TimetableApplication.DB.Timeslots;
+        
 
         public OutputController(IWebHostEnvironment environment)
         {
@@ -26,7 +26,7 @@ namespace UserInterface
         public FileResult DownloadFile()
         {
             var path = Path.Combine(Environment.ContentRootPath, "Files", "output.xlsx");
-            var file = ApplicationConfigurator.Configurator.GetOutputFile(".xlsx", path, TimeSlots);
+            var file = ApplicationConfigurator.AppConfigurator.GetOutputFile(".xlsx", path);
             var bytes = System.IO.File.ReadAllBytes(path);
             return File(bytes, "application/octet-stream", file.Name);
         }

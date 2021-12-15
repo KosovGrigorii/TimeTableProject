@@ -1,4 +1,4 @@
-using System;
+using TimetableCommonClasses;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,6 +11,7 @@ namespace TimetableApplication
         private readonly Dictionary<string, IInputParser> parsers;
         private readonly Dictionary<string, ITimetableMaker> algorithms;
         private readonly Dictionary<string, OutputFormatter> formatters;
+        private readonly InstanceCreator commonInstanceCreator = new InstanceCreator();
         
         public Configurator(IEnumerable<IInputParser> parsers,
             IEnumerable<ITimetableMaker> algorithms,
@@ -27,21 +28,26 @@ namespace TimetableApplication
             InputHandler.ParseInput(stream, parser);
         }
 
+        public Filter GetFilter(string category, string name, int daysCount)
+        {
+            return commonInstanceCreator.GetFilter(category, name, daysCount);
+        }
+
         public IEnumerable<string> GetFilterTypes() => FilterInputHandler.GetFilterTypes();
 
         public IEnumerable<string> GetFiltersOfType(string filterType)
             => FilterInputHandler.GetFiltersOfType(filterType);
         
-        public void MakeTimetable(IEnumerable<ValueTuple<string, string, int>> filters)
+        public void MakeTimetable(IEnumerable<Filter> filters)
         {
             var algo = algorithms["Genetic"];
             TimetableMakingController.StartMakingTimeTable(algo, filters);
         }
 
-        public FileInfo GetOutputFile(string extention, string filePath, IEnumerable<TimeSlot> timeslots)
+        public FileInfo GetOutputFile(string extention, string filePath)
         {
             var formatter = formatters[extention];
-            return formatter.GetOutputFile(filePath, timeslots);
+            return formatter.GetOutputFile(filePath, DB.Timeslots);
         }
     }
 }

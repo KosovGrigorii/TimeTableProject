@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using TimetableDomain;
+using TimetableCommonClasses;
 
 namespace TimetableApplication
 {
     public class DB
     {
         public static HashSet<SlotInfo> Slots { get; set; }
-        public static List<TimeSlot> Timeslots { get; set; }
+        public static IEnumerable<TimeSlot> Timeslots { get; set; }
     }
 }

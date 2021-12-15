@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
-using TimetableDomain;
+using TimetableCommonClasses;
 
 namespace TimetableApplication
 {
@@ -22,7 +22,6 @@ namespace TimetableApplication
             var (schedule, bells) = ConvertTimeSlotsToDictionaries(timeSlots.ToList());
             // в path нужно указать путь, где будет создан файл
             // если он пустой, то файл будет создан в папке проекта
-            var path = "";
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using (var package = new ExcelPackage(filePath))
             {

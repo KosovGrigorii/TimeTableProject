@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+using TimetableCommonClasses;
 
 namespace TimetableDomain
 {
     public interface ITimetableMaker
     {
         string Name { get; }
-        List<TimeSlot> Start(List<Course> cources, List<string> classes, IEnumerable<Teacher> teachers, List<TimeSpan> lessonStarts);
+        IEnumerable<TimeSlot> Start(IEnumerable<Course> cources, 
+            IEnumerable<string> classes, IEnumerable<Teacher> teachers, IEnumerable<TimeSpan> lessonStarts);
     }
 }
