@@ -21,10 +21,11 @@ namespace TimetableApplication
 
         public static IEnumerable<string> GetFiltersOfType(string filterType)
         {
+            var uid = "sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
             if (filterType == "Teacher")
-                return DB.Slots.Select(x => x.Teacher).Distinct();
+                return UserToData.GetInputInfo(uid).Select(x => x.Teacher).Distinct();
             else if(filterType == "Group")
-                return DB.Slots.Select(x => x.Group).Distinct();
+                return UserToData.GetInputInfo(uid).Select(x => x.Group).Distinct();
             throw new ArgumentException("No such filter");
         }
     }
