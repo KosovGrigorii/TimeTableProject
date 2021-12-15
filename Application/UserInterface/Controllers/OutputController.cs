@@ -12,24 +12,22 @@ namespace UserInterface
 {
     public class OutputController: Controller
     {
-        private readonly IWebHostEnvironment Environment;
+        //private readonly IWebHostEnvironment Environment;
         private IEnumerable<TimeSlot> TimeSlots => TimetableApplication.DB.Timeslots;
 
-        public OutputController(IWebHostEnvironment environment)
-        {
-            Environment = environment;
-        }
+        // public OutputController(IWebHostEnvironment environment)
+        // {
+        //     Environment = environment;
+        // }
         
         [HttpGet]
         public IActionResult Index() => View("Output");
 
         public FileResult DownloadFile()
         {
-            var path = Path.Combine(Environment.ContentRootPath, "Files", "output.xlsx");
-            var file = ApplicationConfigurator.Configurator.GetOutputFile(".xlsx", path, TimeSlots);
-            //var path = file.FullName;
-            var bytes = System.IO.File.ReadAllBytes(path);
-            return File(bytes, "application/octet-stream", file.Name);
+            var filePath = ApplicationConfigurator.Configurator.GetOutputFile(".xlsx", TimeSlots);
+            var bytes = System.IO.File.ReadAllBytes(filePath);
+            return File(bytes, "application/octet-stream", Path.GetFileName(filePath));
         }
     }
 }

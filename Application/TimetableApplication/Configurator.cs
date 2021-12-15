@@ -33,10 +33,13 @@ namespace TimetableApplication
             TimetableMakingController.StartMakingTimeTable(algo, filters);
         }
 
-        public FileInfo GetOutputFile(string extention, string filePath, IEnumerable<TimeSlot> timeslots)
+        public string GetOutputFile(string extension, IEnumerable<TimeSlot> timeslots)
         {
-            var formatter = formatters[extention];
-            return formatter.GetOutputFile(filePath, timeslots);
+            var formatter = formatters[extension];
+            var fileName = Guid.NewGuid() + extension;
+            var path =  Path.Combine(Path.GetTempPath(), fileName);
+            formatter.GetOutputFile(path, timeslots);
+            return path;
         }
     }
 }
