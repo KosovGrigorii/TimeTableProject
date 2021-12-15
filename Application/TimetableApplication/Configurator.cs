@@ -35,7 +35,7 @@ namespace TimetableApplication
         public void MakeTimetable(IEnumerable<ValueTuple<string, string, int>> filters)
         {
             var algo = algorithms["Genetic"];
-            TimetableMakingController.StartMakingTimeTable(algo);
+            TimetableMakingController.StartMakingTimeTable(algo, filters);
         }
 
         public FileInfo GetOutputFile(string extention, string filePath, IEnumerable<TimeSlot> timeslots)

@@ -24,9 +24,14 @@
       <Folder Include="wwwroot\css\" />
       <Folder Include="wwwroot\js\" />
       <Folder Include="wwwroot\lib\" />
+      <Folder Include="Files\" />
     </ItemGroup>
     <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="5.0.11" />
       <PackageReference Include="Ninject" Version="4.0.0-beta-0134" />
       <PackageReference Include="Ninject.Extensions.Conventions" Version="3.3.0" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Remove="Files\" />
     </ItemGroup>
 </Project>
