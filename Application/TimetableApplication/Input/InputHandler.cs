@@ -8,11 +8,10 @@ namespace TimetableApplication
 {
     public class InputHandler
     {
-        public static void ParseInput(Stream inputStream, IInputParser parser)
+        public static void ParseInput(string uid, Stream inputStream, IInputParser parser)
         {
             var slots = parser.ParseFile(inputStream);
-            DB.Slots = new HashSet<SlotInfo>();
-            slots.Select(x => DB.Slots.Add(x)).ToList();
+            UserToData.SetInputInfo(uid, slots);
         }
     }
 }

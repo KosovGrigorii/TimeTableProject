@@ -8,24 +8,25 @@ namespace UserInterface
     public class OutputController: Controller
     {
         private readonly Configurator configurator;
-        private readonly IWebHostEnvironment Environment;
-        
 
-        public OutputController(Configurator configurator, IWebHostEnvironment environment)
+
+        public OutputController(Configurator configurator)
         {
             this.configurator = configurator;
-            Environment = environment;
         }
-        
-        [HttpGet]
-        public IActionResult Index() => View("Output");
 
-        public FileResult DownloadFile()
+        [HttpGet]
+        public IActionResult Index(string uid)
         {
-            var path = Path.Combine(Environment.ContentRootPath, "Files", "output.xlsx");
-            var file = configurator.GetOutputFile(".xlsx", path);
-            var bytes = System.IO.File.ReadAllBytes(path);
-            return File(bytes, "application/octet-stream", file.Name);
+            ViewBag.uid = uid;
+            return View("Output");
+        }
+
+        public FileResult DownloadFile(string uid)
+        {
+            var filePath = configurator.GetOutputFile(uid, ".xlsx");
+            var bytes = System.IO.File.ReadAllBytes(filePath);
+            return File(bytes, "application/octet-stream", Path.GetFileName(filePath));
         }
     }
 }

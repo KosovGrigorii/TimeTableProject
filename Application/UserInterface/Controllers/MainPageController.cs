@@ -22,11 +22,10 @@ namespace UserInterface
         {
             this.configurator = configurator;
         }
-
-        public ActionResult Index(string user)
+        
+        public ActionResult Index()
         {
-            Console.WriteLine(user);
-            return View(user);
+            return View();
         }
 
         [HttpPost]
@@ -35,20 +34,22 @@ namespace UserInterface
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             var extension = Path.GetExtension(Request.Form.Files[0].FileName);
             var stream = Request.Form.Files[0].OpenReadStream();
+            var uid = Guid.NewGuid().ToString();
             
-            configurator.Input(stream, extension);
-            return RedirectToAction("FiltersInput");
+            configurator.Input(uid, stream, extension);
+            return RedirectToAction("FiltersInput", new { uid = uid});
         }
 
         [HttpGet]
-        public IActionResult FiltersInput()
+        public IActionResult FiltersInput(string uid)
         {
+            ViewBag.uid = uid;
             return View("FiltersInput");
         }
 
         public PartialViewResult GetFiltersInputForm(string elementId)
         {
-            var filterTypes = configurator.GetFilterTypes();
+            var filterTypes = FilterInputHandler.GetFilterTypes();
             ViewBag.FilterTypes = new SelectList(filterTypes);
             ViewBag.Index = elementId;
             return PartialView("_SingleFilter");
@@ -57,25 +58,31 @@ namespace UserInterface
         [HttpPost]
         public PartialViewResult GetFiltersInputField(string filterKey, string elementId)
         {
-            var specifiedFilters = configurator.GetFiltersOfType(filterKey);
+            var specifiedFilters = FilterInputHandler.GetFiltersOfType(filterKey);
             ViewBag.Index = elementId;
             return PartialView("_SingleSpecifiedFilter", specifiedFilters);
         }
 
         [HttpPost]
-        public IActionResult GetFilters(IEnumerable<FilterUI> filters)
+        public IActionResult GetFilters(IEnumerable<Filter> filters, string uid)
         {
-            configurator.MakeTimetable(filters
-                .Select(x => configurator.GetFilter(x.Category, x.Name, x.Hours)));
+            configurator.MakeTimetable(uid, filters);
+            return RedirectToAction("LoadingPage", new {uid = uid});
+        }
+        
+        [HttpGet]
+        public IActionResult LoadingPage(string uid)
+        {
+            ViewBag.uid = uid;
             return View("Loading");
         }
         
         [HttpPost]
-        public IActionResult ToOutput()
+        public IActionResult ToOutput(string uid)
         {
             return RedirectToRoutePermanent("default", new
             {
-                controller = "Output", action = "Index"
+                controller = "Output", action = "Index", uid = uid
             });
         }
     }

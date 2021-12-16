@@ -22,32 +22,26 @@ namespace TimetableApplication
             this.formatters = formatters.ToDictionary(x => x.Extension, x => x);
         }
 
-        public void Input(Stream stream, string extention)
+        public void Input(string uid, Stream stream, string extension)
         {
-            var parser = parsers[extention];
-            InputHandler.ParseInput(stream, parser);
+            var parser = parsers[extension];
+            UserToData.AddUser(uid);
+            InputHandler.ParseInput(uid, stream, parser);
         }
-
-        public Filter GetFilter(string category, string name, int daysCount)
-        {
-            return commonInstanceCreator.GetFilter(category, name, daysCount);
-        }
-
-        public IEnumerable<string> GetFilterTypes() => FilterInputHandler.GetFilterTypes();
-
-        public IEnumerable<string> GetFiltersOfType(string filterType)
-            => FilterInputHandler.GetFiltersOfType(filterType);
-        
-        public void MakeTimetable(IEnumerable<Filter> filters)
+        public void MakeTimetable(string uid, IEnumerable<Filter> filters)
         {
             var algo = algorithms["Genetic"];
-            TimetableMakingController.StartMakingTimeTable(algo, filters);
+            TimetableMakingController.StartMakingTimeTable(uid, algo, filters);
         }
-
-        public FileInfo GetOutputFile(string extention, string filePath)
+        
+        public string GetOutputFile(string uid, string extension)
         {
-            var formatter = formatters[extention];
-            return formatter.GetOutputFile(filePath, DB.Timeslots);
+            var formatter = formatters[extension];
+            var fileName = uid + extension;
+            var path =  Path.Combine(Path.GetTempPath(), fileName);
+            var timeslots = UserToData.GetTimeslots(uid);
+            formatter.GetOutputFile(path, timeslots);
+            return path;
         }
     }
 }
