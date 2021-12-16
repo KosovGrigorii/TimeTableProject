@@ -12,14 +12,6 @@ namespace UserInterface
 {
     public class OutputController: Controller
     {
-        //private readonly IWebHostEnvironment Environment;
-        //private IEnumerable<TimeSlot> TimeSlots => TimetableApplication.DB.Timeslots;
-
-        // public OutputController(IWebHostEnvironment environment)
-        // {
-        //     Environment = environment;
-        // }
-
         [HttpGet]
         public IActionResult Index(string uid)
         {
