@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
-using TimetableCommonClasses;
+using System.Linq;
+using TimetableDomain;
 
 namespace TimetableApplication
 {
-    public static class UserToData
+    public class UserToData : IUserData
     {
         private class UserData
         {
@@ -14,7 +15,7 @@ namespace TimetableApplication
         
         private static readonly Dictionary<string, UserData> uidToData = new();
 
-        public static void AddUser(string uid)
+        public void AddUser(string uid)
         {
             if (!uidToData.ContainsKey(uid))
                 uidToData[uid] = new UserData();
@@ -22,7 +23,7 @@ namespace TimetableApplication
                 throw new ArgumentException("User with this id is already added");
         }
 
-        public static void SetInputInfo(string uid, IEnumerable<SlotInfo> slots)
+        public void SetInputInfo(string uid, IEnumerable<SlotInfo> slots)
         {
             if (uidToData.TryGetValue(uid, out var data))
                 data.Slots = slots;
@@ -30,14 +31,21 @@ namespace TimetableApplication
                 throw new ArgumentException("No such UID");
         }
         
-        public static IEnumerable<SlotInfo> GetInputInfo(string uid)
+        public IEnumerable<SlotInfo> GetInputInfo(string uid)
         {
             if (uidToData.TryGetValue(uid, out var data))
                 return data.Slots;
             throw new ArgumentException("No such UID");
         }
+        
+        public IEnumerable<string> GetTeacherFilters(string uid)
+        {
+            if (uidToData.TryGetValue(uid, out var data))
+                return data.Slots.Select(x => x.Teacher).Distinct();
+            throw new ArgumentException("No such UID");
+        }
 
-        public static void SetTimeslots(string uid, IEnumerable<TimeSlot> timeslots)
+        public void SetTimeslots(string uid, IEnumerable<TimeSlot> timeslots)
         {
             if (uidToData.TryGetValue(uid, out var data))
                 data.Timeslots = timeslots;
@@ -45,7 +53,7 @@ namespace TimetableApplication
                 throw new ArgumentException("No such UID");
         }
         
-        public static IEnumerable<TimeSlot> GetTimeslots(string uid)
+        public IEnumerable<TimeSlot> GetTimeslots(string uid)
         {
             if (uidToData.TryGetValue(uid, out var data))
                 return data.Timeslots;

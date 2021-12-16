@@ -24,6 +24,8 @@ namespace UserInterface
             services.AddScoped<IInputParser, SomeParser>();
             services.AddScoped<ITimetableMaker, GeneticAlgorithm>();
             services.AddScoped<OutputFormatter, XlsxOutputFormatter>();
+            services.AddSingleton<IUserData, UserToData>();
+            services.AddSingleton<TimetableMakingController>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

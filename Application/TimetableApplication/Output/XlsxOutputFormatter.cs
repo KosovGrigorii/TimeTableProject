@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
-using TimetableCommonClasses;
+using TimetableDomain;
 
 namespace TimetableApplication
 {

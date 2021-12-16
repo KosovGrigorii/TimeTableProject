@@ -9,7 +9,6 @@ using System.Runtime.CompilerServices;
 using Castle.Core.Internal;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using TimetableApplication;
-using TimetableCommonClasses;
 using TimetableDomain;
 using UserInterface.Models;
 
@@ -20,12 +19,18 @@ namespace UserInterface
     {
         private readonly Dictionary<string, IInputParser> inputParsers;
         private readonly Dictionary<string, ITimetableMaker> timetableMakers;
+        private readonly TimetableMakingController timetableMaker;
+        private readonly IUserData userToData;
 
         public MainPageController(IEnumerable<IInputParser> inputParsers, 
-            IEnumerable<ITimetableMaker> timetableMakers)
+            IEnumerable<ITimetableMaker> timetableMakerAlgorithms, 
+            TimetableMakingController timetableMaker,
+            IUserData userToData)
         {
             this.inputParsers = inputParsers.ToDictionary(x => x.Extension);
-            this.timetableMakers = timetableMakers.ToDictionary(x => x.Name);
+            this.timetableMakers = timetableMakerAlgorithms.ToDictionary(x => x.Name);
+            this.timetableMaker = timetableMaker;
+            this.userToData = userToData;
         }
         
         public ActionResult Index()
@@ -42,9 +47,9 @@ namespace UserInterface
             var uid = Guid.NewGuid().ToString();
             var parser = inputParsers[extension];
             
-            UserToData.AddUser(uid);
+            userToData.AddUser(uid);
             var slots = parser.ParseFile(stream);
-            UserToData.SetInputInfo(uid, slots);
+            userToData.SetInputInfo(uid, slots);
             return RedirectToAction("FiltersInput", new { uid = uid});
         }
 
@@ -54,27 +59,20 @@ namespace UserInterface
             ViewBag.uid = uid;
             return View("FiltersInput");
         }
-
-        public PartialViewResult GetFiltersInputForm(string elementId)
-        {
-            var filterTypes = FilterInputHandler.GetFilterTypes();
-            ViewBag.FilterTypes = new SelectList(filterTypes);
-            ViewBag.Index = elementId;
-            return PartialView("_SingleFilter");
-        }
         
         [HttpPost]
-        public PartialViewResult GetFiltersInputField(string uid, string filterKey, string elementId)
+        public PartialViewResult GetFiltersInputField(string uid, string elementId)
         {
-            var specifiedFilters = FilterInputHandler.GetFiltersOfType(uid, filterKey);
+            var specifiedFilters =  userToData.GetTeacherFilters(uid);
             ViewBag.Index = elementId;
             return PartialView("_SingleSpecifiedFilter", specifiedFilters);
         }
         
         [HttpPost]
-        public IActionResult GetFilters(IEnumerable<Filter> filters, string uid)
+        public IActionResult GetFilters(IEnumerable<FilterUI> filters, string uid)
         {
-            //configurator.MakeTimetable(uid, filters);
+            var algorithm = timetableMakers["Genetic"];
+            timetableMaker.StartMakingTimeTable(uid, algorithm, userToData, filters.Select(x => new Filter(x.Name, x.Hours)));
             return RedirectToAction("LoadingPage", new {uid = uid});
         }
         

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace TimetableCommonClasses
+namespace TimetableDomain
 {
     public class TimeSlot
     {

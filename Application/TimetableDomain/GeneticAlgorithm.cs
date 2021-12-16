@@ -2,18 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Accord.Genetic;
-using TimetableCommonClasses;
 
 namespace TimetableDomain
 {
     public class GeneticAlgorithm : ITimetableMaker
     {
-        public string Name { get; }
-
-        public GeneticAlgorithm()
-        {
-            Name = "Genetic";
-        }
+        public string Name => "Genetic";
         
         public IEnumerable<TimeSlot> Start(IEnumerable<Course> cources, 
             IEnumerable<string> classes, IEnumerable<Teacher> teachers, IEnumerable<TimeSpan> lessonStarts)
