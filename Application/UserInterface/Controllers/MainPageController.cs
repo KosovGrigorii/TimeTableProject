@@ -7,8 +7,10 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Castle.Core.Internal;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using TimetableApplication;
 using TimetableCommonClasses;
+using TimetableDomain;
 using UserInterface.Models;
 
 
@@ -16,11 +18,14 @@ namespace UserInterface
 {
     public class MainPageController : Controller
     {
-        private readonly Configurator configurator;
+        private readonly Dictionary<string, IInputParser> inputParsers;
+        private readonly Dictionary<string, ITimetableMaker> timetableMakers;
 
-        public MainPageController(Configurator configurator)
+        public MainPageController(IEnumerable<IInputParser> inputParsers, 
+            IEnumerable<ITimetableMaker> timetableMakers)
         {
-            this.configurator = configurator;
+            this.inputParsers = inputParsers.ToDictionary(x => x.Extension);
+            this.timetableMakers = timetableMakers.ToDictionary(x => x.Name);
         }
         
         public ActionResult Index()
@@ -35,8 +40,11 @@ namespace UserInterface
             var extension = Path.GetExtension(Request.Form.Files[0].FileName);
             var stream = Request.Form.Files[0].OpenReadStream();
             var uid = Guid.NewGuid().ToString();
+            var parser = inputParsers[extension];
             
-            configurator.Input(uid, stream, extension);
+            UserToData.AddUser(uid);
+            var slots = parser.ParseFile(stream);
+            UserToData.SetInputInfo(uid, slots);
             return RedirectToAction("FiltersInput", new { uid = uid});
         }
 
@@ -54,7 +62,7 @@ namespace UserInterface
             ViewBag.Index = elementId;
             return PartialView("_SingleFilter");
         }
-
+        
         [HttpPost]
         public PartialViewResult GetFiltersInputField(string filterKey, string elementId)
         {
@@ -62,11 +70,11 @@ namespace UserInterface
             ViewBag.Index = elementId;
             return PartialView("_SingleSpecifiedFilter", specifiedFilters);
         }
-
+        
         [HttpPost]
         public IActionResult GetFilters(IEnumerable<Filter> filters, string uid)
         {
-            configurator.MakeTimetable(uid, filters);
+            //configurator.MakeTimetable(uid, filters);
             return RedirectToAction("LoadingPage", new {uid = uid});
         }
         

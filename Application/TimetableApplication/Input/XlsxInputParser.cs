@@ -8,12 +8,7 @@ namespace TimetableApplication
 {
     public class XlsxInputParser : IInputParser
     {
-        public string Extension { get; }
-
-        public XlsxInputParser()
-        {
-            Extension = ".xlsx";
-        }
+        public string Extension => ".xlsx";
         
         public IEnumerable<SlotInfo> ParseFile(Stream stream)
         {

@@ -22,12 +22,7 @@ namespace TimetableApplication
             this.formatters = formatters.ToDictionary(x => x.Extension, x => x);
         }
 
-        public void Input(string uid, Stream stream, string extension)
-        {
-            var parser = parsers[extension];
-            UserToData.AddUser(uid);
-            InputHandler.ParseInput(uid, stream, parser);
-        }
+        
         public void MakeTimetable(string uid, IEnumerable<Filter> filters)
         {
             var algo = algorithms["Genetic"];
