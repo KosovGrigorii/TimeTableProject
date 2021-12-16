@@ -21,22 +21,27 @@ namespace TimetableApplication
             this.formatters = formatters.ToDictionary(x => x.Extension, x => x);
         }
 
-        public void Input(Stream stream, string extention)
+        public void Input(string uid, Stream stream, string extension)
         {
-            var parser = parsers[extention];
-            InputHandler.ParseInput(stream, parser);
+            var parser = parsers[extension];
+            UserToData.AddUser(uid);
+            InputHandler.ParseInput(uid, stream, parser);
         }
 
-        public void MakeTimetable(IEnumerable<Filter> filters)
+        public void MakeTimetable(string uid, IEnumerable<Filter> filters)
         {
             var algo = algorithms["Genetic"];
-            TimetableMakingController.StartMakingTimeTable(algo, filters);
+            TimetableMakingController.StartMakingTimeTable(uid, algo, filters);
         }
 
-        public FileInfo GetOutputFile(string extention, string filePath, IEnumerable<TimeSlot> timeslots)
+        public string GetOutputFile(string uid, string extension)
         {
-            var formatter = formatters[extention];
-            return formatter.GetOutputFile(filePath, timeslots);
+            var formatter = formatters[extension];
+            var fileName = uid + extension;
+            var path =  Path.Combine(Path.GetTempPath(), fileName);
+            var timeslots = UserToData.GetTimeslots(uid);
+            formatter.GetOutputFile(path, timeslots);
+            return path;
         }
     }
 }

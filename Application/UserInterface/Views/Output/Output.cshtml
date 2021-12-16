@@ -11,7 +11,7 @@
     </head>
     <body>
         <div class="output">
-            @using (Html.BeginForm("DownloadFile", "Output"))
+            @using (Html.BeginForm("DownloadFile", "Output", new { uid = @ViewBag.uid }))
             {
                 <input type="submit" value="Download">
             }

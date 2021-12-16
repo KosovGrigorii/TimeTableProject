@@ -6,7 +6,7 @@
 }
 
 <div>
-    @using (Html.BeginForm("ToOutput", "MainPage"))
+    @using (Html.BeginForm("ToOutput", "MainPage", new {uid = @ViewBag.uid}))
     {
         <input type="submit" value="Submit"/>
     }
