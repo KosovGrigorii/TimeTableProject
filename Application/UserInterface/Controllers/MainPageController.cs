@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Castle.Core.Internal;
+using TimetableApplication;
 using TimetableCommonClasses;
 using UserInterface.Models;
 
@@ -15,6 +16,13 @@ namespace UserInterface
 {
     public class MainPageController : Controller
     {
+        private readonly Configurator configurator;
+
+        public MainPageController(Configurator configurator)
+        {
+            this.configurator = configurator;
+        }
+
         public ActionResult Index(string user)
         {
             Console.WriteLine(user);
@@ -28,7 +36,7 @@ namespace UserInterface
             var extension = Path.GetExtension(Request.Form.Files[0].FileName);
             var stream = Request.Form.Files[0].OpenReadStream();
             
-            ApplicationConfigurator.AppConfigurator.Input(stream, extension);
+            configurator.Input(stream, extension);
             return RedirectToAction("FiltersInput");
         }
 
@@ -40,7 +48,7 @@ namespace UserInterface
 
         public PartialViewResult GetFiltersInputForm(string elementId)
         {
-            var filterTypes = ApplicationConfigurator.AppConfigurator.GetFilterTypes();
+            var filterTypes = configurator.GetFilterTypes();
             ViewBag.FilterTypes = new SelectList(filterTypes);
             ViewBag.Index = elementId;
             return PartialView("_SingleFilter");
@@ -49,7 +57,7 @@ namespace UserInterface
         [HttpPost]
         public PartialViewResult GetFiltersInputField(string filterKey, string elementId)
         {
-            var specifiedFilters = ApplicationConfigurator.AppConfigurator.GetFiltersOfType(filterKey);
+            var specifiedFilters = configurator.GetFiltersOfType(filterKey);
             ViewBag.Index = elementId;
             return PartialView("_SingleSpecifiedFilter", specifiedFilters);
         }
@@ -57,8 +65,8 @@ namespace UserInterface
         [HttpPost]
         public IActionResult GetFilters(IEnumerable<FilterUI> filters)
         {
-            ApplicationConfigurator.AppConfigurator.MakeTimetable(filters
-                .Select(x => ApplicationConfigurator.AppConfigurator.GetFilter(x.Category, x.Name, x.Hours)));
+            configurator.MakeTimetable(filters
+                .Select(x => configurator.GetFilter(x.Category, x.Name, x.Hours)));
             return View("Loading");
         }
         

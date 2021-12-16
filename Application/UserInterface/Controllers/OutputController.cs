@@ -1,22 +1,19 @@
 using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using TimetableDomain;
-using UserInterface.Models;
+using TimetableApplication;
 
 namespace UserInterface
 {
     public class OutputController: Controller
     {
+        private readonly Configurator configurator;
         private readonly IWebHostEnvironment Environment;
         
 
-        public OutputController(IWebHostEnvironment environment)
+        public OutputController(Configurator configurator, IWebHostEnvironment environment)
         {
+            this.configurator = configurator;
             Environment = environment;
         }
         
@@ -26,7 +23,7 @@ namespace UserInterface
         public FileResult DownloadFile()
         {
             var path = Path.Combine(Environment.ContentRootPath, "Files", "output.xlsx");
-            var file = ApplicationConfigurator.AppConfigurator.GetOutputFile(".xlsx", path);
+            var file = configurator.GetOutputFile(".xlsx", path);
             var bytes = System.IO.File.ReadAllBytes(path);
             return File(bytes, "application/octet-stream", file.Name);
         }
