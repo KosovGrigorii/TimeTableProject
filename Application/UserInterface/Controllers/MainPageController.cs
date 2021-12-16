@@ -47,9 +47,9 @@ namespace UserInterface
         }
 
         [HttpPost]
-        public PartialViewResult GetFiltersInputField(string filterKey, string elementId)
+        public PartialViewResult GetFiltersInputField(string uid, string filterKey, string elementId)
         {
-            var specifiedFilters = FilterInputHandler.GetFiltersOfType(filterKey);
+            var specifiedFilters = FilterInputHandler.GetFiltersOfType(uid, filterKey);
             ViewBag.Index = elementId;
             return PartialView("_SingleSpecifiedFilter", specifiedFilters);
         }
