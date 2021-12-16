@@ -19,7 +19,7 @@
 <script>
 function filterInputField(div_to_insert, input, insert_index) {
     $.ajax({
-        url: '@Url.Action("GetFiltersInputField", "MainPage")',
+        url: '@Url.Action("GetFiltersInputField", "MainPage", new { uid = ViewBag.uid })',
         data: {filterKey: input, elementId: insert_index},
         type: "POST",
         success: function(data) {

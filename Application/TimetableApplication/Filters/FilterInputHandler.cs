@@ -19,12 +19,11 @@ namespace TimetableApplication
             return filterTypes;
         }
 
-        public static IEnumerable<string> GetFiltersOfType(string filterType)
+        public static IEnumerable<string> GetFiltersOfType(string uid, string filterType)
         {
-            var uid = "sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
             if (filterType == "Teacher")
                 return UserToData.GetInputInfo(uid).Select(x => x.Teacher).Distinct();
-            else if(filterType == "Group")
+            if(filterType == "Group")
                 return UserToData.GetInputInfo(uid).Select(x => x.Group).Distinct();
             throw new ArgumentException("No such filter");
         }
