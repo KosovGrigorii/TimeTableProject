@@ -1,13 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using Castle.Core.Internal;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using TimetableApplication;
 using TimetableDomain;
 using UserInterface.Models;
@@ -60,10 +55,9 @@ namespace UserInterface
             return View("FiltersInput");
         }
         
-        [HttpPost]
         public PartialViewResult GetFiltersInputField(string uid, string elementId)
         {
-            var specifiedFilters =  userToData.GetTeacherFilters(uid);
+            var specifiedFilters = userToData.GetTeacherFilters(uid);
             ViewBag.Index = elementId;
             return PartialView("_SingleSpecifiedFilter", specifiedFilters);
         }
@@ -72,7 +66,8 @@ namespace UserInterface
         public IActionResult GetFilters(IEnumerable<FilterUI> filters, string uid)
         {
             var algorithm = timetableMakers["Genetic"];
-            timetableMaker.StartMakingTimeTable(uid, algorithm, userToData, filters.Select(x => new Filter(x.Name, x.Hours)));
+            timetableMaker.StartMakingTimeTable(uid, algorithm, userToData, 
+                filters.Select(x => new Filter(x.Name, x.Hours)));
             return RedirectToAction("LoadingPage", new {uid = uid});
         }
         

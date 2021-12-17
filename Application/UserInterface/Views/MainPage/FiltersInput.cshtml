@@ -17,17 +17,6 @@
 </div>
 
 <script>
-// function filterInputField(div_to_insert, input, insert_index) {
-//     $.ajax({
-//         url: '@Url.Action("GetFiltersInputField", "MainPage", new { uid = ViewBag.uid })',
-//         data: {filterKey: input, elementId: insert_index},
-//         type: "POST",
-//         success: function(data) {
-//             $('#' + div_to_insert).html(data);
-//         }
-//     })
-// }
-    
 function AddInputDiv(){
     var filterForm = document.getElementById('filtersForm');
     var div = document.createElement('div');
@@ -35,8 +24,8 @@ function AddInputDiv(){
     div.id = insert_id;
     filterForm.appendChild(div);
     $.ajax({
-        url: '@Url.Action("GetFiltersInputField", "MainPage")',
-        data: {uid: ViewBag.uid, elementId: insert_id},
+        url: '@Url.Action("GetFiltersInputField", "MainPage", new { uid = ViewBag.uid })',
+        data: {elementId: insert_id},
         success: function (data) {  
             $('#' + insert_id).html(data);  
         }  

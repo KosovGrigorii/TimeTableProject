@@ -5,7 +5,7 @@
     var modelHoursId = "filters[" + ViewBag.Index + "].Days";
 }
 
-<input list="filtered" type="text" placeholder="Name" name="@modelNameId"/>
+<input list="filtered" autocomplete="off" type="text" placeholder="Name" name="@modelNameId"/>
 <datalist id="filtered">
     @foreach (var item in Model)
     {
