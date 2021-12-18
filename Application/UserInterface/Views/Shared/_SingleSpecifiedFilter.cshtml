@@ -1,13 +1,13 @@
-@model IEnumerable<string>
+@model UserInterface.Models.UserFilters
 
 @{
-    var modelNameId = "filters[" + ViewBag.Index + "].Name";
-    var modelHoursId = "filters[" + ViewBag.Index + "].Days";
+    var modelNameId = "filters[" + Model.Index + "].Name";
+    var modelHoursId = "filters[" + Model.Index + "].Days";
 }
 
-<input list="filtered" type="text" placeholder="Name" name="@modelNameId"/>
+<input list="filtered" autocomplete="off" type="text" placeholder="Name" name="@modelNameId"/>
 <datalist id="filtered">
-    @foreach (var item in Model)
+    @foreach (var item in Model.Filters)
     {
         <option value="@item"></option>
     }

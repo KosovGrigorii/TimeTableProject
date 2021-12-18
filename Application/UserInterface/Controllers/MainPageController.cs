@@ -1,19 +1,31 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Http;
-using TimetableApplication;
 using System.IO;
-using Castle.Core.Internal;
+using System.Linq;
+using TimetableApplication;
+using TimetableDomain;
 using UserInterface.Models;
-using Filter = TimetableApplication.Filter;
 
 
 namespace UserInterface
 {
     public class MainPageController : Controller
     {
+        private readonly InputProvider inputProvider;
+        private readonly TimetableMakingController timetableMaker;
+        private readonly IUserData userToData;
+
+        public MainPageController(IEnumerable<IInputParser> inputParsers,
+            IEnumerable<ITimetableMaker> algorithms,
+            IUserData userToData)
+        {
+        
+            inputProvider = new InputProvider(inputParsers.ToDictionary(x => x.Extension));
+            timetableMaker = new TimetableMakingController(algorithms.ToDictionary(x => x.Name));
+            this.userToData = userToData;
+        }
+        
         public ActionResult Index()
         {
             return View();
@@ -22,50 +34,48 @@ namespace UserInterface
         [HttpPost]
         public IActionResult FileFormUpload()
         {
-            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-            var extension = Path.GetExtension(Request.Form.Files[0].FileName);
-            var stream = Request.Form.Files[0].OpenReadStream();
             var uid = Guid.NewGuid().ToString();
+            userToData.AddUser(uid);
             
-            ApplicationConfigurator.Configurator.Input(uid, stream, extension);
+            var fileInfo = Request.Form.Files[0];
+            var strExtension = Path.GetExtension(fileInfo.FileName);
+            var translated = Enum.TryParse<Parsers>(strExtension, out var extension);
+            
+            using (var stream = fileInfo.OpenReadStream())
+            {
+                var slots = inputProvider.ParseInput(stream, extension);
+                userToData.SetInputInfo(uid, slots);
+            }
+            
             return RedirectToAction("FiltersInput", new { uid = uid});
         }
 
-        [HttpGet]
         public IActionResult FiltersInput(string uid)
         {
-            ViewBag.uid = uid;
-            return View("FiltersInput");
+            var model = new UserID { ID = uid };
+            return View(model);
         }
-
-        public PartialViewResult GetFiltersInputForm(string elementId)
+        
+        public PartialViewResult GetFiltersInputField(string uid, string elementId)
         {
-            var filterTypes = FilterInputHandler.GetFilterTypes();
-            ViewBag.FilterTypes = new SelectList(filterTypes);
-            ViewBag.Index = elementId;
-            return PartialView("_SingleFilter");
+            var specifiedFilters = userToData.GetTeacherFilters(uid);
+            var userFilters = new UserFilters() {Filters = specifiedFilters, Index = elementId};
+            return PartialView("_SingleSpecifiedFilter", userFilters);
         }
-
+        
         [HttpPost]
-        public PartialViewResult GetFiltersInputField(string uid, string filterKey, string elementId)
+        public IActionResult GetFilters(IEnumerable<FilterUI> filters, string uid)
         {
-            var specifiedFilters = FilterInputHandler.GetFiltersOfType(uid, filterKey);
-            ViewBag.Index = elementId;
-            return PartialView("_SingleSpecifiedFilter", specifiedFilters);
-        }
-
-        [HttpPost]
-        public IActionResult GetFilters(IEnumerable<Filter> filters, string uid)
-        {
-            ApplicationConfigurator.Configurator.MakeTimetable(uid, filters);
+            var applicationFilters = filters.Select(x => new Filter(x.Name, x.Hours));
+            
+            timetableMaker.StartMakingTimeTable(uid, userToData, applicationFilters);
             return RedirectToAction("LoadingPage", new {uid = uid});
         }
         
         [HttpGet]
         public IActionResult LoadingPage(string uid)
         {
-            ViewBag.uid = uid;
-            return View("Loading");
+            return View("Loading", new UserID() {ID = uid});
         }
         
         [HttpPost]

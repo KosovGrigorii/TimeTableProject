@@ -1,27 +1,38 @@
+using System;
 using System.IO;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using Microsoft.AspNetCore.Hosting;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using TimetableDomain;
 using UserInterface.Models;
+using TimetableApplication;
+
 
 namespace UserInterface
 {
     public class OutputController: Controller
     {
+        private readonly OutputProvider outputProvider;
+        private readonly IUserData userToData;
+
+        public OutputController(IEnumerable<OutputFormatter> outputFormatters, IUserData userToData)
+        {
+            outputProvider = new OutputProvider(outputFormatters.ToDictionary(x => x.Extension));
+            this.userToData = userToData;
+        }
+
         [HttpGet]
         public IActionResult Index(string uid)
         {
-            ViewBag.uid = uid;
-            return View("Output");
+            return View("Output", new UserID() {ID = uid});
         }
 
         public FileResult DownloadFile(string uid)
         {
-            var filePath = ApplicationConfigurator.Configurator.GetOutputFile(uid, ".xlsx");
+            var strExtension = ".xlsx";
+            var translated = Enum.TryParse<Formatters>(strExtension, out var extension);
+            var timeslots = userToData.GetTimeslots(uid);
+            var filePath = outputProvider.GetOutputPath(extension, uid, timeslots);
+            
             var bytes = System.IO.File.ReadAllBytes(filePath);
             return File(bytes, "application/octet-stream", Path.GetFileName(filePath));
         }

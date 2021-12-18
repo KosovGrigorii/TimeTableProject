@@ -11,8 +11,8 @@ namespace TimetableDomain
     {
         //private readonly IEnumerable<Entity> _dataContext;
         static Random Random=new Random();
-        private List<Course> dataCourses;
-        private List<string> dataClasses;
+        private IEnumerable<Course> dataCourses;
+        private IEnumerable<string> dataClasses;
         private List<TimeSpan> lessonStarts;
         
 
@@ -24,14 +24,14 @@ namespace TimetableDomain
 
         public List<TimeSlotChromosome> Value;
 
-        public TimeTableChromosome(List<Course> courses, List<string> classes, List<TimeSpan> lessonStarts)
+        public TimeTableChromosome(IEnumerable<Course> courses, IEnumerable<string> classes, IEnumerable<TimeSpan> lessonStarts)
         {
             dataCourses = courses;
             dataClasses = classes;
-            this.lessonStarts = lessonStarts;
+            this.lessonStarts = lessonStarts.ToList();
             Generate();
         }
-        public TimeTableChromosome(List<TimeSlotChromosome> slots, List<Course> courses, List<string> classes,
+        public TimeTableChromosome(List<TimeSlotChromosome> slots, IEnumerable<Course> courses, IEnumerable<string> classes,
             List<TimeSpan> lessonStarts)
         {
             dataCourses = courses;

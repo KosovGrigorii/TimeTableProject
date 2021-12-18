@@ -1,26 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Accord.Genetic;
-//using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-//using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
 
 namespace TimetableDomain
 {
     public class GeneticAlgorithm : ITimetableMaker
     {
-        public string Name { get; }
-
-        public GeneticAlgorithm()
-        {
-            Name = "Genetic";
-        }
+        public TimetableMakers Name => TimetableMakers.Genetic;
         
-        public List<TimeSlot> Start(List<Course> cources, List<string> classes, IEnumerable<Teacher> teachers, List<TimeSpan> lessonStarts)
+        public IEnumerable<TimeSlot> Start(IEnumerable<Course> cources, 
+            IEnumerable<string> classes, IEnumerable<Teacher> teachers, IEnumerable<TimeSpan> lessonStarts)
         {
             Population population = new Population(1000, new TimeTableChromosome(cources, classes, lessonStarts),
                 new FitnessFunction(teachers), new EliteSelection());
@@ -37,17 +27,14 @@ namespace TimetableDomain
             }
 
             var timetable = (population.BestChromosome as TimeTableChromosome).Value.Select(chromosome =>
-                new TimeSlot()
-                {
-                    Course = chromosome.CourseId, 
-                    Place = chromosome.PlaceId,
-                    Teacher = chromosome.TeacherId,
-                    Day = (DayOfWeek) chromosome.Day,
-                    Start = chromosome.StartAt, End = chromosome.EndAt,
-                    //Id = Guid.NewGuid().ToString(),
-                    Groups = chromosome.Groups
-                }
-            ).ToList();
+                new TimeSlot(
+                    (DayOfWeek) chromosome.Day,
+                    chromosome.StartAt, 
+                    chromosome.EndAt, 
+                    chromosome.PlaceId, 
+                    chromosome.CourseId, 
+                    chromosome.TeacherId, 
+                    chromosome.Groups));
             return timetable;
         }
     }
