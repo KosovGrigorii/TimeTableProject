@@ -8,21 +8,25 @@ namespace TimetableApplication
 {
     public class OutputProvider
     {
-        private readonly IReadOnlyDictionary<Formatters, OutputFormatter> formatters;
+        private FormatterChooser chooser;
         
-        public OutputProvider(IReadOnlyDictionary<Formatters, OutputFormatter> formatters)
+        public OutputProvider(IReadOnlyDictionary<OutputExtension, OutputFormatter> formatters)
         {
-            this.formatters = formatters;
+            chooser = new FormatterChooser(formatters);
         }
 
-        public string GetOutputPath(Formatters extension, string uid, IEnumerable<TimeSlot> timeslots)
+        public string GetPathToOutputFile(OutputExtension extension, string uid, IEnumerable<TimeSlot> timeslots)
+        {
+            var path = GetPath(extension, uid);
+            var formatter = chooser.ChooseFormatter(extension);
+            formatter.MakeOutputFile(path, timeslots);
+            return path;
+        }
+
+        private string GetPath(OutputExtension extension, string uid)
         {
             var fileName = $"{uid}.{extension.ToString().ToLower()}";
-            var path =  Path.Combine(Path.GetTempPath(), fileName);
-            
-            var formatter = formatters[extension];
-            formatter.GetOutputFile(path, timeslots);
-            return path;
+            return Path.Combine(Path.GetTempPath(), fileName);
         }
     }
 }

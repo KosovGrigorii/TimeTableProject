@@ -10,9 +10,9 @@ namespace TimetableApplication
 {
     public class XlsxOutputFormatter: OutputFormatter
     {
-        public override Formatters Extension => Formatters.Xlsx;
+        public override OutputExtension Extension => OutputExtension.Xlsx;
         
-        public override void GetOutputFile(string filePath, IEnumerable<TimeSlot> timeSlots)
+        public override void MakeOutputFile(string filePath, IEnumerable<TimeSlot> timeSlots)
         {
             var (schedule, bells) = ConvertTimeSlotsToDictionaries(timeSlots.ToList());
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;

@@ -7,16 +7,16 @@ namespace UserInterface
 {
     public class InputProvider
     {
-        private readonly Dictionary<Parsers, IInputParser> inputParsers;
+        private ParserChooser chooser;
 
-        public InputProvider(Dictionary<Parsers, IInputParser> inputParsers)
+        public InputProvider(Dictionary<ParserExtension, IInputParser> inputParsers)
         {
-            this.inputParsers = inputParsers;
+            chooser = new ParserChooser(inputParsers);
         }
 
-        public IEnumerable<SlotInfo> ParseInput(Stream stream, Parsers extension)
+        public IEnumerable<SlotInfo> ParseInput(Stream stream, ParserExtension extension)
         {
-            var parser = inputParsers[extension];
+            var parser = chooser.ChooseParser(extension);
             return parser.ParseFile(stream);
         }
     }

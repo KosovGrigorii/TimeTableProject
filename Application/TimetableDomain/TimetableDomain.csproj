@@ -8,9 +8,4 @@
       <PackageReference Include="Accord.Genetic" Version="3.8.2-alpha" />
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
-      <ProjectReference Include="..\TimetableCommonClasses\TimetableCommonClasses.csproj" />
-    </ItemGroup>
-
 </Project>

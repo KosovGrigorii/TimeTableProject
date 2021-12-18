@@ -43,13 +43,6 @@ namespace UserInterface
                     name: "default",
                     pattern: "{controller=MainPage}/{action=Index}/{id?}");
             });
-            
-            app.Run(async x =>
-            {
-                x.Response.StatusCode = 200;
-                // await x.Response.WriteAsync("Hello, World!");
-                await x.Response.WriteAsync(x.Request.QueryString.Value);
-            });
         }
     }
 }

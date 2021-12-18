@@ -23,7 +23,7 @@ function AddInputDiv(){
     div.id = insert_id;
     filterForm.appendChild(div);
     $.ajax({
-        url: '@Url.Action("GetFiltersInputField", "MainPage", new { uid = Model.ID })',
+        url: '@Url.Action("_SingleSpecifiedFilter", "MainPage", new { uid = Model.ID })',
         data: {elementId: insert_id},
         success: function (data) {
             $('#' + insert_id).html(data);

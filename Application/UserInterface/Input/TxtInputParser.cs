@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using TimetableApplication;
 
-namespace TimetableApplication.Input
+namespace UserInterface
 {
-    class TxtInputParser
+    class TxtInputParser : IInputParser
     {
-        public string Extension => ".txt";
+        public ParserExtension Extension => ParserExtension.Txt;
 
         public IEnumerable<SlotInfo> ParseFile(Stream stream)
         {

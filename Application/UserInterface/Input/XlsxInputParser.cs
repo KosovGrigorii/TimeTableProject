@@ -8,7 +8,7 @@ namespace UserInterface
 {
     public class XlsxInputParser : IInputParser
     {
-        public Parsers Extension => Parsers.Xlsx;
+        public ParserExtension Extension => ParserExtension.Xlsx;
         
         public IEnumerable<SlotInfo> ParseFile(Stream stream)
         {

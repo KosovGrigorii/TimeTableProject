@@ -6,11 +6,11 @@ using TimetableDomain;
 
 namespace TimetableApplication
 {
-    public class TimetableMakingController
+    public class TimetableMakingProvider
     {
-        private readonly IReadOnlyDictionary<TimetableMakers, ITimetableMaker> timetableMakers;
+        private readonly IReadOnlyDictionary<Algorithm, ITimetableMaker> timetableMakers;
         
-        public TimetableMakingController(IReadOnlyDictionary<TimetableMakers, ITimetableMaker> timetableMakers)
+        public TimetableMakingProvider(IReadOnlyDictionary<Algorithm, ITimetableMaker> timetableMakers)
         {
             this.timetableMakers = timetableMakers;
         }
@@ -18,7 +18,7 @@ namespace TimetableApplication
         public void StartMakingTimeTable(string uid, 
             IUserData userToData, IEnumerable<Filter> filters)
         {
-            var algorithm = timetableMakers[TimetableMakers.Genetic];
+            var algorithm = timetableMakers[Algorithm.Genetic];
             
             var lessonStarts = new List<TimeSpan>() { 
                 new TimeSpan(9, 0, 0),
@@ -33,7 +33,7 @@ namespace TimetableApplication
             var teachers = filters.Select(x => new Teacher(x.Name, x.Days)).ToList();
             var rooms = userToData.GetInputInfo(uid).Select(x => x.Class).ToList();
             
-            var timeslots = algorithm.Start(courses, rooms, teachers, lessonStarts);
+            var timeslots = algorithm.GetTimetable(courses, rooms, teachers, lessonStarts);
             userToData.SetTimeslots(uid, timeslots);
         }
     }

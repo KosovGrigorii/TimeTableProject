@@ -1,6 +1,6 @@
 namespace TimetableDomain
 {
-    public enum TimetableMakers
+    public enum Algorithm
     {
         Genetic,
         Other

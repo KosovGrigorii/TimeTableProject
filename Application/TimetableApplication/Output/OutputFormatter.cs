@@ -8,8 +8,8 @@ namespace TimetableApplication
 {
     public abstract class OutputFormatter
     {
-        public abstract Formatters Extension { get; }
-        public abstract void GetOutputFile(string filePath, IEnumerable<TimeSlot> timeSlots);
+        public abstract OutputExtension Extension { get; }
+        public abstract void MakeOutputFile(string filePath, IEnumerable<TimeSlot> timeSlots);
         
         protected (Dictionary<string, string[,]>, List<Tuple<TimeSpan, TimeSpan>>) ConvertTimeSlotsToDictionaries(
             List<TimeSlot> timeSlots)

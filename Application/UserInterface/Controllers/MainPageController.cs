@@ -13,16 +13,15 @@ namespace UserInterface
     public class MainPageController : Controller
     {
         private readonly InputProvider inputProvider;
-        private readonly TimetableMakingController timetableMaker;
+        private readonly TimetableMakingProvider timetableMaker;
         private readonly IUserData userToData;
 
         public MainPageController(IEnumerable<IInputParser> inputParsers,
             IEnumerable<ITimetableMaker> algorithms,
             IUserData userToData)
         {
-        
             inputProvider = new InputProvider(inputParsers.ToDictionary(x => x.Extension));
-            timetableMaker = new TimetableMakingController(algorithms.ToDictionary(x => x.Name));
+            timetableMaker = new TimetableMakingProvider(algorithms.ToDictionary(x => x.Name));
             this.userToData = userToData;
         }
         
@@ -39,7 +38,7 @@ namespace UserInterface
             
             var fileInfo = Request.Form.Files[0];
             var strExtension = Path.GetExtension(fileInfo.FileName);
-            var translated = Enum.TryParse<Parsers>(strExtension, out var extension);
+            var translated = Enum.TryParse<ParserExtension>(strExtension, out var extension);
             
             using (var stream = fileInfo.OpenReadStream())
             {
@@ -56,11 +55,11 @@ namespace UserInterface
             return View(model);
         }
         
-        public PartialViewResult GetFiltersInputField(string uid, string elementId)
+        public PartialViewResult _SingleSpecifiedFilter(string uid, string elementId)
         {
             var specifiedFilters = userToData.GetTeacherFilters(uid);
             var userFilters = new UserFilters() {Filters = specifiedFilters, Index = elementId};
-            return PartialView("_SingleSpecifiedFilter", userFilters);
+            return PartialView(userFilters);
         }
         
         [HttpPost]

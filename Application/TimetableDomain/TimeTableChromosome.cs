@@ -2,14 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Accord.Genetic;
-using Microsoft.EntityFrameworkCore;
 
 
 namespace TimetableDomain
 {
     class TimeTableChromosome : ChromosomeBase
     {
-        //private readonly IEnumerable<Entity> _dataContext;
         static Random Random=new Random();
         private IEnumerable<Course> dataCourses;
         private IEnumerable<string> dataClasses;
@@ -50,8 +48,8 @@ namespace TimetableDomain
                         Groups = course.Groups.ToList(),
                         //CourseId = course.Id,
                         StartAt = RandomStartTime(),
-                        PlaceId = dataClasses.OrderBy(_class => Guid.NewGuid()).FirstOrDefault(),
-                        TeacherId = course.Teacher, //Teacher themselves, but not id
+                        Place = dataClasses.OrderBy(_class => Guid.NewGuid()).FirstOrDefault(),
+                        Teacher = course.Teacher, //Teacher themselves, but not id
                         Day=Random.Next(1,5)
                     };
                 }

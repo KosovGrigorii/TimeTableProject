@@ -22,15 +22,11 @@ namespace TimetableDomain
             
             var getTimeOverLaps = new Func<TimeSlotChromosome, IEnumerable<TimeSlotChromosome>>(current => values
                 .Except(new[] { current })
-                .Where(slot => slot.Day == current.Day && (slot.StartAt == current.StartAt
-                                                           || slot.StartAt <= current.EndAt 
-                                                           && slot.StartAt >= current.StartAt 
-                                                           || slot.EndAt >= current.StartAt 
-                                                           && slot.EndAt <= current.EndAt)));
+                .Where(slot => slot.IsOverlappedBy(current)));
+            
             var teacherWorkDaysOverLaps = new Func<TimeSlotChromosome, IEnumerable<TimeSlotChromosome>>(current =>
                 values.Where(x => 
-                        Teachers.TryGetValue(x.TeacherId, out var teacher) 
-                                  && teacher.IsDayForbidden(x.Day)));
+                        Teachers.TryGetValue(x.Teacher, out var teacher) && teacher.IsDayForbidden(x.Day)));
             var GetoverLaps = new Func<TimeSlotChromosome, List<TimeSlotChromosome>>(current => 
                 getTimeOverLaps(current)
                     .Concat(teacherWorkDaysOverLaps(current))
@@ -40,11 +36,10 @@ namespace TimetableDomain
             foreach (var value in values)
             {
                 var overLaps = GetoverLaps(value);
-                score -= overLaps.GroupBy(slot => slot.TeacherId).Sum(x => x.Count() - 1);
-                score -= overLaps.GroupBy(slot => slot.PlaceId).Sum(x => x.Count() - 1);
-                score -= overLaps.GroupBy(slot => slot.CourseId).Sum(x => x.Count() - 1);
+                score -= overLaps.GroupBy(slot => slot.Teacher).Sum(x => x.Count() - 1);
+                score -= overLaps.GroupBy(slot => slot.Place).Sum(x => x.Count() - 1);
+                score -= overLaps.GroupBy(slot => slot.Course).Sum(x => x.Count() - 1);
                 score -= overLaps.Sum(item => item.Groups.Intersect(value.Groups).Count());
-                //score -= overLaps.Sum(item => item.Group.Intersect(value.Groups).Count());
             }
 
             score -= values.GroupBy(v => v.Day).Count() * 0.5;

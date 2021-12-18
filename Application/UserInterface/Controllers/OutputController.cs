@@ -29,9 +29,9 @@ namespace UserInterface
         public FileResult DownloadFile(string uid)
         {
             var strExtension = ".xlsx";
-            var translated = Enum.TryParse<Formatters>(strExtension, out var extension);
+            var translated = Enum.TryParse<OutputExtension>(strExtension, out var extension);
             var timeslots = userToData.GetTimeslots(uid);
-            var filePath = outputProvider.GetOutputPath(extension, uid, timeslots);
+            var filePath = outputProvider.GetPathToOutputFile(extension, uid, timeslots);
             
             var bytes = System.IO.File.ReadAllBytes(filePath);
             return File(bytes, "application/octet-stream", Path.GetFileName(filePath));

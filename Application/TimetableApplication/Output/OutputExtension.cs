@@ -1,6 +1,6 @@
 namespace TimetableApplication
 {
-    public enum Formatters
+    public enum OutputExtension
     {
         Xlsx
     }

@@ -7,19 +7,20 @@ namespace TimetableDomain
 {
     public class GeneticAlgorithm : ITimetableMaker
     {
-        public TimetableMakers Name => TimetableMakers.Genetic;
+        public Algorithm Name => Algorithm.Genetic;
         
-        public IEnumerable<TimeSlot> Start(IEnumerable<Course> cources, 
-            IEnumerable<string> classes, IEnumerable<Teacher> teachers, IEnumerable<TimeSpan> lessonStarts)
+        public IEnumerable<TimeSlot> GetTimetable(
+            IEnumerable<Course> cources, 
+            IEnumerable<string> classes, 
+            IEnumerable<Teacher> teachers, 
+            IEnumerable<TimeSpan> lessonStarts)
         {
             Population population = new Population(1000, new TimeTableChromosome(cources, classes, lessonStarts),
                 new FitnessFunction(teachers), new EliteSelection());
 
-            int i = 0;
-            while (true)
+            for(var i = 1; ; i++)
             {
                 population.RunEpoch();
-                i++;
                 if (population.FitnessMax >= 0.99 || i >= 1000)
                 {
                     break;
@@ -31,9 +32,9 @@ namespace TimetableDomain
                     (DayOfWeek) chromosome.Day,
                     chromosome.StartAt, 
                     chromosome.EndAt, 
-                    chromosome.PlaceId, 
-                    chromosome.CourseId, 
-                    chromosome.TeacherId, 
+                    chromosome.Place, 
+                    chromosome.Course, 
+                    chromosome.Teacher, 
                     chromosome.Groups));
             return timetable;
         }

@@ -3,11 +3,6 @@ using System.Collections.Generic;
 
 namespace TimetableDomain
 {
-    //public abstract class Entity
-    //{
-    //    public string Id { get; set; }
-    //}
-        
     public class Course
     {
         public string Title { get; set; }
