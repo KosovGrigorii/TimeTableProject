@@ -1,4 +1,4 @@
-@using TimetableApplication
+@model UserInterface.Models.UserID
  
 @{
     Layout = "_Layout";
@@ -11,7 +11,7 @@
     </head>
     <body>
         <div class="output">
-            @using (Html.BeginForm("DownloadFile", "Output", new { uid = @ViewBag.uid }))
+            @using (Html.BeginForm("DownloadFile", "Output", new { uid = Model.ID }))
             {
                 <input type="submit" value="Download">
             }

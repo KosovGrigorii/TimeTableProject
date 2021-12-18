@@ -24,7 +24,6 @@ namespace UserInterface
             services.AddScoped<ITimetableMaker, GeneticAlgorithm>();
             services.AddScoped<OutputFormatter, XlsxOutputFormatter>();
             services.AddSingleton<IUserData, UserToData>();
-            services.AddSingleton<TimetableMakingController>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +42,13 @@ namespace UserInterface
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=MainPage}/{action=Index}/{id?}");
+            });
+            
+            app.Run(async x =>
+            {
+                x.Response.StatusCode = 200;
+                // await x.Response.WriteAsync("Hello, World!");
+                await x.Response.WriteAsync(x.Request.QueryString.Value);
             });
         }
     }

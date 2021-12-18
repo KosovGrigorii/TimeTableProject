@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using TimetableApplication;
 using System.IO;
 
-namespace TimetableApplication
+namespace UserInterface
 {
     public interface IInputParser
     {
-        string Extension {get;}
+        Parsers Extension {get;}
         IEnumerable<SlotInfo> ParseFile(Stream stream);
     }
 }

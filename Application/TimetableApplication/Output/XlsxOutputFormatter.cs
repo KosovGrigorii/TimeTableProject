@@ -10,12 +10,7 @@ namespace TimetableApplication
 {
     public class XlsxOutputFormatter: OutputFormatter
     {
-        public override string Extension { get; }
-
-        public XlsxOutputFormatter()
-        {
-            Extension = ".xlsx";
-        }
+        public override Formatters Extension => Formatters.Xlsx;
         
         public override void GetOutputFile(string filePath, IEnumerable<TimeSlot> timeSlots)
         {

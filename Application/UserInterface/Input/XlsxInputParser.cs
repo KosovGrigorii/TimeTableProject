@@ -1,16 +1,18 @@
 using System;
 using System.Collections.Generic;
+using TimetableApplication;
 using System.IO;
 using ExcelDataReader;
 
-namespace TimetableApplication
+namespace UserInterface
 {
     public class XlsxInputParser : IInputParser
     {
-        public string Extension => ".xlsx";
+        public Parsers Extension => Parsers.Xlsx;
         
         public IEnumerable<SlotInfo> ParseFile(Stream stream)
         {
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             var slots = new List<SlotInfo>();
             stream.Position = 0;
             using var reader = ExcelReaderFactory.CreateReader(stream);

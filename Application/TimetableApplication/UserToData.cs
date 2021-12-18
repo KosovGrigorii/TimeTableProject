@@ -13,7 +13,7 @@ namespace TimetableApplication
             internal IEnumerable<TimeSlot> Timeslots { get; set; }
         }
         
-        private static readonly Dictionary<string, UserData> uidToData = new();
+        private readonly Dictionary<string, UserData> uidToData = new();
 
         public void AddUser(string uid)
         {

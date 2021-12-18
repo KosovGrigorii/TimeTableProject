@@ -6,7 +6,7 @@ namespace TimetableDomain
 {
     public interface ITimetableMaker
     {
-        string Name { get; }
+        TimetableMakers Name { get; }
         IEnumerable<TimeSlot> Start(IEnumerable<Course> cources, 
             IEnumerable<string> classes, IEnumerable<Teacher> teachers, IEnumerable<TimeSpan> lessonStarts);
     }

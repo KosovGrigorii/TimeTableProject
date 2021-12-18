@@ -1,12 +1,11 @@
-@page
-@model UserInterface.Views.MainPage.Loading
+@model UserInterface.Models.UserID
 
 @{
     Layout = "_Layout";
 }
 
 <div>
-    @using (Html.BeginForm("ToOutput", "MainPage", new {uid = @ViewBag.uid}))
+    @using (Html.BeginForm("ToOutput", "MainPage", new {uid = Model.ID}))
     {
         <input type="submit" value="Submit"/>
     }

@@ -5,7 +5,6 @@ using TimetableDomain;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using TimetableDomain;
 
 namespace TimetableApplication
 {

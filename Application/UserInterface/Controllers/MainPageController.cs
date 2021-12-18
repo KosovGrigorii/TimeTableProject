@@ -12,19 +12,17 @@ namespace UserInterface
 {
     public class MainPageController : Controller
     {
-        private readonly Dictionary<string, IInputParser> inputParsers;
-        private readonly Dictionary<string, ITimetableMaker> timetableMakers;
+        private readonly InputProvider inputProvider;
         private readonly TimetableMakingController timetableMaker;
         private readonly IUserData userToData;
 
-        public MainPageController(IEnumerable<IInputParser> inputParsers, 
-            IEnumerable<ITimetableMaker> timetableMakerAlgorithms, 
-            TimetableMakingController timetableMaker,
+        public MainPageController(IEnumerable<IInputParser> inputParsers,
+            IEnumerable<ITimetableMaker> algorithms,
             IUserData userToData)
         {
-            this.inputParsers = inputParsers.ToDictionary(x => x.Extension);
-            this.timetableMakers = timetableMakerAlgorithms.ToDictionary(x => x.Name);
-            this.timetableMaker = timetableMaker;
+        
+            inputProvider = new InputProvider(inputParsers.ToDictionary(x => x.Extension));
+            timetableMaker = new TimetableMakingController(algorithms.ToDictionary(x => x.Name));
             this.userToData = userToData;
         }
         
@@ -36,46 +34,48 @@ namespace UserInterface
         [HttpPost]
         public IActionResult FileFormUpload()
         {
-            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-            var extension = Path.GetExtension(Request.Form.Files[0].FileName);
-            var stream = Request.Form.Files[0].OpenReadStream();
             var uid = Guid.NewGuid().ToString();
-            var parser = inputParsers[extension];
-            
             userToData.AddUser(uid);
-            var slots = parser.ParseFile(stream);
-            userToData.SetInputInfo(uid, slots);
+            
+            var fileInfo = Request.Form.Files[0];
+            var strExtension = Path.GetExtension(fileInfo.FileName);
+            var translated = Enum.TryParse<Parsers>(strExtension, out var extension);
+            
+            using (var stream = fileInfo.OpenReadStream())
+            {
+                var slots = inputProvider.ParseInput(stream, extension);
+                userToData.SetInputInfo(uid, slots);
+            }
+            
             return RedirectToAction("FiltersInput", new { uid = uid});
         }
 
-        [HttpGet]
         public IActionResult FiltersInput(string uid)
         {
-            ViewBag.uid = uid;
-            return View("FiltersInput");
+            var model = new UserID { ID = uid };
+            return View(model);
         }
         
         public PartialViewResult GetFiltersInputField(string uid, string elementId)
         {
             var specifiedFilters = userToData.GetTeacherFilters(uid);
-            ViewBag.Index = elementId;
-            return PartialView("_SingleSpecifiedFilter", specifiedFilters);
+            var userFilters = new UserFilters() {Filters = specifiedFilters, Index = elementId};
+            return PartialView("_SingleSpecifiedFilter", userFilters);
         }
         
         [HttpPost]
         public IActionResult GetFilters(IEnumerable<FilterUI> filters, string uid)
         {
-            var algorithm = timetableMakers["Genetic"];
-            timetableMaker.StartMakingTimeTable(uid, algorithm, userToData, 
-                filters.Select(x => new Filter(x.Name, x.Hours)));
+            var applicationFilters = filters.Select(x => new Filter(x.Name, x.Hours));
+            
+            timetableMaker.StartMakingTimeTable(uid, userToData, applicationFilters);
             return RedirectToAction("LoadingPage", new {uid = uid});
         }
         
         [HttpGet]
         public IActionResult LoadingPage(string uid)
         {
-            ViewBag.uid = uid;
-            return View("Loading");
+            return View("Loading", new UserID() {ID = uid});
         }
         
         [HttpPost]

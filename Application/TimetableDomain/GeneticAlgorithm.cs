@@ -7,7 +7,7 @@ namespace TimetableDomain
 {
     public class GeneticAlgorithm : ITimetableMaker
     {
-        public string Name => "Genetic";
+        public TimetableMakers Name => TimetableMakers.Genetic;
         
         public IEnumerable<TimeSlot> Start(IEnumerable<Course> cources, 
             IEnumerable<string> classes, IEnumerable<Teacher> teachers, IEnumerable<TimeSpan> lessonStarts)

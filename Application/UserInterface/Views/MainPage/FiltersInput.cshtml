@@ -1,6 +1,5 @@
-@page
-@using UserInterface.Models
-@model FilterUI
+@model UserInterface.Models.UserID
+
 
 @{
     Layout = "_Layout";
@@ -8,7 +7,7 @@
 
 <div>
     <h1>Add limitations of working hours</h1>
-    @using (Html.BeginForm("GetFilters", "MainPage", new { uid = @ViewBag.uid }, FormMethod.Post))
+    @using (Html.BeginForm("GetFilters", "MainPage", new { uid = Model.ID }, FormMethod.Post))
     {
         <div id="filtersForm"></div>
         <input type="button" onclick="AddInputDiv()" value="+"/>
@@ -24,11 +23,11 @@ function AddInputDiv(){
     div.id = insert_id;
     filterForm.appendChild(div);
     $.ajax({
-        url: '@Url.Action("GetFiltersInputField", "MainPage", new { uid = ViewBag.uid })',
+        url: '@Url.Action("GetFiltersInputField", "MainPage", new { uid = Model.ID })',
         data: {elementId: insert_id},
-        success: function (data) {  
-            $('#' + insert_id).html(data);  
-        }  
+        success: function (data) {
+            $('#' + insert_id).html(data);
+        }
     })
     return false;
 }
