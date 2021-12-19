@@ -6,6 +6,7 @@ using System.Linq;
 using TimetableApplication;
 using TimetableDomain;
 using UserInterface.Models;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace UserInterface
@@ -15,14 +16,25 @@ namespace UserInterface
         private readonly InputProvider inputProvider;
         private readonly TimetableMakingProvider timetableMaker;
         private readonly IUserData userToData;
+        private readonly MysqlDataContext dataContext;
 
         public MainPageController(IEnumerable<IInputParser> inputParsers,
             IEnumerable<ITimetableMaker> algorithms,
-            IUserData userToData)
+            IUserData userToData,
+            MysqlDataContext dataContext)
         {
             inputProvider = new InputProvider(inputParsers.ToDictionary(x => x.Extension));
             timetableMaker = new TimetableMakingProvider(algorithms.ToDictionary(x => x.Name));
             this.userToData = userToData;
+            this.dataContext = dataContext;
+            var user = Guid.NewGuid().ToString();
+            var newEntity = new UserInputData()
+            {
+                UserID = user, 
+                Slot = new SlotInfo(){Class = "04"}
+            };
+            dataContext.InputData.Add(newEntity);
+            var e = 0;
         }
         
         public ActionResult Index()

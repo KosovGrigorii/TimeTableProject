@@ -26,9 +26,16 @@
       <Folder Include="wwwroot\lib\" />
     </ItemGroup>
     <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.11" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="5.0.11" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.11">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="MySql.Data" Version="8.0.27" />
       <PackageReference Include="Ninject" Version="4.0.0-beta-0134" />
       <PackageReference Include="Ninject.Extensions.Conventions" Version="3.3.0" />
+      <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.3" />
     </ItemGroup>
     <ItemGroup>
       <None Remove="Files\" />
