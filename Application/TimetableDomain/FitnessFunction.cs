@@ -39,7 +39,7 @@ namespace TimetableDomain
                 score -= overLaps.GroupBy(slot => slot.Teacher).Sum(x => x.Count() - 1);
                 score -= overLaps.GroupBy(slot => slot.Place).Sum(x => x.Count() - 1);
                 score -= overLaps.GroupBy(slot => slot.Course).Sum(x => x.Count() - 1);
-                score -= overLaps.Sum(item => item.Groups.Intersect(value.Groups).Count());
+                score -= overLaps.Sum(item => Convert.ToInt32(item.Group == value.Group));
             }
 
             score -= values.GroupBy(v => v.Day).Count() * 0.5;

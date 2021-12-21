@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using TimetableApplication;
 using TimetableDomain;
 
@@ -30,14 +27,23 @@ namespace UserInterface
             services.AddControllers();
             services.AddMvc();
             
-            var connectionString = configuration.GetConnectionString("DefaultConnection"); 
-            services.AddDbContextPool<MysqlDataContext>(
-                options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+            var firebaseUrl = configuration.GetConnectionString("FirebaseUrl");
+            var mysqlConnectionString = configuration.GetConnectionString("MySQLConnection");
+            
+            services.AddDbContext<MySQLDataContext>(
+                options => options.UseMySql(mysqlConnectionString, ServerVersion.AutoDetect(mysqlConnectionString))
+                    .LogTo(Console.WriteLine, LogLevel.Information)
+                    .EnableSensitiveDataLogging()
+                    .EnableDetailedErrors());
             
             services.AddScoped<IInputParser, XlsxInputParser>();
+            services.AddScoped<IInputParser, TxtInputParser>();
             services.AddScoped<ITimetableMaker, GeneticAlgorithm>();
             services.AddScoped<OutputFormatter, XlsxOutputFormatter>();
-            services.AddSingleton<IUserData, UserToData>();
+            
+            services.AddSingleton<IDatabaseClient, SimpleDictionary>();
+            services.AddSingleton<IDatabaseClient, MySQLClient>();
+            services.AddSingleton<IDatabaseClient>(new FirebaseClient(firebaseUrl));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

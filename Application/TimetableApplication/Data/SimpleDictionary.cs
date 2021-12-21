@@ -5,26 +5,24 @@ using TimetableDomain;
 
 namespace TimetableApplication
 {
-    public class UserToData : IUserData
+    public class SimpleDictionary : IDatabaseClient
     {
         private class UserData
         {
             internal IEnumerable<SlotInfo> Slots { get; set; }
             internal IEnumerable<TimeSlot> Timeslots { get; set; }
         }
+
+        public DatabaseClient Name => DatabaseClient.Dictionary;
         
         private readonly Dictionary<string, UserData> uidToData = new();
 
-        public void AddUser(string uid)
+        public void SetInputInfo(string uid, IEnumerable<SlotInfo> slots)
         {
             if (!uidToData.ContainsKey(uid))
                 uidToData[uid] = new UserData();
             else
                 throw new ArgumentException("User with this id is already added");
-        }
-
-        public void SetInputInfo(string uid, IEnumerable<SlotInfo> slots)
-        {
             if (uidToData.TryGetValue(uid, out var data))
                 data.Slots = slots;
             else
@@ -58,6 +56,11 @@ namespace TimetableApplication
             if (uidToData.TryGetValue(uid, out var data))
                 return data.Timeslots;
             throw new ArgumentException("No such UID");
+        }
+
+        public void DeleteUserData(string uid)
+        {
+            uidToData.Remove(uid);
         }
     }
 }

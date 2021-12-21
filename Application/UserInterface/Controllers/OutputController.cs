@@ -12,12 +12,12 @@ namespace UserInterface
     public class OutputController: Controller
     {
         private readonly OutputProvider outputProvider;
-        private readonly IUserData userToData;
+        private readonly IDatabaseClient databaseClient;
 
-        public OutputController(IEnumerable<OutputFormatter> outputFormatters, IUserData userToData)
+        public OutputController(IEnumerable<OutputFormatter> outputFormatters, IDatabaseClient databaseClient)
         {
             outputProvider = new OutputProvider(outputFormatters.ToDictionary(x => x.Extension));
-            this.userToData = userToData;
+            this.databaseClient = databaseClient;
         }
 
         [HttpGet]
@@ -30,10 +30,11 @@ namespace UserInterface
         {
             var strExtension = ".xlsx";
             var translated = Enum.TryParse<OutputExtension>(strExtension, out var extension);
-            var timeslots = userToData.GetTimeslots(uid);
+            var timeslots = databaseClient.GetTimeslots(uid);
             var filePath = outputProvider.GetPathToOutputFile(extension, uid, timeslots);
             
             var bytes = System.IO.File.ReadAllBytes(filePath);
+            databaseClient.DeleteUserData(uid);
             return File(bytes, "application/octet-stream", Path.GetFileName(filePath));
         }
     }

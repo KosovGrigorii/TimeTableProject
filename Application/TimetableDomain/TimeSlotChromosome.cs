@@ -10,8 +10,7 @@ namespace TimetableDomain
         public string Course { get; set; }
         public string Place { get; set; }
         public string Teacher { get; set; }
-        
-        public List<string> Groups { get; set; }
+        public string Group { get; set; }
         public int Day { get; set; }
         
         public bool IsOverlappedBy(TimeSlotChromosome other)

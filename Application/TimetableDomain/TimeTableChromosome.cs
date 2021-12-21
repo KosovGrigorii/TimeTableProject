@@ -45,7 +45,7 @@ namespace TimetableDomain
                 {
                     yield return new TimeSlotChromosome()
                     {
-                        Groups = course.Groups.ToList(),
+                        Group = course.Group,
                         //CourseId = course.Id,
                         StartAt = RandomStartTime(),
                         Place = dataClasses.OrderBy(_class => Guid.NewGuid()).FirstOrDefault(),

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using TimetableApplication;
 using TimetableDomain;
 using UserInterface.Models;
@@ -15,26 +16,15 @@ namespace UserInterface
     {
         private readonly InputProvider inputProvider;
         private readonly TimetableMakingProvider timetableMaker;
-        private readonly IUserData userToData;
-        private readonly MysqlDataContext dataContext;
+        private readonly IDatabaseClient databaseClient;
 
         public MainPageController(IEnumerable<IInputParser> inputParsers,
             IEnumerable<ITimetableMaker> algorithms,
-            IUserData userToData,
-            MysqlDataContext dataContext)
+            IEnumerable<IDatabaseClient> databaseClients)
         {
             inputProvider = new InputProvider(inputParsers.ToDictionary(x => x.Extension));
             timetableMaker = new TimetableMakingProvider(algorithms.ToDictionary(x => x.Name));
-            this.userToData = userToData;
-            this.dataContext = dataContext;
-            var user = Guid.NewGuid().ToString();
-            var newEntity = new UserInputData()
-            {
-                UserID = user, 
-                Slot = new SlotInfo(){Class = "04"}
-            };
-            dataContext.InputData.Add(newEntity);
-            var e = 0;
+            databaseClient = databaseClients.Where(x => x.Name == DatabaseClient.Firebase).First();
         }
         
         public ActionResult Index()
@@ -46,7 +36,6 @@ namespace UserInterface
         public IActionResult FileFormUpload()
         {
             var uid = Guid.NewGuid().ToString();
-            userToData.AddUser(uid);
             
             var fileInfo = Request.Form.Files[0];
             var strExtension = Path.GetExtension(fileInfo.FileName);
@@ -55,7 +44,7 @@ namespace UserInterface
             using (var stream = fileInfo.OpenReadStream())
             {
                 var slots = inputProvider.ParseInput(stream, extension);
-                userToData.SetInputInfo(uid, slots);
+                databaseClient.SetInputInfo(uid, slots);
             }
             
             return RedirectToAction("FiltersInput", new { uid = uid});
@@ -69,7 +58,7 @@ namespace UserInterface
         
         public PartialViewResult _SingleSpecifiedFilter(string uid, string elementId)
         {
-            var specifiedFilters = userToData.GetTeacherFilters(uid);
+            var specifiedFilters = databaseClient.GetTeacherFilters(uid);
             var userFilters = new UserFilters() {Filters = specifiedFilters, Index = elementId};
             return PartialView(userFilters);
         }
@@ -79,7 +68,7 @@ namespace UserInterface
         {
             var applicationFilters = filters.Select(x => new Filter(x.Name, x.Hours));
             
-            timetableMaker.StartMakingTimeTable(uid, userToData, applicationFilters);
+            timetableMaker.StartMakingTimeTable(uid, databaseClient, applicationFilters);
             return RedirectToAction("LoadingPage", new {uid = uid});
         }
         

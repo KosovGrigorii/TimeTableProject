@@ -28,14 +28,16 @@ namespace TimetableDomain
             }
 
             var timetable = (population.BestChromosome as TimeTableChromosome).Value.Select(chromosome =>
-                new TimeSlot(
-                    (DayOfWeek) chromosome.Day,
-                    chromosome.StartAt, 
-                    chromosome.EndAt, 
-                    chromosome.Place, 
-                    chromosome.Course, 
-                    chromosome.Teacher, 
-                    chromosome.Groups));
+                new TimeSlot()
+                    {
+                        Course = chromosome.Course,
+                        Day = (DayOfWeek) chromosome.Day,
+                        End = chromosome.EndAt,
+                        Group = chromosome.Group,
+                        Place = chromosome.Place,
+                        Start = chromosome.StartAt,
+                        Teacher = chromosome.Teacher
+                    });
             return timetable;
         }
     }

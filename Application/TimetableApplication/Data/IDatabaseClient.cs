@@ -3,13 +3,14 @@ using TimetableDomain;
 
 namespace TimetableApplication
 {
-    public interface IUserData
+    public interface IDatabaseClient
     {
-        void AddUser(string uid);
+        DatabaseClient Name {get;}
         void SetInputInfo(string uid, IEnumerable<SlotInfo> slots);
         IEnumerable<SlotInfo> GetInputInfo(string uid);
         IEnumerable<string> GetTeacherFilters(string uid);
         void SetTimeslots(string uid, IEnumerable<TimeSlot> timeslots);
         IEnumerable<TimeSlot> GetTimeslots(string uid);
+        void DeleteUserData(string uid);
     }
 }
