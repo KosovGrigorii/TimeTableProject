@@ -2,6 +2,6 @@ namespace TimetableApplication
 {
     public enum OutputExtension
     {
-        Xlsx
+        Xlsx, Pdf
     }
 }

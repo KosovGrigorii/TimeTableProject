@@ -24,6 +24,7 @@ namespace UserInterface
             services.AddScoped<IInputParser, TxtInputParser>();
             services.AddScoped<ITimetableMaker, GeneticAlgorithm>();
             services.AddScoped<OutputFormatter, XlsxOutputFormatter>();
+            services.AddScoped<OutputFormatter, PdfOutputFormatter>();
             services.AddSingleton<IUserData, UserToData>();
         }
 

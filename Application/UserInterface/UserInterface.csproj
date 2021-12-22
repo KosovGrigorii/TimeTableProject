@@ -6,7 +6,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\TimetableApplication\TimetableApplication.csproj" />
-      <ProjectReference Include="..\TimetableCommonClasses\TimetableCommonClasses.csproj" />
     </ItemGroup>
 
     <ItemGroup>
