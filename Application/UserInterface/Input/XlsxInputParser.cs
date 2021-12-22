@@ -21,7 +21,7 @@ namespace TimetableApplication
             return (begin_span.TotalMinutes, end_span.TotalMinutes);
         }
 
-        public ParserExtension Extension => ParserExtension.Xlsx;
+        public ParserExtension Extension => ParserExtension.xlsx;
 
         public IEnumerable<SlotInfo> ParseFile(Stream stream)
         {

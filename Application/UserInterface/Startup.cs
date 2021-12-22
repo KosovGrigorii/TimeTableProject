@@ -21,6 +21,7 @@ namespace UserInterface
             services.AddControllers();
             services.AddMvc();
             services.AddScoped<IInputParser, XlsxInputParser>();
+            services.AddScoped<IInputParser, TxtInputParser>();
             services.AddScoped<ITimetableMaker, GeneticAlgorithm>();
             services.AddScoped<OutputFormatter, XlsxOutputFormatter>();
             services.AddSingleton<IUserData, UserToData>();

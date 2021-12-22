@@ -2,7 +2,7 @@ namespace UserInterface
 {
     public enum ParserExtension
     {
-        Xlsx,
-        Txt
+        xlsx,
+        txt
     }
 }

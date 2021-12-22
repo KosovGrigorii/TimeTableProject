@@ -37,7 +37,7 @@ namespace UserInterface
             userToData.AddUser(uid);
             
             var fileInfo = Request.Form.Files[0];
-            var strExtension = Path.GetExtension(fileInfo.FileName);
+            var strExtension = Path.GetExtension(fileInfo.FileName).Split('.').Last();
             var translated = Enum.TryParse<ParserExtension>(strExtension, out var extension);
             
             using (var stream = fileInfo.OpenReadStream())

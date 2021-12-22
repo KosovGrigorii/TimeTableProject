@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UserInterface;
 
-namespace TimetableApplication.Input
+namespace TimetableApplication
 {
     class TxtInputParser : IInputParser
     {
@@ -20,7 +20,7 @@ namespace TimetableApplication.Input
             return (begin_span.TotalMinutes, end_span.TotalMinutes);
         }
 
-        public ParserExtension Extension => ParserExtension.Txt;
+        public ParserExtension Extension => ParserExtension.txt;
 
         public IEnumerable<SlotInfo> ParseFile(Stream stream)
         {
@@ -77,9 +77,6 @@ namespace TimetableApplication.Input
             {
                 throw new ArgumentException(".xlsx file was filled out wrongly");
             }
-            foreach (var i in starts)
-                Console.WriteLine(i);
-            Console.WriteLine(duration);
             return slots;
             //return (slots, starts, duration);
         }
