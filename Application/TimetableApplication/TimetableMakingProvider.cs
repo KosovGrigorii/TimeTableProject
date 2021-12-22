@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Infrastructure;
 using TimetableDomain;
 
 
@@ -16,14 +17,15 @@ namespace TimetableApplication
         }
         
         public void StartMakingTimeTable(string uid, 
-            IDatabaseClient userToData, IEnumerable<Filter> filters)
+            DatabaseProvider database,
+            IEnumerable<Filter> filters)
         {
             var algorithm = timetableMakers[Algorithm.Genetic];
             
             var lessonStarts = new List<TimeSpan>() { 
                 new TimeSpan(9, 0, 0),
                 new TimeSpan(10, 40, 0)};
-            var courses = userToData.GetInputInfo(uid)
+            var courses = database.GetInputInfo(uid)
                 .Select(x => new Course()
                 {
                     Title = x.Course,
@@ -31,10 +33,10 @@ namespace TimetableApplication
                     Group = x.Group
                 });
             var teachers = filters.Select(x => new Teacher(x.Name, x.Days)).ToList();
-            var rooms = userToData.GetInputInfo(uid).Select(x => x.Room).ToList();
+            var rooms = database.GetInputInfo(uid).Select(x => x.Room).ToList();
             
             var timeslots = algorithm.GetTimetable(courses, rooms, teachers, lessonStarts);
-            userToData.SetTimeslots(uid, timeslots);
+            database.SetTimeslots(uid, timeslots);
         }
     }
 }

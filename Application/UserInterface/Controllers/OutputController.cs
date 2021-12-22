@@ -2,9 +2,11 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using UserInterface.Models;
 using TimetableApplication;
+using TimetableDomain;
 
 
 namespace UserInterface
@@ -12,12 +14,16 @@ namespace UserInterface
     public class OutputController: Controller
     {
         private readonly OutputProvider outputProvider;
-        private readonly IDatabaseClient databaseClient;
+        private readonly DatabaseProvider databaseProvider;
 
-        public OutputController(IEnumerable<OutputFormatter> outputFormatters, IDatabaseClient databaseClient)
+        public OutputController(IEnumerable<OutputFormatter> outputFormatters, 
+            IEnumerable<IDatabaseWrapper<string, DatabaseSlot>> slotWrappers,
+            IEnumerable<IDatabaseWrapper<string, DatabaseTimeslot>> timeslotWrappers)
         {
             outputProvider = new OutputProvider(outputFormatters.ToDictionary(x => x.Extension));
-            this.databaseClient = databaseClient;
+            databaseProvider = new DatabaseProvider(
+                slotWrappers.ToDictionary(x => x.BaseName), 
+                timeslotWrappers.ToDictionary(x => x.BaseName));
         }
 
         [HttpGet]
@@ -30,11 +36,11 @@ namespace UserInterface
         {
             var strExtension = ".xlsx";
             var translated = Enum.TryParse<OutputExtension>(strExtension, out var extension);
-            var timeslots = databaseClient.GetTimeslots(uid);
+            var timeslots = databaseProvider.GetTimeslots(uid);
             var filePath = outputProvider.GetPathToOutputFile(extension, uid, timeslots);
             
             var bytes = System.IO.File.ReadAllBytes(filePath);
-            databaseClient.DeleteUserData(uid);
+            databaseProvider.DeleteUserData(uid);
             return File(bytes, "application/octet-stream", Path.GetFileName(filePath));
         }
     }

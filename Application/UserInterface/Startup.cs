@@ -1,4 +1,5 @@
 using System;
+using Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -29,21 +30,29 @@ namespace UserInterface
             
             var firebaseUrl = configuration.GetConnectionString("FirebaseUrl");
             var mysqlConnectionString = configuration.GetConnectionString("MySQLConnection");
-            
-            services.AddDbContext<MySQLDataContext>(
-                options => options.UseMySql(mysqlConnectionString, ServerVersion.AutoDetect(mysqlConnectionString))
-                    .LogTo(Console.WriteLine, LogLevel.Information)
-                    .EnableSensitiveDataLogging()
-                    .EnableDetailedErrors());
+            Action<DbContextOptionsBuilder> optionsAction = options => options
+                .UseMySql(mysqlConnectionString, ServerVersion.AutoDetect(mysqlConnectionString))
+                .LogTo(Console.WriteLine, LogLevel.Information)
+                .EnableSensitiveDataLogging()
+                .EnableDetailedErrors();
             
             services.AddScoped<IInputParser, XlsxInputParser>();
             services.AddScoped<IInputParser, TxtInputParser>();
             services.AddScoped<ITimetableMaker, GeneticAlgorithm>();
             services.AddScoped<OutputFormatter, XlsxOutputFormatter>();
-            
-            services.AddSingleton<IDatabaseClient, SimpleDictionary>();
-            services.AddSingleton<IDatabaseClient, MySQLClient>();
-            services.AddSingleton<IDatabaseClient>(new FirebaseClient(firebaseUrl));
+
+            services.AddDbContext<MySQLContext<string, DatabaseSlot>>(optionsAction);
+            services.AddDbContext<MySQLContext<string, DatabaseTimeslot>>(optionsAction);
+            services.AddSingleton<IDatabaseWrapper<string, DatabaseSlot>, MySQLWrapper<string, DatabaseSlot>>();
+            services.AddSingleton<IDatabaseWrapper<string, DatabaseTimeslot>, MySQLWrapper<string, DatabaseTimeslot>>();
+            services.AddSingleton<IDatabaseWrapper<string, DatabaseSlot>, DictionaryWrapper<string, DatabaseSlot>>();
+            services.AddSingleton<IDatabaseWrapper<string, DatabaseTimeslot>, DictionaryWrapper<string, DatabaseTimeslot>>();
+            services.AddSingleton<IDatabaseWrapper<string, DatabaseSlot>>(new FirebaseWrapper<string, DatabaseSlot>(firebaseUrl, "User"));
+            services.AddSingleton<IDatabaseWrapper<string, DatabaseTimeslot>>(new FirebaseWrapper<string, DatabaseTimeslot>(firebaseUrl, "User"));
+
+            // services.AddSingleton<IDatabaseClient, SimpleDictionary>();
+            // services.AddSingleton<IDatabaseClient, MySQLClient>();
+            // services.AddSingleton<IDatabaseClient>(new FirebaseClient(firebaseUrl));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Accord;
+using Infrastructure;
 using TimetableApplication;
 using TimetableDomain;
 using UserInterface.Models;
@@ -16,15 +18,18 @@ namespace UserInterface
     {
         private readonly InputProvider inputProvider;
         private readonly TimetableMakingProvider timetableMaker;
-        private readonly IDatabaseClient databaseClient;
+        private readonly DatabaseProvider databaseProvider;
 
         public MainPageController(IEnumerable<IInputParser> inputParsers,
             IEnumerable<ITimetableMaker> algorithms,
-            IEnumerable<IDatabaseClient> databaseClients)
+            IEnumerable<IDatabaseWrapper<string, DatabaseSlot>> slotWrappers,
+            IEnumerable<IDatabaseWrapper<string, DatabaseTimeslot>> timeslotWrappers)
         {
             inputProvider = new InputProvider(inputParsers.ToDictionary(x => x.Extension));
             timetableMaker = new TimetableMakingProvider(algorithms.ToDictionary(x => x.Name));
-            databaseClient = databaseClients.Where(x => x.Name == DatabaseClient.Firebase).First();
+            databaseProvider = new DatabaseProvider(
+                slotWrappers.ToDictionary(x => x.BaseName), 
+                timeslotWrappers.ToDictionary(x => x.BaseName));
         }
         
         public ActionResult Index()
@@ -44,7 +49,7 @@ namespace UserInterface
             using (var stream = fileInfo.OpenReadStream())
             {
                 var slots = inputProvider.ParseInput(stream, extension);
-                databaseClient.SetInputInfo(uid, slots);
+                databaseProvider.AddInputSlotInfo(uid, slots);
             }
             
             return RedirectToAction("FiltersInput", new { uid = uid});
@@ -58,7 +63,7 @@ namespace UserInterface
         
         public PartialViewResult _SingleSpecifiedFilter(string uid, string elementId)
         {
-            var specifiedFilters = databaseClient.GetTeacherFilters(uid);
+            var specifiedFilters = databaseProvider.GetTeacherFilters(uid);
             var userFilters = new UserFilters() {Filters = specifiedFilters, Index = elementId};
             return PartialView(userFilters);
         }
@@ -68,7 +73,7 @@ namespace UserInterface
         {
             var applicationFilters = filters.Select(x => new Filter(x.Name, x.Hours));
             
-            timetableMaker.StartMakingTimeTable(uid, databaseClient, applicationFilters);
+            timetableMaker.StartMakingTimeTable(uid, databaseProvider, applicationFilters);
             return RedirectToAction("LoadingPage", new {uid = uid});
         }
         

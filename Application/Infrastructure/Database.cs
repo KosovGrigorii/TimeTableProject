@@ -1,6 +1,6 @@
-namespace TimetableApplication
+namespace Infrastructure
 {
-    public enum DatabaseClient
+    public enum Database
     {
         MySQL,
         Firebase,
