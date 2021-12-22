@@ -10,7 +10,6 @@ namespace TimetableDomain
     {
         static Random Random=new Random();
         private IEnumerable<Course> dataCourses;
-        private IEnumerable<string> dataClasses;
         private List<TimeSpan> lessonStarts;
         
 
@@ -22,18 +21,16 @@ namespace TimetableDomain
 
         public List<TimeSlotChromosome> Value;
 
-        public TimeTableChromosome(IEnumerable<Course> courses, IEnumerable<string> classes, IEnumerable<TimeSpan> lessonStarts)
+        public TimeTableChromosome(IEnumerable<Course> courses, IEnumerable<TimeSpan> lessonStarts)
         {
             dataCourses = courses;
-            dataClasses = classes;
             this.lessonStarts = lessonStarts.ToList();
             Generate();
         }
-        public TimeTableChromosome(List<TimeSlotChromosome> slots, IEnumerable<Course> courses, IEnumerable<string> classes,
+        public TimeTableChromosome(List<TimeSlotChromosome> slots, IEnumerable<Course> courses,
             List<TimeSpan> lessonStarts)
         {
             dataCourses = courses;
-            dataClasses = classes;
             this.lessonStarts = lessonStarts;
             Value = slots.ToList();
         }
@@ -48,7 +45,8 @@ namespace TimetableDomain
                         Groups = course.Groups.ToList(),
                         //CourseId = course.Id,
                         StartAt = RandomStartTime(),
-                        Place = dataClasses.OrderBy(_class => Guid.NewGuid()).FirstOrDefault(),
+                        Course = course,
+                        //Place = dataClasses.OrderBy(_class => Guid.NewGuid()).FirstOrDefault(),
                         Teacher = course.Teacher, //Teacher themselves, but not id
                         Day=Random.Next(1,5)
                     };
@@ -61,7 +59,7 @@ namespace TimetableDomain
 
         public override IChromosome CreateNew()
         {
-            var timeTableChromosome = new TimeTableChromosome(dataCourses, dataClasses,
+            var timeTableChromosome = new TimeTableChromosome(dataCourses,
                 lessonStarts);
             timeTableChromosome.Generate();
             return timeTableChromosome;
@@ -69,7 +67,7 @@ namespace TimetableDomain
 
         public override IChromosome Clone()
         {
-            return new TimeTableChromosome(Value, dataCourses, dataClasses, lessonStarts);
+            return new TimeTableChromosome(Value, dataCourses, lessonStarts);
         }
 
         public override void Mutate()

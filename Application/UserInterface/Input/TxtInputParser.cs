@@ -37,7 +37,7 @@ namespace TimetableApplication
                     var slot = line.Split('|');
                     slots.Add(new SlotInfo
                     {
-                        Class = slot[0].ToString(),
+                        Room = slot[0].ToString(),
                         Course = slot[1].ToString(),
                         Group = slot[2].ToString(),
                         Teacher = slot[3].ToString()

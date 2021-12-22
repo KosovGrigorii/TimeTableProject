@@ -11,11 +11,10 @@ namespace TimetableDomain
         
         public IEnumerable<TimeSlot> GetTimetable(
             IEnumerable<Course> cources, 
-            IEnumerable<string> classes, 
             IEnumerable<Teacher> teachers, 
             IEnumerable<TimeSpan> lessonStarts)
         {
-            Population population = new Population(1000, new TimeTableChromosome(cources, classes, lessonStarts),
+            Population population = new Population(1000, new TimeTableChromosome(cources, lessonStarts),
                 new FitnessFunction(teachers), new EliteSelection());
 
             for(var i = 1; ; i++)
@@ -32,7 +31,7 @@ namespace TimetableDomain
                     (DayOfWeek) chromosome.Day,
                     chromosome.StartAt, 
                     chromosome.EndAt, 
-                    chromosome.Place, 
+                    //chromosome.Place, 
                     chromosome.Course, 
                     chromosome.Teacher, 
                     chromosome.Groups));

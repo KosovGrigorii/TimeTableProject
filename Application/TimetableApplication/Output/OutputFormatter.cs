@@ -66,6 +66,6 @@ namespace TimetableApplication
     public static class TimeSlotExtension
     {
         public static string ToString(this TimeSlot slot, string name)
-            => $"{slot.Course}\n{name}\n{slot.Place}";
+            => $"{slot.Course}\n{name}\n{slot.Course.Place}";
     }
 }

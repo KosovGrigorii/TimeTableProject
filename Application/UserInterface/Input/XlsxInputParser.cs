@@ -39,8 +39,9 @@ namespace TimetableApplication
                     {
                         Course = reader.GetValue(0).ToString(),
                         Group = reader.GetValue(1).ToString(),
-                        Teacher = reader.GetValue(2).ToString(),
-                        Class = reader.GetValue(3).ToString()
+                        Teacher = reader.GetValue(2).ToString(), 
+                        Room = reader.GetValue(3).ToString()
+                        
                     });
                 }
                 reader.Read();
