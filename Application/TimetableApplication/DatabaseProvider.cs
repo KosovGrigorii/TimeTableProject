@@ -15,7 +15,7 @@ namespace TimetableApplication
             IReadOnlyDictionary<Database, IDatabaseWrapper<string, DatabaseSlot>> wrappersSlots,
             IReadOnlyDictionary<Database, IDatabaseWrapper<string, DatabaseTimeslot>> wrappersTimeslots)
         {
-            const Database db = Database.MySQL;
+            const Database db = Database.Dictionary;
             slotWrapper = wrappersSlots[db];
             timeslotWrapper = wrappersTimeslots[db];
         }

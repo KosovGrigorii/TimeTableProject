@@ -26,9 +26,6 @@ namespace UserInterface
             IEnumerable<IDatabaseWrapper<string, DatabaseTimeslot>> timeslotWrappers)
         {
             inputProvider = new InputProvider(inputParsers.ToDictionary(x => x.Extension));
-            //var dict = algorithms.ToDictionary(x => x.Name);
-            //dict.Add(Algorithm.Graph, new GraphAlgorithm());
-            //timetableMaker = new TimetableMakingProvider(dict);
             timetableMaker = new TimetableMakingProvider(algorithms.ToDictionary(x => x.Name));
             databaseProvider = new DatabaseProvider(
                 slotWrappers.ToDictionary(x => x.BaseName), 

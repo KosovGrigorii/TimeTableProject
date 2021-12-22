@@ -18,8 +18,8 @@ namespace TimetableDomain
             {
                 if(!TeacherTime.ContainsKey(course.Teacher))
                     TeacherTime.Add(course.Teacher, new List<(int, TimeSpan)>());
-                if(!GroupTime.ContainsKey(course.Groups[0])) 
-                    GroupTime.Add(course.Groups[0], new List<(int, TimeSpan)>());
+                if(!GroupTime.ContainsKey(course.Group)) 
+                    GroupTime.Add(course.Group, new List<(int, TimeSpan)>());
             }
 
             foreach (var teacher in teachers)
@@ -36,7 +36,7 @@ namespace TimetableDomain
                     {
                         var isTransformable = true;
                         if (TeacherTime[course.Teacher].Contains((i, time)) || 
-                            GroupTime[course.Groups[0]].Contains((i, time))) continue;
+                            GroupTime[course.Group].Contains((i, time))) continue;
                         
                         if (TeachersFilter.ContainsKey(course.Teacher))
                         {
@@ -64,7 +64,7 @@ namespace TimetableDomain
                         }
                         
                         TeacherTime[course.Teacher].Add((i, time));
-                        GroupTime[course.Groups[0]].Add((i, time));
+                        GroupTime[course.Group].Add((i, time));
                         flag = true;
                         break;
                     }
@@ -72,19 +72,20 @@ namespace TimetableDomain
                     if (flag) break;
                 }
             }
-            
-            var timeTable = CourseTime.SelectMany(chromosome => chromosome.Value, 
-                (day, courseInfo) => new { day.Key, courseInfo }
-                ).Select(chromosome =>
-                
-                new TimeSlot(
-                    (DayOfWeek)chromosome.Key,
-                    chromosome.courseInfo.Item2,
-                    chromosome.courseInfo.Item2.Add(TimeSpan.FromHours(1.5)),
-                    //chromosome.Place, 
-                    chromosome.courseInfo.Item1,
-                    chromosome.courseInfo.Item1.Teacher,
-                    chromosome.courseInfo.Item1.Groups));
+
+            var timeTable = CourseTime.SelectMany(chromosome => chromosome.Value,
+                (day, courseInfo) => new {day.Key, courseInfo}
+            ).Select(chromosome =>
+                new TimeSlot()
+                {
+                    Day = (DayOfWeek) chromosome.Key,
+                    Start = chromosome.courseInfo.Item2,
+                    End = chromosome.courseInfo.Item2.Add(TimeSpan.FromHours(1.5)),
+                    Place = chromosome.courseInfo.Item1.Place,
+                    Course = chromosome.courseInfo.Item1.Title,
+                    Teacher = chromosome.courseInfo.Item1.Teacher,
+                    Group = chromosome.courseInfo.Item1.Group
+                });
             return timeTable;
         }
 
