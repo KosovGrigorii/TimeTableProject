@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Infrastructure
 {
-    public interface IDatabaseWrapper<TKey, TStoredObject>
+    public interface IDatabaseWrapper<in TKey, TStoredObject>
     {
         Database BaseName { get; }
         void AddRange(TKey key, IEnumerable<TStoredObject> content);

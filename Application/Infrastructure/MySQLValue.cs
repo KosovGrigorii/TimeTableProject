@@ -1,7 +1,8 @@
 namespace Infrastructure
 {
-    public class MySQLValue
+    public class MySQLValue<TKey>
     {
-        public string KeyId { get; set; }
+        public TKey Id { get; set; }
+        public TKey KeyId { get; set; }
     }
 }

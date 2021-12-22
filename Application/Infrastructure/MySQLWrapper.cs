@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Infrastructure
 {
-    public class MySQLWrapper<TKey, TValue> : IDatabaseWrapper<TKey, TValue> where TKey : class where TValue : MySQLValue
+    public class MySQLWrapper<TKey, TValue> : IDatabaseWrapper<TKey, TValue> where TValue : MySQLValue<TKey>
     {
         public Database BaseName => Database.MySQL;
         private readonly MySQLContext<TKey, TValue> context;
@@ -13,28 +13,23 @@ namespace Infrastructure
             this.context = context;
         }
         
-        public void AddTablesInfo(string keyTableName, string valueTableName)
-            => context.AddTablesInfo(keyTableName, valueTableName);
+        public void AddTablesInfo(string valueTableName)
+            => context.AddTablesInfo(valueTableName);
 
         public void AddRange(TKey key, IEnumerable<TValue> content)
         {
-            var addedEntity = new MySQLMultipleValuesClass<TKey, TValue>()
-            {
-                Id = key,
-                Data = content.ToList()
-            };
-            context.KeyTable.Add(addedEntity);
+            context.Table.AddRange(content);
             context.SaveChanges();
         }
 
         public IEnumerable<TValue> ReadBy(TKey key)
         {
-            return context.KeyTable.Find(key).Data;
+            return context.Table.Where(x => x.KeyId.Equals(key));
         }
 
         public void DeleteKey(TKey key)
         {
-            context.KeyTable.Remove(context.KeyTable.Find(key));
+            context.Table.RemoveRange(context.Table.Where(x => x.KeyId.Equals(key)));
             context.SaveChanges();
         }
     }

@@ -19,9 +19,9 @@ namespace TimetableApplication
             slotWrapper = wrappersSlots[db];
             timeslotWrapper = wrappersTimeslots[db];
             if (slotWrapper.BaseName == Database.MySQL)
-                ((MySQLWrapper<string, DatabaseSlot>)slotWrapper).AddTablesInfo("UserSlots", "SlotInfo");
+                ((MySQLWrapper<string, DatabaseSlot>)slotWrapper).AddTablesInfo("SlotInfo");
             if (timeslotWrapper.BaseName == Database.MySQL)
-                ((MySQLWrapper<string, DatabaseTimeslot>)timeslotWrapper).AddTablesInfo("UserTimeslots", "Timeslots");
+                ((MySQLWrapper<string, DatabaseTimeslot>)timeslotWrapper).AddTablesInfo("Timeslots");
         }
 
         public void AddInputSlotInfo(string uid, IEnumerable<SlotInfo> inputData)
