@@ -11,10 +11,9 @@ namespace TimetableDomain
         //public string Place { get; }
         public Course Course { get; }
         public string Teacher { get; }
-        public List<string> Groups { get; }
+        public string Group { get; }
 
-        public TimeSlot(DayOfWeek day, TimeSpan start, TimeSpan end, //string place,
-            Course course, string teacher, List<string> groups)
+        public TimeSlot(DayOfWeek day, TimeSpan start, TimeSpan end, Course course, string teacher, string group)
         {
             Day = day;
             Start = start;
@@ -22,7 +21,7 @@ namespace TimetableDomain
             //Place = place;
             Course = course;
             Teacher = teacher;
-            Groups = groups;
+            Group = group;
         }
     }
 }

@@ -34,7 +34,7 @@ namespace TimetableDomain
                     //chromosome.Place, 
                     chromosome.Course, 
                     chromosome.Teacher, 
-                    chromosome.Groups));
+                    chromosome.Group));
             return timetable;
         }
     }
