@@ -18,10 +18,6 @@ namespace TimetableApplication
             const Database db = Database.MySQL;
             slotWrapper = wrappersSlots[db];
             timeslotWrapper = wrappersTimeslots[db];
-            if (slotWrapper.BaseName == Database.MySQL)
-                ((MySQLWrapper<string, DatabaseSlot>)slotWrapper).AddTablesInfo("SlotInfo");
-            if (timeslotWrapper.BaseName == Database.MySQL)
-                ((MySQLWrapper<string, DatabaseTimeslot>)timeslotWrapper).AddTablesInfo("Timeslots");
         }
 
         public void AddInputSlotInfo(string uid, IEnumerable<SlotInfo> inputData)

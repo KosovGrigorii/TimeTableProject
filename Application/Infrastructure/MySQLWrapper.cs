@@ -13,9 +13,6 @@ namespace Infrastructure
             this.context = context;
         }
         
-        public void AddTablesInfo(string valueTableName)
-            => context.AddTablesInfo(valueTableName);
-
         public void AddRange(TKey key, IEnumerable<TValue> content)
         {
             context.Table.AddRange(content);

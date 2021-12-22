@@ -1,5 +1,6 @@
 using System;
 using Infrastructure;
+using LiteDB;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -29,20 +30,23 @@ namespace UserInterface
             services.AddMvc();
             
             var firebaseUrl = configuration.GetConnectionString("FirebaseUrl");
-            var mysqlConnectionString = configuration.GetConnectionString("MySQLConnection");
-            Action<DbContextOptionsBuilder> optionsAction = options => options
-                .UseMySql(mysqlConnectionString, ServerVersion.AutoDetect(mysqlConnectionString))
-                .LogTo(Console.WriteLine, LogLevel.Information)
-                .EnableSensitiveDataLogging()
-                .EnableDetailedErrors();
+            var mysqlSlotsConnectionString = configuration.GetConnectionString("MySQLSlotConnection");
+            var mysqlTimeslotsConnectionString = configuration.GetConnectionString("MySQLTimeslotConnection");
+            // Action<DbContextOptionsBuilder> optionsAction = options  => options
+            //     .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
+            //     .LogTo(Console.WriteLine, LogLevel.Information)
+            //     .EnableSensitiveDataLogging()
+            //     .EnableDetailedErrors();
             
             services.AddScoped<IInputParser, XlsxInputParser>();
             services.AddScoped<IInputParser, TxtInputParser>();
             services.AddScoped<ITimetableMaker, GeneticAlgorithm>();
             services.AddScoped<OutputFormatter, XlsxOutputFormatter>();
 
-            services.AddDbContext<MySQLContext<string, DatabaseSlot>>(optionsAction);
-            services.AddDbContext<MySQLContext<string, DatabaseTimeslot>>(optionsAction);
+            services.AddDbContext<MySQLContext<string, DatabaseSlot>>(options  => options
+                .UseMySql(mysqlSlotsConnectionString, ServerVersion.AutoDetect(mysqlSlotsConnectionString)));
+            services.AddDbContext<MySQLContext<string, DatabaseTimeslot>>(options  => options
+                .UseMySql(mysqlTimeslotsConnectionString, ServerVersion.AutoDetect(mysqlTimeslotsConnectionString)));
             services.AddSingleton<IDatabaseWrapper<string, DatabaseSlot>, MySQLWrapper<string, DatabaseSlot>>();
             services.AddSingleton<IDatabaseWrapper<string, DatabaseTimeslot>, MySQLWrapper<string, DatabaseTimeslot>>();
             services.AddSingleton<IDatabaseWrapper<string, DatabaseSlot>, DictionaryWrapper<string, DatabaseSlot>>();
