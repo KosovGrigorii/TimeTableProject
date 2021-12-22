@@ -21,7 +21,9 @@ namespace UserInterface
             IUserData userToData)
         {
             inputProvider = new InputProvider(inputParsers.ToDictionary(x => x.Extension));
-            timetableMaker = new TimetableMakingProvider(algorithms.ToDictionary(x => x.Name));
+            var dict = algorithms.ToDictionary(x => x.Name);
+            dict.Add(Algorithm.Graph, new GraphAlgorithm());
+            timetableMaker = new TimetableMakingProvider(dict);
             this.userToData = userToData;
         }
         
@@ -65,7 +67,7 @@ namespace UserInterface
         [HttpPost]
         public IActionResult GetFilters(IEnumerable<FilterUI> filters, string uid)
         {
-            var applicationFilters = filters.Select(x => new Filter(x.Name, x.Hours));
+            var applicationFilters = filters.Select(x => new Filter(x.Name, x.Days));
             
             timetableMaker.StartMakingTimeTable(uid, userToData, applicationFilters);
             return RedirectToAction("LoadingPage", new {uid = uid});

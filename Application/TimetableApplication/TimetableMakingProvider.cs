@@ -18,7 +18,7 @@ namespace TimetableApplication
         public void StartMakingTimeTable(string uid, 
             IUserData userToData, IEnumerable<Filter> filters)
         {
-            var algorithm = timetableMakers[Algorithm.Genetic];
+            var algorithm = timetableMakers[Algorithm.Graph];
             
             var lessonStarts = new List<TimeSpan>() { 
                 new TimeSpan(9, 0, 0),
@@ -28,12 +28,13 @@ namespace TimetableApplication
                 {
                     Title = x.Course,
                     Teacher = x.Teacher,
-                    Groups = new List<string>() {x.Group}
+                    Groups = new List<string>() {x.Group},
+                    Place = x.Room
                 });
             var teachers = filters.Select(x => new Teacher(x.Name, x.Days)).ToList();
-            var rooms = userToData.GetInputInfo(uid).Select(x => x.Class).ToList();
+            var rooms = userToData.GetInputInfo(uid).Select(x => x.Room).ToList();
             
-            var timeslots = algorithm.GetTimetable(courses, rooms, teachers, lessonStarts);
+            var timeslots = algorithm.GetTimetable(courses, teachers, lessonStarts);
             userToData.SetTimeslots(uid, timeslots);
         }
     }

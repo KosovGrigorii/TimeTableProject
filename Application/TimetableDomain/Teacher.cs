@@ -15,6 +15,7 @@ namespace TimetableDomain
             WorkingDays = new HashSet<int>();
             DaysCount = daysCount;
         }
+        
 
         public bool IsDayForbidden(int day)
         {

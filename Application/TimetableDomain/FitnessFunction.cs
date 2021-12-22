@@ -37,8 +37,8 @@ namespace TimetableDomain
             {
                 var overLaps = GetoverLaps(value);
                 score -= overLaps.GroupBy(slot => slot.Teacher).Sum(x => x.Count() - 1);
-                score -= overLaps.GroupBy(slot => slot.Place).Sum(x => x.Count() - 1);
                 score -= overLaps.GroupBy(slot => slot.Course).Sum(x => x.Count() - 1);
+                score -= overLaps.Where(slot => slot.Course != null).GroupBy(slot => slot.Course.Place).Sum(x => x.Count() - 1);
                 score -= overLaps.Sum(item => item.Groups.Intersect(value.Groups).Count());
             }
 
