@@ -10,9 +10,9 @@ namespace TimetableApplication
     {
         private FormatterChooser chooser;
         
-        public OutputProvider(IReadOnlyDictionary<OutputExtension, OutputFormatter> formatters)
+        public OutputProvider(FormatterChooser chooser)
         {
-            chooser = new FormatterChooser(formatters);
+            this.chooser = chooser;
         }
 
         public string GetPathToOutputFile(OutputExtension extension, string uid, IEnumerable<TimeSlot> timeslots)

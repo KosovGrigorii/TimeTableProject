@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using ExcelDataReader;
-using UserInterface;
+using TimetableApplication;
 
-namespace TimetableApplication
+namespace UserInterface
 {
     public class XlsxInputParser : IInputParser
     {
@@ -29,6 +29,7 @@ namespace TimetableApplication
             var starts = new List<TimeSpan>();
             var duration = 90;
             stream.Position = 0;
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             using var reader = ExcelReaderFactory.CreateReader(stream);
             try
             {

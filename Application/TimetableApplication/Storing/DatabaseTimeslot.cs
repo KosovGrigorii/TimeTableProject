@@ -4,7 +4,7 @@ using TimetableDomain;
 
 namespace TimetableApplication
 {
-    public class DatabaseTimeslot : MySQLValue<string>
+    public class DatabaseTimeslot : DatabaseEbtity<string>
     {
         public int Day { get; set; }
         public int Start { get; set; }

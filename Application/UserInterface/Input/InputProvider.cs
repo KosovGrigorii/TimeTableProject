@@ -9,9 +9,9 @@ namespace UserInterface
     {
         private ParserChooser chooser;
 
-        public InputProvider(Dictionary<ParserExtension, IInputParser> inputParsers)
+        public InputProvider(ParserChooser chooser)
         {
-            chooser = new ParserChooser(inputParsers);
+            this.chooser = chooser;
         }
 
         public IEnumerable<SlotInfo> ParseInput(Stream stream, ParserExtension extension)

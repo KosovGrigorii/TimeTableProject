@@ -1,14 +1,15 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace UserInterface
 {
     public class ParserChooser
     {
-        private readonly Dictionary<ParserExtension, IInputParser> inputParsers;
+        private readonly IReadOnlyDictionary<ParserExtension, IInputParser> inputParsers;
 
-        public ParserChooser(Dictionary<ParserExtension, IInputParser> inputParsers)
+        public ParserChooser(IEnumerable<IInputParser> inputParsers)
         {
-            this.inputParsers = inputParsers;
+            this.inputParsers = inputParsers.ToDictionary(x => x.Extension);
         }
 
         public IInputParser ChooseParser(ParserExtension parserExtensionExtension)

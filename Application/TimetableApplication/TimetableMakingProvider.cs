@@ -9,18 +9,18 @@ namespace TimetableApplication
 {
     public class TimetableMakingProvider
     {
-        private readonly IReadOnlyDictionary<Algorithm, ITimetableMaker> timetableMakers;
+        private AlgorithmChooser chooser;
         
-        public TimetableMakingProvider(IReadOnlyDictionary<Algorithm, ITimetableMaker> timetableMakers)
+        public TimetableMakingProvider(AlgorithmChooser chooser)
         {
-            this.timetableMakers = timetableMakers;
+            this.chooser = chooser;
         }
         
         public void StartMakingTimeTable(string uid, 
             DatabaseProvider database,
             IEnumerable<Filter> filters)
         {
-            var algorithm = timetableMakers[Algorithm.Graph];
+            var algorithm = chooser.ChooseAlgorithm(Algorithm.Graph);
             
             var lessonStarts = new List<TimeSpan>() { 
                 new TimeSpan(9, 0, 0),

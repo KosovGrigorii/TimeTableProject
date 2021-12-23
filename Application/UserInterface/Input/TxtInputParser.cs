@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using UserInterface;
+using TimetableApplication;
 
-namespace TimetableApplication
+
+
+namespace UserInterface
 {
     class TxtInputParser : IInputParser
     {

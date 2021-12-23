@@ -1,4 +1,5 @@
 using System;
+using Castle.Core.Internal;
 using Infrastructure;
 using LiteDB;
 using Microsoft.AspNetCore.Builder;
@@ -28,10 +29,17 @@ namespace UserInterface
         {
             services.AddControllers();
             services.AddMvc();
-            
-            // var firebaseUrl = configuration.GetConnectionString("FirebaseUrl");
-            // var mysqlSlotsConnectionString = configuration.GetConnectionString("MySQLSlotConnection");
-            // var mysqlTimeslotsConnectionString = configuration.GetConnectionString("MySQLTimeslotConnection");
+
+            ConfigureDatabases(services);
+
+            services.AddScoped<ParserChooser>();
+            services.AddScoped<InputProvider>();
+            services.AddScoped<AlgorithmChooser>();
+            services.AddScoped<TimetableMakingProvider>();
+            services.AddScoped<DatabaseProvider>();
+            services.AddScoped<DatabasesChooser>();
+            services.AddScoped<OutputProvider>();
+            services.AddScoped<FormatterChooser>();
             
             services.AddScoped<IInputParser, XlsxInputParser>();
             services.AddScoped<IInputParser, TxtInputParser>();
@@ -39,17 +47,36 @@ namespace UserInterface
             services.AddScoped<ITimetableMaker, GraphAlgorithm>();
             services.AddScoped<OutputFormatter, XlsxOutputFormatter>();
             services.AddScoped<OutputFormatter, PdfOutputFormatter>();
-			
-            // services.AddDbContext<MySQLContext<string, DatabaseSlot>>(options  => options
-            //     .UseMySql(mysqlSlotsConnectionString, ServerVersion.AutoDetect(mysqlSlotsConnectionString)));
-            // services.AddDbContext<MySQLContext<string, DatabaseTimeslot>>(options  => options
-            //     .UseMySql(mysqlTimeslotsConnectionString, ServerVersion.AutoDetect(mysqlTimeslotsConnectionString)));
-            // services.AddSingleton<IDatabaseWrapper<string, DatabaseSlot>, MySQLWrapper<string, DatabaseSlot>>();
-            // services.AddSingleton<IDatabaseWrapper<string, DatabaseTimeslot>, MySQLWrapper<string, DatabaseTimeslot>>();
-            //
-            // services.AddSingleton<IDatabaseWrapper<string, DatabaseSlot>>(new FirebaseWrapper<string, DatabaseSlot>(firebaseUrl, "User"));
-            // services.AddSingleton<IDatabaseWrapper<string, DatabaseTimeslot>>(new FirebaseWrapper<string, DatabaseTimeslot>(firebaseUrl, "User"));
-    
+        }
+
+        private void ConfigureDatabases(IServiceCollection services)
+        {
+            var firebaseUrl = configuration.GetConnectionString("FirebaseUrl");
+            if (!firebaseUrl.IsNullOrEmpty())
+            {
+                services.AddSingleton<IDatabaseWrapper<string, DatabaseSlot>>(
+                    new FirebaseWrapper<string, DatabaseSlot>(firebaseUrl, "User"));
+                services.AddSingleton<IDatabaseWrapper<string, DatabaseTimeslot>>(
+                    new FirebaseWrapper<string, DatabaseTimeslot>(firebaseUrl, "User"));
+
+            }
+            
+            var mysqlSlotsConnectionString = configuration.GetConnectionString("MySQLSlotConnection");
+            if (!mysqlSlotsConnectionString.IsNullOrEmpty())
+            {
+                services.AddDbContext<MySQLContext<string, DatabaseSlot>>(options  => options
+                    .UseMySql(mysqlSlotsConnectionString, ServerVersion.AutoDetect(mysqlSlotsConnectionString)));
+                services.AddSingleton<IDatabaseWrapper<string, DatabaseSlot>, MySQLWrapper<string, DatabaseSlot>>();
+            }
+            
+            var mysqlTimeslotsConnectionString = configuration.GetConnectionString("MySQLTimeslotConnection");
+            if (!mysqlSlotsConnectionString.IsNullOrEmpty())
+            {
+                services.AddDbContext<MySQLContext<string, DatabaseTimeslot>>(options  => options
+                    .UseMySql(mysqlTimeslotsConnectionString, ServerVersion.AutoDetect(mysqlTimeslotsConnectionString)));
+                services.AddSingleton<IDatabaseWrapper<string, DatabaseTimeslot>, MySQLWrapper<string, DatabaseTimeslot>>();
+            }
+            
             services.AddSingleton<IDatabaseWrapper<string, DatabaseSlot>, DictionaryWrapper<string, DatabaseSlot>>();
             services.AddSingleton<IDatabaseWrapper<string, DatabaseTimeslot>, DictionaryWrapper<string, DatabaseTimeslot>>();
         }

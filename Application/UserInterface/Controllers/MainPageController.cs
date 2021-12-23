@@ -3,13 +3,9 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using Accord;
 using Infrastructure;
 using TimetableApplication;
-using TimetableDomain;
 using UserInterface.Models;
-using Microsoft.EntityFrameworkCore;
 
 
 namespace UserInterface
@@ -20,16 +16,13 @@ namespace UserInterface
         private readonly TimetableMakingProvider timetableMaker;
         private readonly DatabaseProvider databaseProvider;
 
-        public MainPageController(IEnumerable<IInputParser> inputParsers,
-            IEnumerable<ITimetableMaker> algorithms,
-            IEnumerable<IDatabaseWrapper<string, DatabaseSlot>> slotWrappers,
-            IEnumerable<IDatabaseWrapper<string, DatabaseTimeslot>> timeslotWrappers)
+        public MainPageController(InputProvider inputProvider,
+            TimetableMakingProvider timetableMaker,
+            DatabaseProvider databaseProvider)
         {
-            inputProvider = new InputProvider(inputParsers.ToDictionary(x => x.Extension));
-            timetableMaker = new TimetableMakingProvider(algorithms.ToDictionary(x => x.Name));
-            databaseProvider = new DatabaseProvider(
-                slotWrappers.ToDictionary(x => x.BaseName), 
-                timeslotWrappers.ToDictionary(x => x.BaseName));
+            this.inputProvider = inputProvider;
+            this.timetableMaker = timetableMaker;
+            this.databaseProvider = databaseProvider;
         }
         
         public ActionResult Index()

@@ -16,14 +16,10 @@ namespace UserInterface
         private readonly OutputProvider outputProvider;
         private readonly DatabaseProvider databaseProvider;
 
-        public OutputController(IEnumerable<OutputFormatter> outputFormatters, 
-            IEnumerable<IDatabaseWrapper<string, DatabaseSlot>> slotWrappers,
-            IEnumerable<IDatabaseWrapper<string, DatabaseTimeslot>> timeslotWrappers)
+        public OutputController( OutputProvider outputProvider, DatabaseProvider databaseProvider)
         {
-            outputProvider = new OutputProvider(outputFormatters.ToDictionary(x => x.Extension));
-            databaseProvider = new DatabaseProvider(
-                slotWrappers.ToDictionary(x => x.BaseName), 
-                timeslotWrappers.ToDictionary(x => x.BaseName));
+            this.outputProvider = outputProvider;
+            this.databaseProvider = databaseProvider;
         }
 
         [HttpGet]
@@ -34,7 +30,7 @@ namespace UserInterface
 
         public FileResult DownloadFile(string uid)
         {
-            var strExtension = ".xlsx";
+            var strExtension = ".pdf";
             var translated = Enum.TryParse<OutputExtension>(strExtension, out var extension);
             var timeslots = databaseProvider.GetTimeslots(uid);
             var filePath = outputProvider.GetPathToOutputFile(extension, uid, timeslots);
