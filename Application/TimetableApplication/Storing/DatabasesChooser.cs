@@ -23,11 +23,10 @@ namespace TimetableApplication
 
         private IDatabaseWrapper<string, TItem> GetWrapper<TItem>(IReadOnlyDictionary<Database, IDatabaseWrapper<string, TItem>> wrappersDict)
         {
-            if (!wrappersDict.TryGetValue(Database.Firebase, out var slotWrapper))
-                if (!wrappersDict.TryGetValue(Database.MySQL, out slotWrapper))
-                    if (!wrappersDict.TryGetValue(Database.Dictionary, out slotWrapper))
-                        throw new Exception("Suitable database was not found");
-            return slotWrapper;
+            foreach (var db in Enum.GetValues(typeof(Database)).Cast<Database>())
+                if (wrappersDict.TryGetValue(db, out var slotWrapper))
+                    return slotWrapper;
+            throw new Exception("Suitable database was not found");
         }
     }
 }

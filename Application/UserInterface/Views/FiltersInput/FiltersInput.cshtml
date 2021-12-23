@@ -7,7 +7,7 @@
 
 <div>
     <h1>Add limitations of working hours</h1>
-    @using (Html.BeginForm("GetFilters", "MainPage", new { uid = Model.ID }, FormMethod.Post))
+    @using (Html.BeginForm("GetFilters", "FiltersInput", new { uid = Model.ID }, FormMethod.Post))
     {
         <div id="filtersForm"></div>
         <input type="button" onclick="AddInputDiv()" value="+"/>
@@ -23,7 +23,7 @@ function AddInputDiv(){
     div.id = insert_id;
     filterForm.appendChild(div);
     $.ajax({
-        url: '@Url.Action("_SingleSpecifiedFilter", "MainPage", new { uid = Model.ID })',
+        url: '@Url.Action("_SingleSpecifiedFilter", "FiltersInput", new { uid = Model.ID })',
         data: {elementId: insert_id},
         success: function (data) {
             $('#' + insert_id).html(data);
