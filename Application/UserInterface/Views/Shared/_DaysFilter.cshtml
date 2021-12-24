@@ -1,0 +1,23 @@
+@model UserInterface.Models.UserWeekdayFilters
+
+@{
+    var modelNameId = "filters[" + Model.Index + "].Name";
+    var modelDays = "filters[" + Model.Index + "].Days";
+}
+
+<input list="filtered" autocomplete="off" type="text" placeholder="Name" name="@modelNameId" required/>
+<datalist id="filtered">
+    @foreach (var item in Model.Filters)
+    {
+        <option value="@item"></option>
+    }
+</datalist>
+<br>
+    @foreach (var item in Model.WeekDays)
+    {
+        <div>
+            <label>
+                <input type="checkbox" name="@modelDays" value="@item"/>@item
+            </label>
+        </div>
+    }
