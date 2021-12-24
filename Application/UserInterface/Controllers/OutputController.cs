@@ -33,11 +33,10 @@ namespace UserInterface
             var strExtension = ".pdf";
             var translated = Enum.TryParse<OutputExtension>(strExtension, out var extension);
             var timeslots = databaseProvider.GetTimeslots(uid);
-            var filePath = outputProvider.GetPathToOutputFile(extension, uid, timeslots);
             
-            var bytes = System.IO.File.ReadAllBytes(filePath);
+            var bytes =  outputProvider.GetPathToOutputFile(extension, uid, timeslots);
             databaseProvider.DeleteUserData(uid);
-            return File(bytes, "application/octet-stream", Path.GetFileName(filePath));
+            return File(bytes, "application/octet-stream", "Timetable.xlsx");
         }
     }
 }

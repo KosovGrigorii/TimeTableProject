@@ -13,15 +13,12 @@ namespace UserInterface
     public class MainPageController : Controller
     {
         private readonly InputProvider inputProvider;
-        private readonly TimetableMakingProvider timetableMaker;
         private readonly DatabaseProvider databaseProvider;
 
         public MainPageController(InputProvider inputProvider,
-            TimetableMakingProvider timetableMaker,
             DatabaseProvider databaseProvider)
         {
             this.inputProvider = inputProvider;
-            this.timetableMaker = timetableMaker;
             this.databaseProvider = databaseProvider;
         }
         
@@ -45,43 +42,14 @@ namespace UserInterface
                 databaseProvider.AddInputSlotInfo(uid, slots);
             }
             
-            return RedirectToAction("FiltersInput", new { uid = uid});
-        }
-
-        public IActionResult FiltersInput(string uid)
-        {
-            var model = new UserID { ID = uid };
-            return View(model);
+            return RedirectToAction("ToFiltersInput", new { uid = uid});
         }
         
-        public PartialViewResult _SingleSpecifiedFilter(string uid, string elementId)
-        {
-            var specifiedFilters = databaseProvider.GetTeacherFilters(uid);
-            var userFilters = new UserFilters() {Filters = specifiedFilters, Index = elementId};
-            return PartialView(userFilters);
-        }
-        
-        [HttpPost]
-        public IActionResult GetFilters(IEnumerable<FilterUI> filters, string uid)
-        {
-            var applicationFilters = filters.Select(x => new Filter(x.Name, x.Days));
-            
-            timetableMaker.StartMakingTimeTable(uid, databaseProvider, applicationFilters);
-            return RedirectToAction("LoadingPage", new {uid = uid});
-        }
-        
-        [HttpGet]
-        public IActionResult LoadingPage(string uid)
-        {
-            return View("Loading", new UserID() {ID = uid});
-        }
-        
-        [HttpPost]
-        public IActionResult ToOutput(string uid)
+        public IActionResult ToFiltersInput(string uid)
         {
             return RedirectToRoutePermanent("default", new
             {
-                controller = "Output", action = "Index", uid = uid
+                controller = "FiltersInput", action = "FiltersInput", uid = uid
             });
         }
     }
