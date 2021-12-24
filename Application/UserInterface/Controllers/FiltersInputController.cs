@@ -24,6 +24,17 @@ namespace UserInterface
             return View(model);
         }
         
+        public PartialViewResult _FilterChoosingForm(string userId, string elementId)
+        {
+            var model = new FilterChoose {UserId = userId, FilterId = elementId};
+            return PartialView(model);
+        }
+
+        public PartialViewResult ChooseSingleFilter(string filterName, string userId, string elementId)
+        {
+            return _SingleSpecifiedFilter(userId, elementId);
+        }
+        
         public PartialViewResult _SingleSpecifiedFilter(string uid, string elementId)
         {
             var specifiedFilters = databaseProvider.GetTeacherFilters(uid);

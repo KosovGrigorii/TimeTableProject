@@ -1,0 +1,17 @@
+@model UserInterface.Models.FilterChoose
+
+@{
+    var filterId = "specifiedFilter" + Model.FilterId;
+    var modelPartId = "filters[" + Model.FilterId + "].Category";
+}
+
+
+<div>
+        @Html.DropDownList(
+            modelPartId,
+            Model.Categories,
+            "Choose filter type",
+            new {onchange = "ChooseFilter('" + filterId + "', this.value, '" 
+                            + Model.UserId + "', '" + Model.FilterId + "')"})
+</div>
+<div id="@filterId"></div>
