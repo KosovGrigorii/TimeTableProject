@@ -51,19 +51,21 @@ namespace TimetableDomain
                     }
                 }
             }
-            
-            var timeTable = CourseTime.SelectMany(chromosome => chromosome.Value, 
+
+            var timeTable = CourseTime.SelectMany(chromosome => chromosome.Value,
                 (day, courseInfo) => new { day.Key, courseInfo }
-                ).Select(chromosome =>
-                
-                new TimeSlot(
-                    (DayOfWeek)chromosome.Key,
-                    chromosome.courseInfo.Item2,
-                    chromosome.courseInfo.Item2.Add(TimeSpan.FromHours(1.5)),
-                    //chromosome.Place, 
-                    chromosome.courseInfo.Item1,
-                    chromosome.courseInfo.Item1.Teacher,
-                    chromosome.courseInfo.Item1.Groups));
+            ).Select(chromosome =>
+
+                new TimeSlot
+                {
+                    Day = (DayOfWeek)chromosome.Key,
+                    Start = chromosome.courseInfo.Item2,
+                    End = chromosome.courseInfo.Item2.Add(TimeSpan.FromHours(1.5)),
+                    Place = chromosome.courseInfo.Item1.Place,
+                    Course = chromosome.courseInfo.Item1.Title,
+                    Teacher = chromosome.courseInfo.Item1.Teacher,
+                    Group = chromosome.courseInfo.Item1.Group
+                });
 
             return timeTable;
         }
@@ -82,7 +84,7 @@ namespace TimetableDomain
                 foreach (var time in lessonStarts)
                 {
                     if (TeacherTime[course.Teacher].Contains((day, time)) ||
-                        GroupTime[course.Groups[0]].Contains((day, time))) continue;
+                        GroupTime[course.Group].Contains((day, time))) continue;
 
                     if (!(isTransformable || Handler.checkPossibility(course, TeachersFilter, day))) return false;
 
@@ -97,7 +99,7 @@ namespace TimetableDomain
                     }
                         
                     TeacherTime[course.Teacher].Add((day, time));
-                    GroupTime[course.Groups[0]].Add((day, time));
+                    GroupTime[course.Group].Add((day, time));
                     flag = true;
                     break;
                 }
