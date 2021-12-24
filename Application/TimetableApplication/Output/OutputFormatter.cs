@@ -24,17 +24,15 @@ namespace TimetableApplication
                 if (!teachers.ContainsKey(teacher))
                     teachers[teacher] = new List<TimeSlot>();
                 teachers[teacher].Add(timeSlot);
-                foreach (var group in timeSlot.Groups)
-                {
-                    if (!groups.ContainsKey(group))
-                        groups[group] = new List<TimeSlot>();
-                    groups[group].Add(timeSlot);
-                }
+                var group = timeSlot.Group;
+                if (!groups.ContainsKey(group))
+                    groups[group] = new List<TimeSlot>();
+                groups[group].Add(timeSlot);
             }
             
             var bells = bellSet.OrderBy(tuple => tuple.Item1.TotalHours).ToList();
             var teachersSchedule = GetScheduleTable(teachers, bells,
-                slot => string.Join(", ", slot.Groups));
+                slot => string.Join(", ", slot.Group));
             var groupsSchedule = GetScheduleTable(groups, bells,
                 slot => slot.Teacher);
             var schedule = teachersSchedule
@@ -66,6 +64,6 @@ namespace TimetableApplication
     public static class TimeSlotExtension
     {
         public static string ToString(this TimeSlot slot, string name)
-            => $"{slot.Course}\n{name}\n{slot.Course.Place}";
+            => $"{slot.Course}\n{name}\n{slot.Place}";
     }
 }

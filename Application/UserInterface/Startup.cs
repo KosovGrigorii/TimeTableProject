@@ -1,12 +1,14 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Castle.Core.Internal;
+using Infrastructure;
+using LiteDB;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using TimetableApplication;
 using TimetableDomain;
 
@@ -14,16 +16,69 @@ namespace UserInterface
 {
     public class Startup
     {
+        private readonly IConfiguration configuration;
+        
+        public Startup(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+        }
+        
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
             services.AddMvc();
+
+            ConfigureDatabases(services);
+
+            services.AddScoped<ParserChooser>();
+            services.AddScoped<InputProvider>();
+            services.AddScoped<AlgorithmChooser>();
+            services.AddScoped<TimetableMakingProvider>();
+            services.AddScoped<DatabaseProvider>();
+            services.AddScoped<DatabasesChooser>();
+            services.AddScoped<OutputProvider>();
+            services.AddScoped<FormatterChooser>();
+            
             services.AddScoped<IInputParser, XlsxInputParser>();
+            services.AddScoped<IInputParser, TxtInputParser>();
             services.AddScoped<ITimetableMaker, GeneticAlgorithm>();
+            services.AddScoped<ITimetableMaker, GraphAlgorithm>();
             services.AddScoped<OutputFormatter, XlsxOutputFormatter>();
-            services.AddSingleton<IUserData, UserToData>();
+            services.AddScoped<OutputFormatter, PdfOutputFormatter>();
+        }
+
+        private void ConfigureDatabases(IServiceCollection services)
+        {
+            var firebaseUrl = configuration.GetConnectionString("FirebaseUrl");
+            if (!firebaseUrl.IsNullOrEmpty())
+            {
+                services.AddSingleton<IDatabaseWrapper<string, DatabaseSlot>>(
+                    new FirebaseWrapper<string, DatabaseSlot>(firebaseUrl, "User"));
+                services.AddSingleton<IDatabaseWrapper<string, DatabaseTimeslot>>(
+                    new FirebaseWrapper<string, DatabaseTimeslot>(firebaseUrl, "User"));
+
+            }
+            
+            var mysqlSlotsConnectionString = configuration.GetConnectionString("MySQLSlotConnection");
+            if (!mysqlSlotsConnectionString.IsNullOrEmpty())
+            {
+                services.AddDbContext<MySQLContext<string, DatabaseSlot>>(options  => options
+                    .UseMySql(mysqlSlotsConnectionString, ServerVersion.AutoDetect(mysqlSlotsConnectionString)));
+                services.AddSingleton<IDatabaseWrapper<string, DatabaseSlot>, MySQLWrapper<string, DatabaseSlot>>();
+            }
+            
+            var mysqlTimeslotsConnectionString = configuration.GetConnectionString("MySQLTimeslotConnection");
+            if (!mysqlSlotsConnectionString.IsNullOrEmpty())
+            {
+                services.AddDbContext<MySQLContext<string, DatabaseTimeslot>>(options  => options
+                    .UseMySql(mysqlTimeslotsConnectionString, ServerVersion.AutoDetect(mysqlTimeslotsConnectionString)));
+                services.AddSingleton<IDatabaseWrapper<string, DatabaseTimeslot>, MySQLWrapper<string, DatabaseTimeslot>>();
+            }
+            
+            services.AddSingleton<IDatabaseWrapper<string, DatabaseSlot>, DictionaryWrapper<string, DatabaseSlot>>();
+            services.AddSingleton<IDatabaseWrapper<string, DatabaseTimeslot>, DictionaryWrapper<string, DatabaseTimeslot>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

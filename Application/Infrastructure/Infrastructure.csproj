@@ -5,8 +5,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="FirebaseDatabase.net" Version="4.0.7" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.11" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.11" />
+      <PackageReference Include="Z.EntityFramework.Extensions.EFCore" Version="5.13.4" />
     </ItemGroup>
 
 </Project>

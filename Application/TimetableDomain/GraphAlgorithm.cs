@@ -19,8 +19,8 @@ namespace TimetableDomain
             {
                 if(!TeacherTime.ContainsKey(course.Teacher))
                     TeacherTime.Add(course.Teacher, new List<(int, TimeSpan)>());
-                if(!GroupTime.ContainsKey(course.Groups[0])) 
-                    GroupTime.Add(course.Groups[0], new List<(int, TimeSpan)>());
+                if(!GroupTime.ContainsKey(course.Group)) 
+                    GroupTime.Add(course.Group, new List<(int, TimeSpan)>());
             }
 
             foreach (var teacher in teachers)
@@ -52,7 +52,6 @@ namespace TimetableDomain
                 }
             }
             
-            
             var timeTable = CourseTime.SelectMany(chromosome => chromosome.Value, 
                 (day, courseInfo) => new { day.Key, courseInfo }
                 ).Select(chromosome =>
@@ -65,6 +64,7 @@ namespace TimetableDomain
                     chromosome.courseInfo.Item1,
                     chromosome.courseInfo.Item1.Teacher,
                     chromosome.courseInfo.Item1.Groups));
+
             return timeTable;
         }
 

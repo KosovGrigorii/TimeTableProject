@@ -2,9 +2,11 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using UserInterface.Models;
 using TimetableApplication;
+using TimetableDomain;
 
 
 namespace UserInterface
@@ -12,12 +14,12 @@ namespace UserInterface
     public class OutputController: Controller
     {
         private readonly OutputProvider outputProvider;
-        private readonly IUserData userToData;
+        private readonly DatabaseProvider databaseProvider;
 
-        public OutputController(IEnumerable<OutputFormatter> outputFormatters, IUserData userToData)
+        public OutputController( OutputProvider outputProvider, DatabaseProvider databaseProvider)
         {
-            outputProvider = new OutputProvider(outputFormatters.ToDictionary(x => x.Extension));
-            this.userToData = userToData;
+            this.outputProvider = outputProvider;
+            this.databaseProvider = databaseProvider;
         }
 
         [HttpGet]
@@ -28,13 +30,13 @@ namespace UserInterface
 
         public FileResult DownloadFile(string uid)
         {
-            var strExtension = ".xlsx";
+            var strExtension = ".pdf";
             var translated = Enum.TryParse<OutputExtension>(strExtension, out var extension);
-            var timeslots = userToData.GetTimeslots(uid);
-            var filePath = outputProvider.GetPathToOutputFile(extension, uid, timeslots);
+            var timeslots = databaseProvider.GetTimeslots(uid);
             
-            var bytes = System.IO.File.ReadAllBytes(filePath);
-            return File(bytes, "application/octet-stream", Path.GetFileName(filePath));
+            var bytes =  outputProvider.GetPathToOutputFile(extension, uid, timeslots);
+            databaseProvider.DeleteUserData(uid);
+            return File(bytes, "application/octet-stream", "Timetable.xlsx");
         }
     }
 }

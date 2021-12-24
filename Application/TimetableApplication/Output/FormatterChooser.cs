@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TimetableApplication
 {
@@ -6,9 +7,9 @@ namespace TimetableApplication
     {
         private readonly IReadOnlyDictionary<OutputExtension, OutputFormatter> formatters;
 
-        public FormatterChooser(IReadOnlyDictionary<OutputExtension, OutputFormatter> formatters)
+        public FormatterChooser(IEnumerable<OutputFormatter> outputFormatters)
         {
-            this.formatters = formatters;
+            formatters = outputFormatters.ToDictionary(x => x.Extension);
         }
 
         public OutputFormatter ChooseFormatter(OutputExtension extension) 
