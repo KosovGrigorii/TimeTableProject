@@ -45,8 +45,8 @@ namespace UserInterface
             services.AddScoped<IInputParser, TxtInputParser>();
             services.AddScoped<ITimetableMaker, GeneticAlgorithm>();
             services.AddScoped<ITimetableMaker, GraphAlgorithm>();
-            services.AddScoped<OutputFormatter, XlsxOutputFormatter>();
-            services.AddScoped<OutputFormatter, PdfOutputFormatter>();
+            services.AddScoped<IOutputFormatter, XlsxOutputFormatter>();
+            services.AddScoped<IOutputFormatter, PdfOutputFormatter>();
         }
 
         private void ConfigureDatabases(IServiceCollection services)

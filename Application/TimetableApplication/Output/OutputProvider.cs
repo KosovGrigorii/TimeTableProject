@@ -19,7 +19,7 @@ namespace TimetableApplication
         {
             var path = GetPath(extension, uid);
             var formatter = chooser.ChooseFormatter(extension);
-            formatter.MakeOutputFile(path, timeslots);
+            formatter.MakeOutputFile(path, OutputConverter.ConvertTimeslotsToDictionary(timeslots));
             return path;
         }
 
