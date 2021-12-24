@@ -7,6 +7,7 @@ namespace TimetableDomain
 {
     public class GraphAlgorithm : ITimetableMaker
     {
+        public FilterHandler Handler = new FilterHandler();
         public Algorithm Name => Algorithm.Graph;
         public IEnumerable<TimeSlot> GetTimetable(IEnumerable<Course> courses, IEnumerable<Teacher> teachers, IEnumerable<TimeSpan> lessonStarts)
         {
@@ -29,49 +30,28 @@ namespace TimetableDomain
 
             foreach (var course in courses)
             {
-                for (int i = 1; i <= 5; i++)
+                var isTransformable = TeachersFilter.ContainsKey(course.Teacher);
+                var attemptResult = findAvailablePosition(course, CourseTime, TeacherTime, GroupTime,
+                    lessonStarts, TeachersFilter, isTransformable);
+
+                if (!attemptResult)
                 {
-                    var flag = false;
-                    foreach (var time in lessonStarts)
+                    var transformedCourse = Handler.handleFilters(TeachersFilter[course.Teacher].WorkingDays, course,
+                        CourseTime);
+                                
+                    if (!transformedCourse.Equals(null))
                     {
-                        var isTransformable = true;
-                        if (TeacherTime[course.Teacher].Contains((i, time)) || 
-                            GroupTime[course.Groups[0]].Contains((i, time))) continue;
-                        
-                        if (TeachersFilter.ContainsKey(course.Teacher))
-                        {
-                            if (TeachersFilter[course.Teacher].IsDayForbidden(i))
-                            {
-                                var transformedCourse = handleFilters(TeachersFilter[course.Teacher].WorkingDays, course,
-                                    CourseTime);
-                                if (!transformedCourse.Equals(null))
-                                {
-                                    
-                                }
-                            }
-                            
-                            isTransformable = false;
-                        }
-
-                        if (CourseTime.ContainsKey(i))
-                        {
-                            CourseTime[i].Add((course, time, isTransformable));
-                        }
-
-                        else
-                        {
-                            CourseTime.Add(i, new List<(Course, TimeSpan, bool)>{(course, time, isTransformable)});
-                        }
-                        
-                        TeacherTime[course.Teacher].Add((i, time));
-                        GroupTime[course.Groups[0]].Add((i, time));
-                        flag = true;
-                        break;
+                        findAvailablePosition(transformedCourse, CourseTime, TeacherTime,
+                            GroupTime, lessonStarts, TeachersFilter);
                     }
-                    
-                    if (flag) break;
+                    else
+                    {
+                        findAvailablePosition(course, CourseTime, TeacherTime,
+                            GroupTime, lessonStarts, TeachersFilter);
+                    }
                 }
             }
+            
             
             var timeTable = CourseTime.SelectMany(chromosome => chromosome.Value, 
                 (day, courseInfo) => new { day.Key, courseInfo }
@@ -88,22 +68,44 @@ namespace TimetableDomain
             return timeTable;
         }
 
-
-        public Course handleFilters(HashSet<int> workingDays, Course course, Dictionary<int, List<(Course, TimeSpan, bool)>> courseTime)
+        public bool findAvailablePosition(Course course, 
+            Dictionary<int, List<(Course, TimeSpan, bool)>> CourseTime,
+            Dictionary<string, List<(int, TimeSpan)>> TeacherTime,
+            Dictionary<string, List<(int, TimeSpan)>> GroupTime,
+            IEnumerable<TimeSpan> lessonStarts,
+            Dictionary<string, Teacher> TeachersFilter,
+            bool isTransformable = true)
         {
-            foreach (var workingDay in workingDays)
+            for (int day = 1; day <= 5; day++)
             {
-                int index = courseTime[workingDay].FindIndex(TimeSlot => TimeSlot.Item3);
-
-                if (index != -1)
+                var flag = false;
+                foreach (var time in lessonStarts)
                 {
-                    var transformedCourse = courseTime[workingDay][index].Item1;
-                    courseTime[workingDay][index] = (course, courseTime[workingDay][index].Item2, false);
-                    return transformedCourse;
+                    if (TeacherTime[course.Teacher].Contains((day, time)) ||
+                        GroupTime[course.Groups[0]].Contains((day, time))) continue;
+
+                    if (!(isTransformable || Handler.checkPossibility(course, TeachersFilter, day))) return false;
+
+                    if (CourseTime.ContainsKey(day))
+                    {
+                        CourseTime[day].Add((course, time, isTransformable));
+                    }
+
+                    else
+                    {
+                        CourseTime.Add(day, new List<(Course, TimeSpan, bool)>{(course, time, isTransformable)});
+                    }
+                        
+                    TeacherTime[course.Teacher].Add((day, time));
+                    GroupTime[course.Groups[0]].Add((day, time));
+                    flag = true;
+                    break;
                 }
+                    
+                if (flag) return true;
             }
 
-            return null;
+            return false;
         }
     }
 }
