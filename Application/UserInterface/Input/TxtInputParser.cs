@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Microsoft.AspNetCore.Http;
 using TimetableApplication;
 
 
@@ -11,8 +12,9 @@ namespace UserInterface
     {
         public ParserExtension Extension => ParserExtension.txt;
 
-        public IEnumerable<SlotInfo> ParseFile(Stream stream)
+        public IEnumerable<SlotInfo> ParseFile(IFormFile file)
         {
+            using var stream = file.OpenReadStream();
             var slots = new List<SlotInfo>();
             var starts = new List<TimeSpan>() { new TimeSpan(9, 0, 0) };
             var duration = 40;
@@ -45,6 +47,7 @@ namespace UserInterface
                 throw new ArgumentException(".xlsx file was filled out wrongly");
             }
             return slots;
+
             //return (slots, starts, duration);
         }
 

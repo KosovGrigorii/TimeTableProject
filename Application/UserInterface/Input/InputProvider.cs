@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 using TimetableApplication;
 
 namespace UserInterface
@@ -14,10 +15,10 @@ namespace UserInterface
             this.chooser = chooser;
         }
 
-        public IEnumerable<SlotInfo> ParseInput(Stream stream, ParserExtension extension)
+        public IEnumerable<SlotInfo> ParseInput(IFormFile file, ParserExtension extension)
         {
             var parser = chooser.ChooseParser(extension);
-            return parser.ParseFile(stream);
+            return parser.ParseFile(file);
         }
     }
 }
