@@ -9,27 +9,24 @@ namespace Infrastructure
     {
         public Database BaseName => Database.Firebase;
         private FirebaseClient firebaseClient;
-        private string keyName;
         private string category;
 
-        public FirebaseWrapper(string firebaseUrl, string keyName)
+        public FirebaseWrapper(FirebaseClient firebaseClient)
         {
-            firebaseClient = new FirebaseClient(firebaseUrl);
-            this.keyName = keyName;
+            this.firebaseClient = firebaseClient;
             category = typeof(TStoredObject).ToString().Split('.').Last();
         }
         
         public void AddRange(TKey key, IEnumerable<TStoredObject> content)
         {
             foreach (var item in content)
-                firebaseClient.Child($"{keyName}/{key}/{category}").PostAsync(item);
+                firebaseClient.Child($"{key}/{category}").PostAsync(item);
         }
 
         public IEnumerable<TStoredObject> ReadBy(TKey key)
         {
             return firebaseClient
-                .Child(keyName)
-                .Child(key.ToString)
+                .Child(key.ToString())
                 .Child(category)
                 .OnceAsync<TStoredObject>()
                 .Result
@@ -39,8 +36,7 @@ namespace Infrastructure
         public void DeleteKey(TKey key)
         {
             firebaseClient
-                .Child(keyName)
-                .Child(key.ToString)
+                .Child(key.ToString())
                 .DeleteAsync();
         }
     }

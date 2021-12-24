@@ -1,5 +1,6 @@
 using System;
 using Castle.Core.Internal;
+using Firebase.Database;
 using Infrastructure;
 using LiteDB;
 using Microsoft.AspNetCore.Builder;
@@ -40,6 +41,7 @@ namespace UserInterface
             services.AddScoped<DatabasesChooser>();
             services.AddScoped<OutputProvider>();
             services.AddScoped<FormatterChooser>();
+            services.AddScoped<DatabaseEntityConverter>();
             
             services.AddScoped<IInputParser, XlsxInputParser>();
             services.AddScoped<IInputParser, TxtInputParser>();
@@ -54,10 +56,12 @@ namespace UserInterface
             var firebaseUrl = configuration.GetConnectionString("FirebaseUrl");
             if (!firebaseUrl.IsNullOrEmpty())
             {
-                services.AddSingleton<IDatabaseWrapper<string, DatabaseSlot>>(
-                    new FirebaseWrapper<string, DatabaseSlot>(firebaseUrl, "User"));
-                services.AddSingleton<IDatabaseWrapper<string, DatabaseTimeslot>>(
-                    new FirebaseWrapper<string, DatabaseTimeslot>(firebaseUrl, "User"));
+                services.AddSingleton(new FirebaseClient(firebaseUrl));
+                services
+                    .AddSingleton<IDatabaseWrapper<string, DatabaseSlot>, FirebaseWrapper<string, DatabaseSlot>>();
+                services
+                    .AddSingleton<IDatabaseWrapper<string, DatabaseTimeslot>,
+                        FirebaseWrapper<string, DatabaseTimeslot>>();
 
             }
             
