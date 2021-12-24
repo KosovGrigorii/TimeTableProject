@@ -39,6 +39,7 @@ namespace UserInterface
             services.AddScoped<TimetableMakingProvider>();
             services.AddScoped<DatabaseProvider>();
             services.AddScoped<DatabasesChooser>();
+            services.AddScoped<OutputConverter>();
             services.AddScoped<OutputProvider>();
             services.AddScoped<FormatterChooser>();
             services.AddScoped<DatabaseEntityConverter>();
@@ -47,8 +48,8 @@ namespace UserInterface
             services.AddScoped<IInputParser, TxtInputParser>();
             services.AddScoped<ITimetableMaker, GeneticAlgorithm>();
             services.AddScoped<ITimetableMaker, GraphAlgorithm>();
-            services.AddScoped<OutputFormatter, XlsxOutputFormatter>();
-            services.AddScoped<OutputFormatter, PdfOutputFormatter>();
+            services.AddScoped<IOutputFormatter, XlsxOutputFormatter>();
+            services.AddScoped<IOutputFormatter, PdfOutputFormatter>();
         }
 
         private void ConfigureDatabases(IServiceCollection services)
