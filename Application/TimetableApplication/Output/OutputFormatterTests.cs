@@ -17,7 +17,8 @@ namespace TimetableApplication
             var file = new FileInfo(Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".pdf"));
             Console.WriteLine(file.FullName);
             var formatter = new PdfOutputFormatter();
-            formatter.MakeOutputFile(file.FullName, OutputConverter.ConvertTimeslotsToDictionary(GetSlots()));
+            var converter = new OutputConverter();
+            formatter.MakeOutputFile(file.FullName, converter.ConvertTimeslotsToDictionary(GetSlots()));
             Process.Start(new ProcessStartInfo(file.FullName) { UseShellExecute = true });
         }
     

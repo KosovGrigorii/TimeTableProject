@@ -9,17 +9,19 @@ namespace TimetableApplication
     public class OutputProvider
     {
         private FormatterChooser chooser;
+        private OutputConverter converter;
         
-        public OutputProvider(FormatterChooser chooser)
+        public OutputProvider(FormatterChooser chooser, OutputConverter converter)
         {
             this.chooser = chooser;
+            this.converter = converter;
         }
 
         public string GetPathToOutputFile(OutputExtension extension, string uid, IEnumerable<TimeSlot> timeslots)
         {
             var path = GetPath(extension, uid);
             var formatter = chooser.ChooseFormatter(extension);
-            formatter.MakeOutputFile(path, OutputConverter.ConvertTimeslotsToDictionary(timeslots));
+            formatter.MakeOutputFile(path, converter.ConvertTimeslotsToDictionary(timeslots));
             return path;
         }
 

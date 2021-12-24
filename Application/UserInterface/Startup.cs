@@ -38,6 +38,7 @@ namespace UserInterface
             services.AddScoped<TimetableMakingProvider>();
             services.AddScoped<DatabaseProvider>();
             services.AddScoped<DatabasesChooser>();
+            services.AddScoped<OutputConverter>();
             services.AddScoped<OutputProvider>();
             services.AddScoped<FormatterChooser>();
             

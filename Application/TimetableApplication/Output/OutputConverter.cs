@@ -5,9 +5,9 @@ using TimetableDomain;
 
 namespace TimetableApplication
 {
-    public static class OutputConverter
+    public class OutputConverter
     {
-        public static Dictionary<string, string[,]> ConvertTimeslotsToDictionary(IEnumerable<TimeSlot> slots)
+        public Dictionary<string, string[,]> ConvertTimeslotsToDictionary(IEnumerable<TimeSlot> slots)
         {
             var teachers = new Dictionary<string, List<TimeSlot>>();
             var groups = new Dictionary<string, List<TimeSlot>>();
@@ -36,7 +36,7 @@ namespace TimetableApplication
             return tables;
         }
 
-        private static string[,] GetTable(IEnumerable<TimeSlot> slots,
+        private string[,] GetTable(IEnumerable<TimeSlot> slots,
             IList<Tuple<TimeSpan, TimeSpan>> bells,
             Func<TimeSlot, string> getOtherName)
         {
