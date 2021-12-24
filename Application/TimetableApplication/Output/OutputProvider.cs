@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using Accord;
 using TimetableDomain;
 
 namespace TimetableApplication
@@ -10,7 +8,7 @@ namespace TimetableApplication
     {
         private FormatterChooser chooser;
         private OutputConverter converter;
-        
+
         public OutputProvider(FormatterChooser chooser, OutputConverter converter)
         {
             this.chooser = chooser;
