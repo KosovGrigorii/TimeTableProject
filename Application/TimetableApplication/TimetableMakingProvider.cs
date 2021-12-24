@@ -33,7 +33,10 @@ namespace TimetableApplication
 					Group = x.Group,
 					Place = x.Room
 				});
-			var teachers = filters.Select(x => new Teacher(x.Name, x.Days)).ToList();
+			var teachers = filters
+                .Where(x => x.DaysCount.HasValue)
+                .Select(x => new Teacher(x.Name, x.DaysCount.Value))
+                .ToList();
             
 			var timeslots = algorithm.GetTimetable(courses, teachers, lessonStarts);
 			database.SetTimeslots(uid, timeslots);
