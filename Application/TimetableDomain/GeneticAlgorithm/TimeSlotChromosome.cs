@@ -8,7 +8,6 @@ namespace TimetableDomain
         public TimeSpan StartAt { get; set; }
         public TimeSpan EndAt => StartAt.Add(TimeSpan.FromHours(1.5));
         public Course Course { get; set; }
-        //public string Place { get; set; }
         public string Teacher { get; set; }
         public string Group { get; set; }
         public int Day { get; set; }

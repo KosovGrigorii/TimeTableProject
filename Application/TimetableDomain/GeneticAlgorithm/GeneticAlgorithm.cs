@@ -8,14 +8,24 @@ namespace TimetableDomain
     public class GeneticAlgorithm : ITimetableMaker
     {
         public Algorithm Name => Algorithm.Genetic;
+        private EliteSelection eliteSelection;
+        private FitnessFunction fitnessFunction;
+
+        public GeneticAlgorithm(EliteSelection eliteSelection, FitnessFunction fitnessFunction)
+        {
+            this.eliteSelection = eliteSelection;
+            this.fitnessFunction = fitnessFunction;
+        }
         
         public IEnumerable<TimeSlot> GetTimetable(
             IEnumerable<Course> cources, 
             IEnumerable<Teacher> teachers, 
             IEnumerable<TimeSpan> lessonStarts)
         {
-            Population population = new Population(1000, new TimeTableChromosome(cources, lessonStarts),
-                new FitnessFunction(teachers), new EliteSelection());
+            fitnessFunction.SetTeachersFilters(teachers);
+            
+            var population = new Population(1000, new TimeTableChromosome(cources, lessonStarts),
+                fitnessFunction, eliteSelection);
 
             for(var i = 1; ; i++)
             {

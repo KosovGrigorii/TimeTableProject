@@ -1,15 +1,13 @@
-using System;
+using Accord.Genetic;
 using Castle.Core.Internal;
 using Firebase.Database;
 using Infrastructure;
-using LiteDB;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using TimetableApplication;
 using TimetableDomain;
 
@@ -43,6 +41,10 @@ namespace UserInterface
             services.AddScoped<OutputProvider>();
             services.AddScoped<FormatterChooser>();
             services.AddScoped<DatabaseEntityConverter>();
+
+            services.AddScoped<FilterHandler>();
+            services.AddScoped<EliteSelection>();
+            services.AddScoped<FitnessFunction>();
             
             services.AddScoped<IInputParser, XlsxInputParser>();
             services.AddScoped<IInputParser, TxtInputParser>();
