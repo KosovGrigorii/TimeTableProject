@@ -42,6 +42,7 @@ namespace TimetableDomain
                     }
                     else
                     {
+                        teachersFilter.Remove(course.Teacher);
                         FindAvailablePosition(course, courseTime, teacherTime,
                             groupTime, lessonStarts, teachersFilter);
                     }
