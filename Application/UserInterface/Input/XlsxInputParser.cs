@@ -13,8 +13,7 @@ namespace UserInterface
         public IEnumerable<SlotInfo> ParseFile(Stream stream)
         {
             var slots = new List<SlotInfo>();
-            var starts = new List<TimeSpan>() { new TimeSpan(9, 0, 0) };
-            var duration = 40;
+            var times = new Times();
             stream.Position = 0;
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             using var reader = ExcelReaderFactory.CreateReader(stream);
@@ -24,7 +23,7 @@ namespace UserInterface
                 {
                     if (reader.GetValue(0).ToString() == "-")
                     {
-                        (starts, duration) = GetStartsAndDuration(reader);
+                        times = GetTimes(reader);
                         break; 
                     }
                     slots.Add(new SlotInfo
@@ -43,13 +42,13 @@ namespace UserInterface
                 throw new ArgumentException(".xlsx file was filled out wrongly");
             }
             return slots;
-            //return (slots, starts, duration);
+            //return (slots, times);
         }
         
-        public (List<TimeSpan>, int) GetStartsAndDuration(IExcelDataReader reader)
+        public Times GetTimes(IExcelDataReader reader)
         {
             reader.Read();
-            var starts = new List<TimeSpan>();
+            var times = new Times() { times = new List<Tuple<TimeSpan, int>>() };
             var (begin, end) = GetSpan(reader.GetValue(0).ToString(), reader.GetValue(1).ToString());
             var (duration, rest) = (int.Parse(reader.GetValue(2).ToString()), int.Parse(reader.GetValue(3).ToString()));
             var special_rest = new List<double>();
@@ -65,15 +64,15 @@ namespace UserInterface
             {
                 if (special_rest.Count == 0 || begin + duration < special_rest[0])
                 {
-                    starts.Add(TimeSpan.FromMinutes(begin));
+                    times.times.Add(new Tuple<TimeSpan, int>(TimeSpan.FromMinutes(begin), duration));
                     begin += duration + rest;
                     continue;
                 }
-                starts.Add(TimeSpan.FromMinutes(begin));
+                times.times.Add(new Tuple<TimeSpan, int>(TimeSpan.FromMinutes(begin), (int)(special_rest[0] - begin)));
                 begin = special_rest[1];
                 special_rest.RemoveRange(0, 2);
             }
-            return (starts, duration);
+            return times;
         }
 
         public (double, double) GetSpan(string begin, string end)
