@@ -7,13 +7,12 @@ namespace TimetableDomain
 {
     public class FitnessFunction : IFitnessFunction
     {
-        private Dictionary<string, Teacher> Teachers;
+        private IReadOnlyDictionary<string, Teacher> teachers;
 
-        public FitnessFunction(IEnumerable<Teacher> teachers)
+        public void SetTeachersFilters(IEnumerable<Teacher> teachers)
         {
-            Teachers = teachers.ToDictionary(x => x.Name);
+            this.teachers = teachers.ToDictionary(x => x.Name);
         }
-        
         
         public double Evaluate(IChromosome chromosome)
         {
@@ -26,7 +25,7 @@ namespace TimetableDomain
             
             var teacherWorkDaysOverLaps = new Func<TimeSlotChromosome, IEnumerable<TimeSlotChromosome>>(current =>
                 values.Where(x => 
-                        Teachers.TryGetValue(x.Teacher, out var teacher) && teacher.IsDayForbidden(x.Day)));
+                        teachers.TryGetValue(x.Teacher, out var teacher) && teacher.IsDayForbidden(x.Day)));
             var GetoverLaps = new Func<TimeSlotChromosome, List<TimeSlotChromosome>>(current => 
                 getTimeOverLaps(current)
                     .Concat(teacherWorkDaysOverLaps(current))

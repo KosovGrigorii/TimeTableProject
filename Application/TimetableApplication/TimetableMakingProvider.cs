@@ -20,8 +20,6 @@ namespace TimetableApplication
             DatabaseProvider database,
             IEnumerable<Filter> filters)
         {
-            var algorithm = chooser.ChooseAlgorithm(Algorithm.Graph);
-            
             var lessonStarts = new List<TimeSpan>() { 
                 new TimeSpan(9, 0, 0),
                 new TimeSpan(10, 40, 0)};
@@ -34,9 +32,10 @@ namespace TimetableApplication
 					Place = x.Room
 				});
 			var teachers = filters
-                .Where(x => x.DaysCount.HasValue)
-                .Select(x => new Teacher(x.Name, x.DaysCount.Value))
-                .ToList();
+                .Select(x => x.DaysCount.HasValue 
+                    ? new Teacher(x.Name, x.DaysCount.Value) 
+                    : new Teacher(x.Name, x.Days));
+            var algorithm = chooser.ChooseAlgorithmForFilters(filters);
             
 			var timeslots = algorithm.GetTimetable(courses, teachers, lessonStarts);
 			database.SetTimeslots(uid, timeslots);

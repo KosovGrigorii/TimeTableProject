@@ -7,9 +7,9 @@ namespace TimetableApplication
     {
         public string Name { get; }
         public int? DaysCount { get; }
-        public List<DayOfWeek> Days { get; }
+        public List<int> Days { get; }
 
-        public Filter(string name, int? daysCount, List<DayOfWeek> days)
+        public Filter(string name, int? daysCount, List<int> days)
         {
             Name = name;
             DaysCount = daysCount;

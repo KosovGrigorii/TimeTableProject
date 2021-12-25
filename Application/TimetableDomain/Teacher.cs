@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TimetableDomain
 {
     public class Teacher
     {
-        public string Name { get; }
+        public string Name { get;  }
         public HashSet<int> WorkingDays { get; }
         public int DaysCount { get; }
 
@@ -16,7 +17,12 @@ namespace TimetableDomain
             DaysCount = daysCount;
         }
         
-
+        public Teacher(string name, IEnumerable<int> days)
+        {
+            Name = name;
+            WorkingDays = days.ToHashSet();
+        }
+        
         public bool IsDayForbidden(int day)
         {
             var isInSet = WorkingDays.Contains(day);
@@ -26,7 +32,7 @@ namespace TimetableDomain
                 return false;
             }
 
-            return isInSet;
+            return !isInSet;
         }
     }
 }

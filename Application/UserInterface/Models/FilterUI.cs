@@ -7,6 +7,6 @@ namespace UserInterface.Models
     {
         public string Name { get; set; }
         public int? DaysCount { get; set; }
-        public List<DayOfWeek> Days { get; set; }
+        public List<int> Days { get; set; }
     }
 }
