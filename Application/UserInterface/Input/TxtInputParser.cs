@@ -49,11 +49,11 @@ namespace UserInterface
 
         public Times GetTimes(StreamReader reader)
         {
-            var times = new Times() { times = new List<Tuple<TimeSpan, int>>() };
             var info = reader.ReadLine().Split();
             var (begin, end) = GetSpan(info[0], info[1]);
             var (duration, rest) = (int.Parse(info[2]), int.Parse(info[3]));
             var special_rest = new List<double>();
+            var times = new Times() { Duration = duration, LessonStarts = new List<TimeSpan>() };
             for (var i = 4; i < info.Length; i += 2)
             {
                 var (start_rest, end_rest) = GetSpan(info[i], info[i + 1]);
@@ -62,13 +62,12 @@ namespace UserInterface
             }
             while (begin < end)
             {
+                times.LessonStarts.Add(TimeSpan.FromMinutes(begin));
                 if (special_rest.Count == 0 || begin + duration < special_rest[0])
                 {
-                    times.times.Add(new Tuple<TimeSpan, int>(TimeSpan.FromMinutes(begin), duration));
                     begin += duration + rest;
                     continue;
                 }
-                times.times.Add(new Tuple<TimeSpan, int>(TimeSpan.FromMinutes(begin), (int)(special_rest[0] - begin)));
                 begin = special_rest[1];
                 special_rest.RemoveRange(0, 2);
             }

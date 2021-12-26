@@ -48,10 +48,10 @@ namespace UserInterface
         public Times GetTimes(IExcelDataReader reader)
         {
             reader.Read();
-            var times = new Times() { times = new List<Tuple<TimeSpan, int>>() };
             var (begin, end) = GetSpan(reader.GetValue(0).ToString(), reader.GetValue(1).ToString());
             var (duration, rest) = (int.Parse(reader.GetValue(2).ToString()), int.Parse(reader.GetValue(3).ToString()));
             var special_rest = new List<double>();
+            var times = new Times() { Duration = duration, LessonStarts = new List<TimeSpan>() };
             var temp = 4;
             while (reader.GetValue(temp) != null)
             {
@@ -62,13 +62,12 @@ namespace UserInterface
             }
             while (begin < end)
             {
+                times.LessonStarts.Add(TimeSpan.FromMinutes(begin));
                 if (special_rest.Count == 0 || begin + duration < special_rest[0])
                 {
-                    times.times.Add(new Tuple<TimeSpan, int>(TimeSpan.FromMinutes(begin), duration));
                     begin += duration + rest;
                     continue;
                 }
-                times.times.Add(new Tuple<TimeSpan, int>(TimeSpan.FromMinutes(begin), (int)(special_rest[0] - begin)));
                 begin = special_rest[1];
                 special_rest.RemoveRange(0, 2);
             }
