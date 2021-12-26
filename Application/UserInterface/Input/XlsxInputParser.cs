@@ -16,7 +16,7 @@ namespace UserInterface
         {
             using var stream = file.OpenReadStream();
             var slots = new List<SlotInfo>();
-            var times = new Times();
+            var times = new Times() { LessonStarts = new List<TimeSpan>() };
             stream.Position = 0;
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             using var reader = ExcelReaderFactory.CreateReader(stream);

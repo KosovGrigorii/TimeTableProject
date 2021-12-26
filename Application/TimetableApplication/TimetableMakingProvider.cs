@@ -22,6 +22,7 @@ namespace TimetableApplication
             IEnumerable<Filter> filters)
         {
             var lessonStarts = database.GetTimeSchedule(uid).ToList();
+            
             if (!lessonStarts.Any())
                 lessonStarts = new List<TimeSpan>() { 
                     new TimeSpan(9, 0, 0),
