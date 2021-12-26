@@ -10,11 +10,15 @@
         <title>Output</title>
     </head>
     <body>
-        <div class="output">
-            @using (Html.BeginForm("DownloadFile", "Output", new { uid = Model.ID }))
-            {
+    <div class="output">
+        @using (Html.BeginForm("DownloadFile", "Output", new { uid = Model.ID }))
+        {
+            <fieldset>
+                <legend>Choose extension</legend>
+                @Html.DropDownList("extension", ViewBag.Extensions as SelectList)
                 <input type="submit" value="Download">
-            }
-        </div>
+            </fieldset>
+        }
+    </div>
     </body>
 </html>

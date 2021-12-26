@@ -16,6 +16,17 @@
 </div>
 
 <script>
+function ChooseFilter(div_to_insert, input, uid, insert_index) {
+    $.ajax({
+        url: '@Url.Action("ChooseSingleFilter", "FiltersInput")',
+        data: {filterName: input, userId: uid, elementId: insert_index},
+        type: "POST",
+        success: function(data) {
+            $('#' + div_to_insert).html(data);
+        }
+    })
+}
+
 function AddInputDiv(){
     var filterForm = document.getElementById('filtersForm');
     var div = document.createElement('div');
@@ -23,7 +34,7 @@ function AddInputDiv(){
     div.id = insert_id;
     filterForm.appendChild(div);
     $.ajax({
-        url: '@Url.Action("_SingleSpecifiedFilter", "FiltersInput", new { uid = Model.ID })',
+        url: '@Url.Action("_FilterChoosingForm", "FiltersInput", new { userId = Model.ID })',
         data: {elementId: insert_id},
         success: function (data) {
             $('#' + insert_id).html(data);

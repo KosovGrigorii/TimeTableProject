@@ -36,12 +36,9 @@ namespace UserInterface
             var strExtension = Path.GetExtension(fileInfo.FileName).Split('.').Last();
             var translated = Enum.TryParse<ParserExtension>(strExtension, out var extension);
             
-            using (var stream = fileInfo.OpenReadStream())
-            {
-                var userInput = inputProvider.ParseInput(stream, extension);
-                databaseProvider.AddInputSlotInfo(uid, userInput.CourseSlots);
-                databaseProvider.AddTimeSchedule(uid, userInput.TimeSchedule);
-            }
+            var userInput = inputProvider.ParseInput(fileInfo, extension);
+            databaseProvider.AddInputSlotInfo(uid, userInput.CourseSlots);
+            databaseProvider.AddTimeSchedule(uid, userInput.TimeSchedule);
             
             return RedirectToAction("ToFiltersInput", new { uid = uid});
         }

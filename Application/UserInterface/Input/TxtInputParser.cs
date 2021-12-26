@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Microsoft.AspNetCore.Http;
 using TimetableApplication;
 
 
@@ -10,9 +11,10 @@ namespace UserInterface
     class TxtInputParser : IInputParser
     {
         public ParserExtension Extension => ParserExtension.txt;
-
-        public UserInput ParseFile(Stream stream)
+        
+        public UserInput ParseFile(IFormFile file)
         {
+            using var stream = file.OpenReadStream();
             var slots = new List<SlotInfo>();
             var times = new Times();
             stream.Position = 0;
@@ -43,7 +45,6 @@ namespace UserInterface
             {
                 throw new ArgumentException(".xlsx file was filled out wrongly");
             }
-
             return new UserInput() {CourseSlots = slots, TimeSchedule = times};
         }
 

@@ -1,12 +1,8 @@
 using System;
-using System.IO;
-using System.Linq;
-using System.Collections.Generic;
-using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using UserInterface.Models;
 using TimetableApplication;
-using TimetableDomain;
 
 
 namespace UserInterface
@@ -25,18 +21,19 @@ namespace UserInterface
         [HttpGet]
         public IActionResult Index(string uid)
         {
-            return View("Output", new UserID() {ID = uid});
+            var extensions = new SelectList(Enum.GetValues(typeof(OutputExtension)));
+            ViewBag.Extensions = extensions;
+            return View("Output", new UserID {ID = uid});
         }
 
-        public FileResult DownloadFile(string uid)
+        public FileResult DownloadFile(string extension, string uid)
         {
-            var strExtension = ".pdf";
-            var translated = Enum.TryParse<OutputExtension>(strExtension, out var extension);
+            var translated = Enum.TryParse<OutputExtension>(extension, out var outputExtension);
             var timeslots = databaseProvider.GetTimeslots(uid);
             
-            var bytes =  outputProvider.GetPathToOutputFile(extension, uid, timeslots);
+            var bytes =  outputProvider.GetPathToOutputFile(outputExtension, uid, timeslots);
             databaseProvider.DeleteUserData(uid);
-            return File(bytes, "application/octet-stream", "Timetable.xlsx");
+            return File(bytes, "application/octet-stream", $"Timetable.{extension.ToLower()}");
         }
     }
 }

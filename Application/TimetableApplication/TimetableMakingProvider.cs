@@ -21,8 +21,6 @@ namespace TimetableApplication
             DatabaseProvider database,
             IEnumerable<Filter> filters)
         {
-            var algorithm = chooser.ChooseAlgorithm(Algorithm.Graph);
-
             var lessonStarts = database.GetTimeSchedule(uid).ToList();
             if (!lessonStarts.Any())
                 lessonStarts = new List<TimeSpan>() { 
@@ -36,7 +34,10 @@ namespace TimetableApplication
 					Group = x.Group,
 					Place = x.Room
 				});
-			var teachers = filters.Select(x => new Teacher(x.Name, x.Days)).ToList();
+            var teachers = filters
+                .Select(x => x.DaysCount.HasValue 
+                    ? new Teacher(x.Name, x.DaysCount.Value) 
+                    : new Teacher(x.Name, x.Days));
             var algoInput = new AlgoritmInput()
             {
                 Courses = courses,
@@ -44,7 +45,8 @@ namespace TimetableApplication
                 LessonStarts = lessonStarts,
                 LessonLengthMinutes = database.LessonDuration > 0 ? database.LessonDuration : 90
             };
-			var timeslots = algorithm.GetTimetable(algoInput);
+            var algorithm = chooser.ChooseAlgorithmForFilters(filters);
+            var timeslots = algorithm.GetTimetable(algoInput);
 			database.SetTimeslots(uid, timeslots);
         }
     }

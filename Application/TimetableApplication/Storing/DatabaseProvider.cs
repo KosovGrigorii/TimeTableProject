@@ -7,30 +7,32 @@ namespace TimetableApplication
 {
     public class DatabaseProvider
     {
-        private TimetableDatabases databases;
         public int LessonDuration { get; private set; }
+        private TimetableDatabases databases;
+        private DatabaseEntityConverter converter;
 
-        public DatabaseProvider(DatabasesChooser chooser)
+        public DatabaseProvider(DatabasesChooser chooser, DatabaseEntityConverter converter)
         {
             databases = chooser.GetDatabaseWrappers();
+            this.converter = converter;
         }
 
         public void AddInputSlotInfo(string uid, IEnumerable<SlotInfo> inputData)
-        => databases.SlotWrapper.AddRange(uid, inputData.Select(slot => new DatabaseSlot(slot, uid)));
+        => databases.SlotWrapper.AddRange(uid, inputData.Select(slot => converter.SlotToDatabaseClass(slot, uid)));
 
         public void AddTimeSchedule(string uid, Times timeSchedule)
         {
             LessonDuration = timeSchedule.Duration;
             databases.TimeScheduleWrapper.AddRange(uid, 
-                timeSchedule.LessonStarts.Select(x => DatabaseTimeSchedule.TimeSpanToDbClass(x, uid)));
+                timeSchedule.LessonStarts.Select(x => converter.TimeSpanToDbClass(x, uid)));
         }
 
         public IEnumerable<SlotInfo> GetInputInfo(string uid)
-            => databases.SlotWrapper.ReadBy(uid).Select(x => x.ConvertToSlotInfo());
+            => databases.SlotWrapper.ReadBy(uid).Select(x => converter.DbSlotToSlot(x));
 
         public IEnumerable<TimeSpan> GetTimeSchedule(string uid)
             => databases.TimeScheduleWrapper.ReadBy(uid)
-                .Select(x => DatabaseTimeSchedule.DbClassToTimeSpan(x));
+                .Select(x => converter.DbClassToTimeSpan(x));
 
         public IEnumerable<string> GetTeacherFilters(string uid)
         {
@@ -41,10 +43,10 @@ namespace TimetableApplication
         }
 
         public void SetTimeslots(string uid, IEnumerable<TimeSlot> timeslots)
-        => databases.TimeslotWrapper.AddRange(uid, timeslots.Select(t => new DatabaseTimeslot(t, uid)));
+        => databases.TimeslotWrapper.AddRange(uid, timeslots.Select(t => converter.TimeslotToDatabaseClass(t, uid)));
 
         public IEnumerable<TimeSlot> GetTimeslots(string uid)
-            => databases.TimeslotWrapper.ReadBy(uid).Select(x => x.ConvertToTimeslot());
+            => databases.TimeslotWrapper.ReadBy(uid).Select(x => converter.DbTimeslotToTimeslot(x));
 
         public void DeleteUserData(string uid)
         {

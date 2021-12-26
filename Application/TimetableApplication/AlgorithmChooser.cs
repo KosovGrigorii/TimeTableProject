@@ -18,5 +18,12 @@ namespace TimetableApplication
 
         public ITimetableMaker ChooseAlgorithm(Algorithm name)
             => timetableMakers[name];
+
+        public ITimetableMaker ChooseAlgorithmForFilters(IEnumerable<Filter> filters)
+        {
+            if (filters.Any() && timetableMakers.TryGetValue(Algorithm.Graph, out var graph))
+                return graph;
+            return timetableMakers[Algorithm.Genetic];
+        }
     }
 }

@@ -1,14 +1,13 @@
-using System;
+using Accord.Genetic;
 using Castle.Core.Internal;
+using Firebase.Database;
 using Infrastructure;
-using LiteDB;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using TimetableApplication;
 using TimetableDomain;
 
@@ -38,15 +37,21 @@ namespace UserInterface
             services.AddScoped<TimetableMakingProvider>();
             services.AddScoped<DatabaseProvider>();
             services.AddScoped<DatabasesChooser>();
+            services.AddScoped<OutputConverter>();
             services.AddScoped<OutputProvider>();
             services.AddScoped<FormatterChooser>();
+            services.AddScoped<DatabaseEntityConverter>();
+
+            services.AddScoped<FilterHandler>();
+            services.AddScoped<EliteSelection>();
+            services.AddScoped<FitnessFunction>();
             
             services.AddScoped<IInputParser, XlsxInputParser>();
             services.AddScoped<IInputParser, TxtInputParser>();
             services.AddScoped<ITimetableMaker, GeneticAlgorithm>();
             services.AddScoped<ITimetableMaker, GraphAlgorithm>();
-            services.AddScoped<OutputFormatter, XlsxOutputFormatter>();
-            services.AddScoped<OutputFormatter, PdfOutputFormatter>();
+            services.AddScoped<IOutputFormatter, XlsxOutputFormatter>();
+            services.AddScoped<IOutputFormatter, PdfOutputFormatter>();
         }
 
         private void ConfigureDatabases(IServiceCollection services)
@@ -54,12 +59,15 @@ namespace UserInterface
             var firebaseUrl = configuration.GetConnectionString("FirebaseUrl");
             if (!firebaseUrl.IsNullOrEmpty())
             {
-                services.AddSingleton<IDatabaseWrapper<string, DatabaseSlot>>(
-                    new FirebaseWrapper<string, DatabaseSlot>(firebaseUrl, "User"));
-                services.AddSingleton<IDatabaseWrapper<string, DatabaseTimeslot>>(
-                    new FirebaseWrapper<string, DatabaseTimeslot>(firebaseUrl, "User"));
-                services.AddSingleton<IDatabaseWrapper<string, DatabaseTimeSchedule>>(
-                    new FirebaseWrapper<string, DatabaseTimeSchedule>(firebaseUrl, "User"));
+                services.AddSingleton(new FirebaseClient(firebaseUrl));
+                services
+                    .AddSingleton<IDatabaseWrapper<string, DatabaseSlot>, FirebaseWrapper<string, DatabaseSlot>>();
+                services
+                    .AddSingleton<IDatabaseWrapper<string, DatabaseTimeslot>,
+                        FirebaseWrapper<string, DatabaseTimeslot>>();
+                services
+                    .AddSingleton<IDatabaseWrapper<string, DatabaseTimeSchedule>,
+                        FirebaseWrapper<string, DatabaseTimeSchedule>>();
             }
             
             var mysqlConnectionString = configuration.GetConnectionString("MySQLConnection");

@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using Accord;
 using TimetableDomain;
 
 namespace TimetableApplication
@@ -9,17 +7,19 @@ namespace TimetableApplication
     public class OutputProvider
     {
         private FormatterChooser chooser;
-        
-        public OutputProvider(FormatterChooser chooser)
+        private OutputConverter converter;
+
+        public OutputProvider(FormatterChooser chooser, OutputConverter converter)
         {
             this.chooser = chooser;
+            this.converter = converter;
         }
 
         public byte[] GetPathToOutputFile(OutputExtension extension, string uid, IEnumerable<TimeSlot> timeslots)
         {
             var path = GetPath(extension, uid);
             var formatter = chooser.ChooseFormatter(extension);
-            formatter.MakeOutputFile(path, timeslots);
+            formatter.MakeOutputFile(path, converter.ConvertTimeslotsToDictionary(timeslots));
             return  File.ReadAllBytes(path);
         }
 

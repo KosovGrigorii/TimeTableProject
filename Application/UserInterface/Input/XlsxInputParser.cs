@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using ExcelDataReader;
+using Microsoft.AspNetCore.Http;
 using TimetableApplication;
 using UserInterface.Models;
 
@@ -10,9 +11,10 @@ namespace UserInterface
     public class XlsxInputParser : IInputParser
     {
         public ParserExtension Extension => ParserExtension.xlsx;
-
-        public UserInput ParseFile(Stream stream)
+        
+        public UserInput ParseFile(IFormFile file)
         {
+            using var stream = file.OpenReadStream();
             var slots = new List<SlotInfo>();
             var times = new Times();
             stream.Position = 0;
