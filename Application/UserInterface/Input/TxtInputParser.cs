@@ -11,7 +11,7 @@ namespace UserInterface
     {
         public ParserExtension Extension => ParserExtension.txt;
 
-        public IEnumerable<SlotInfo> ParseFile(Stream stream)
+        public UserInput ParseFile(Stream stream)
         {
             var slots = new List<SlotInfo>();
             var times = new Times();
@@ -43,8 +43,8 @@ namespace UserInterface
             {
                 throw new ArgumentException(".xlsx file was filled out wrongly");
             }
-            return slots;
-            //return (slots, times);
+
+            return new UserInput() {CourseSlots = slots, TimeSchedule = times};
         }
 
         public Times GetTimes(StreamReader reader)

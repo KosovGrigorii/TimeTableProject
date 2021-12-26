@@ -8,13 +8,14 @@ namespace TimetableDomain
     public class GraphAlgorithm : ITimetableMaker
     {
         public Algorithm Name => Algorithm.Graph;
-        public IEnumerable<TimeSlot> GetTimetable(IEnumerable<Course> courses, IEnumerable<Teacher> teachers, IEnumerable<TimeSpan> lessonStarts)
+        
+        public IEnumerable<TimeSlot> GetTimetable(AlgoritmInput input)
         {
             var CourseTime = new Dictionary<int, List<(Course, TimeSpan, bool)>>();
             var TeacherTime = new Dictionary<string, List<(int, TimeSpan)>>();
             var TeachersFilter = new Dictionary<string, Teacher>();
             var GroupTime = new Dictionary<string, List<(int, TimeSpan)>>();
-            foreach (var course in courses)
+            foreach (var course in input.Courses)
             {
                 if(!TeacherTime.ContainsKey(course.Teacher))
                     TeacherTime.Add(course.Teacher, new List<(int, TimeSpan)>());
@@ -22,17 +23,17 @@ namespace TimetableDomain
                     GroupTime.Add(course.Group, new List<(int, TimeSpan)>());
             }
 
-            foreach (var teacher in teachers)
+            foreach (var teacher in input.TeacherFilters)
             {
                 TeachersFilter.Add(teacher.Name, teacher);
             }
 
-            foreach (var course in courses)
+            foreach (var course in input.Courses)
             {
                 for (int i = 1; i <= 5; i++)
                 {
                     var flag = false;
-                    foreach (var time in lessonStarts)
+                    foreach (var time in input.LessonStarts)
                     {
                         var isTransformable = true;
                         if (TeacherTime[course.Teacher].Contains((i, time)) || 
@@ -80,7 +81,7 @@ namespace TimetableDomain
                 {
                     Day = (DayOfWeek) chromosome.Key,
                     Start = chromosome.courseInfo.Item2,
-                    End = chromosome.courseInfo.Item2.Add(TimeSpan.FromHours(1.5)),
+                    End = chromosome.courseInfo.Item2.Add(TimeSpan.FromMinutes(input.LessonLengthMinutes)),
                     Place = chromosome.courseInfo.Item1.Place,
                     Course = chromosome.courseInfo.Item1.Title,
                     Teacher = chromosome.courseInfo.Item1.Teacher,

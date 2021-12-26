@@ -58,27 +58,29 @@ namespace UserInterface
                     new FirebaseWrapper<string, DatabaseSlot>(firebaseUrl, "User"));
                 services.AddSingleton<IDatabaseWrapper<string, DatabaseTimeslot>>(
                     new FirebaseWrapper<string, DatabaseTimeslot>(firebaseUrl, "User"));
-
+                services.AddSingleton<IDatabaseWrapper<string, DatabaseTimeSchedule>>(
+                    new FirebaseWrapper<string, DatabaseTimeSchedule>(firebaseUrl, "User"));
             }
             
-            var mysqlSlotsConnectionString = configuration.GetConnectionString("MySQLSlotConnection");
-            if (!mysqlSlotsConnectionString.IsNullOrEmpty())
+            var mysqlConnectionString = configuration.GetConnectionString("MySQLConnection");
+            if (!mysqlConnectionString.IsNullOrEmpty())
             {
                 services.AddDbContext<MySQLContext<string, DatabaseSlot>>(options  => options
-                    .UseMySql(mysqlSlotsConnectionString, ServerVersion.AutoDetect(mysqlSlotsConnectionString)));
+                    .UseMySql(mysqlConnectionString, ServerVersion.AutoDetect(mysqlConnectionString)));
                 services.AddSingleton<IDatabaseWrapper<string, DatabaseSlot>, MySQLWrapper<string, DatabaseSlot>>();
-            }
-            
-            var mysqlTimeslotsConnectionString = configuration.GetConnectionString("MySQLTimeslotConnection");
-            if (!mysqlSlotsConnectionString.IsNullOrEmpty())
-            {
+                
                 services.AddDbContext<MySQLContext<string, DatabaseTimeslot>>(options  => options
-                    .UseMySql(mysqlTimeslotsConnectionString, ServerVersion.AutoDetect(mysqlTimeslotsConnectionString)));
+                    .UseMySql(mysqlConnectionString, ServerVersion.AutoDetect(mysqlConnectionString)));
                 services.AddSingleton<IDatabaseWrapper<string, DatabaseTimeslot>, MySQLWrapper<string, DatabaseTimeslot>>();
+                
+                services.AddDbContext<MySQLContext<string, DatabaseTimeSchedule>>(options  => options
+                    .UseMySql(mysqlConnectionString, ServerVersion.AutoDetect(mysqlConnectionString)));
+                services.AddSingleton<IDatabaseWrapper<string, DatabaseTimeSchedule>, MySQLWrapper<string, DatabaseTimeSchedule>>();
             }
             
             services.AddSingleton<IDatabaseWrapper<string, DatabaseSlot>, DictionaryWrapper<string, DatabaseSlot>>();
             services.AddSingleton<IDatabaseWrapper<string, DatabaseTimeslot>, DictionaryWrapper<string, DatabaseTimeslot>>();
+            services.AddSingleton<IDatabaseWrapper<string, DatabaseTimeSchedule>, DictionaryWrapper<string, DatabaseTimeSchedule>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

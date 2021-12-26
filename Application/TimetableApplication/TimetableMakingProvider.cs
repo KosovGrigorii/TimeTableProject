@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Google.Protobuf.WellKnownTypes;
 using Infrastructure;
 using TimetableDomain;
 
@@ -21,10 +22,12 @@ namespace TimetableApplication
             IEnumerable<Filter> filters)
         {
             var algorithm = chooser.ChooseAlgorithm(Algorithm.Graph);
-            
-            var lessonStarts = new List<TimeSpan>() { 
-                new TimeSpan(9, 0, 0),
-                new TimeSpan(10, 40, 0)};
+
+            var lessonStarts = database.GetTimeSchedule(uid).ToList();
+            if (!lessonStarts.Any())
+                lessonStarts = new List<TimeSpan>() { 
+                    new TimeSpan(9, 0, 0),
+                    new TimeSpan(10, 40, 0)};
             var courses = database.GetInputInfo(uid)
                 .Select(x => new Course()
                 {
@@ -34,8 +37,14 @@ namespace TimetableApplication
 					Place = x.Room
 				});
 			var teachers = filters.Select(x => new Teacher(x.Name, x.Days)).ToList();
-            
-			var timeslots = algorithm.GetTimetable(courses, teachers, lessonStarts);
+            var algoInput = new AlgoritmInput()
+            {
+                Courses = courses,
+                TeacherFilters = teachers,
+                LessonStarts = lessonStarts,
+                LessonLengthMinutes = database.LessonDuration > 0 ? database.LessonDuration : 90
+            };
+			var timeslots = algorithm.GetTimetable(algoInput);
 			database.SetTimeslots(uid, timeslots);
         }
     }

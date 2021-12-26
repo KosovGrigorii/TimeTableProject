@@ -7,6 +7,6 @@ namespace UserInterface
     public interface IInputParser
     {
         ParserExtension Extension {get;}
-        IEnumerable<SlotInfo> ParseFile(Stream stream);
+        UserInput ParseFile(Stream stream);
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TimetableDomain;
@@ -7,6 +8,7 @@ namespace TimetableApplication
     public class DatabaseProvider
     {
         private TimetableDatabases databases;
+        public int LessonDuration { get; private set; }
 
         public DatabaseProvider(DatabasesChooser chooser)
         {
@@ -16,8 +18,19 @@ namespace TimetableApplication
         public void AddInputSlotInfo(string uid, IEnumerable<SlotInfo> inputData)
         => databases.SlotWrapper.AddRange(uid, inputData.Select(slot => new DatabaseSlot(slot, uid)));
 
+        public void AddTimeSchedule(string uid, Times timeSchedule)
+        {
+            LessonDuration = timeSchedule.Duration;
+            databases.TimeScheduleWrapper.AddRange(uid, 
+                timeSchedule.LessonStarts.Select(x => DatabaseTimeSchedule.TimeSpanToDbClass(x, uid)));
+        }
+
         public IEnumerable<SlotInfo> GetInputInfo(string uid)
             => databases.SlotWrapper.ReadBy(uid).Select(x => x.ConvertToSlotInfo());
+
+        public IEnumerable<TimeSpan> GetTimeSchedule(string uid)
+            => databases.TimeScheduleWrapper.ReadBy(uid)
+                .Select(x => DatabaseTimeSchedule.DbClassToTimeSpan(x));
 
         public IEnumerable<string> GetTeacherFilters(string uid)
         {

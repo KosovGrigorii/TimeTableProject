@@ -9,13 +9,10 @@ namespace TimetableDomain
     {
         public Algorithm Name => Algorithm.Genetic;
         
-        public IEnumerable<TimeSlot> GetTimetable(
-            IEnumerable<Course> cources, 
-            IEnumerable<Teacher> teachers, 
-            IEnumerable<TimeSpan> lessonStarts)
+        public IEnumerable<TimeSlot> GetTimetable(AlgoritmInput input)
         {
-            Population population = new Population(1000, new TimeTableChromosome(cources, lessonStarts),
-                new FitnessFunction(teachers), new EliteSelection());
+            Population population = new Population(1000, new TimeTableChromosome(input.Courses, input.LessonStarts),
+                new FitnessFunction(input.TeacherFilters), new EliteSelection());
 
             for(var i = 1; ; i++)
             {

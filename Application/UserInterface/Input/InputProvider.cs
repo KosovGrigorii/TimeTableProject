@@ -14,7 +14,7 @@ namespace UserInterface
             this.chooser = chooser;
         }
 
-        public IEnumerable<SlotInfo> ParseInput(Stream stream, ParserExtension extension)
+        public UserInput ParseInput(Stream stream, ParserExtension extension)
         {
             var parser = chooser.ChooseParser(extension);
             return parser.ParseFile(stream);

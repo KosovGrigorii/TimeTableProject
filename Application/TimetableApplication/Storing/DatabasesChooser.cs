@@ -9,17 +9,25 @@ namespace TimetableApplication
     {
         private IReadOnlyDictionary<Database, IDatabaseWrapper<string, DatabaseSlot>> slotWrappers;
         private IReadOnlyDictionary<Database, IDatabaseWrapper<string, DatabaseTimeslot>> timeslotWrappers;
+        private IReadOnlyDictionary<Database, IDatabaseWrapper<string, DatabaseTimeSchedule>> timeScheduleWrappers;
 
         public DatabasesChooser(
             IEnumerable<IDatabaseWrapper<string, DatabaseSlot>> slotWrappers,
-            IEnumerable<IDatabaseWrapper<string, DatabaseTimeslot>> timeslotWrappers)
+            IEnumerable<IDatabaseWrapper<string, DatabaseTimeslot>> timeslotWrappers,
+            IEnumerable<IDatabaseWrapper<string, DatabaseTimeSchedule>> timeScheduleWrappers)
         {
             this.slotWrappers = slotWrappers.ToDictionary(x => x.BaseName);
             this.timeslotWrappers = timeslotWrappers.ToDictionary(x => x.BaseName);
+            this.timeScheduleWrappers = timeScheduleWrappers.ToDictionary(x => x.BaseName);
         }
 
         public TimetableDatabases GetDatabaseWrappers()
-            => new (){SlotWrapper = GetWrapper(slotWrappers), TimeslotWrapper = GetWrapper(timeslotWrappers)};
+            => new ()
+            {
+                SlotWrapper = GetWrapper(slotWrappers), 
+                TimeslotWrapper = GetWrapper(timeslotWrappers),
+                TimeScheduleWrapper = GetWrapper(timeScheduleWrappers)
+            };
 
         private IDatabaseWrapper<string, TItem> GetWrapper<TItem>(IReadOnlyDictionary<Database, IDatabaseWrapper<string, TItem>> wrappersDict)
         {

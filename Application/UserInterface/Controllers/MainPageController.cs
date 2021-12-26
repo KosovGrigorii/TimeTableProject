@@ -38,8 +38,9 @@ namespace UserInterface
             
             using (var stream = fileInfo.OpenReadStream())
             {
-                var slots = inputProvider.ParseInput(stream, extension);
-                databaseProvider.AddInputSlotInfo(uid, slots);
+                var userInput = inputProvider.ParseInput(stream, extension);
+                databaseProvider.AddInputSlotInfo(uid, userInput.CourseSlots);
+                databaseProvider.AddTimeSchedule(uid, userInput.TimeSchedule);
             }
             
             return RedirectToAction("ToFiltersInput", new { uid = uid});

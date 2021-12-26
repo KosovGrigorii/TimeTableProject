@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure
 {
-    public class MySQLContext<TKey, TValue> : DbContext where TValue : DatabaseEbtity<TKey>
+    public class MySQLContext<TKey, TValue> : DbContext where TValue : DatabaseEntity<TKey>
     {
         public DbSet<TValue> Table { get; set; }
 
