@@ -11,10 +11,10 @@ namespace TimetableApplication
         private TimetableDatabases databases;
         private DatabaseEntityConverter converter;
 
-        public DatabaseProvider(DatabasesChooser chooser, DatabaseEntityConverter converter)
+        public DatabaseProvider(TimetableDatabases databases, DatabaseEntityConverter converter)
         {
-            databases = chooser.GetDatabaseWrappers();
             this.converter = converter;
+            this.databases = databases;
         }
 
         public void AddInputSlotInfo(string uid, IEnumerable<SlotInfo> inputData)

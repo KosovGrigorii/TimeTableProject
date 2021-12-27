@@ -9,13 +9,11 @@ namespace UserInterface
 {
     public class FiltersInputController : Controller
     {
-        private readonly TimetableMakingProvider timetableMaker;
-        private readonly DatabaseProvider databaseProvider;
+        private readonly App app;
 
-        public FiltersInputController(TimetableMakingProvider timetableMaker, DatabaseProvider databaseProvider)
+        public FiltersInputController(App app)
         {
-            this.timetableMaker = timetableMaker;
-            this.databaseProvider = databaseProvider;
+            this.app = app;
         }
         
         public IActionResult FiltersInput(string uid)
@@ -32,7 +30,7 @@ namespace UserInterface
 
         public PartialViewResult ChooseSingleFilter(string filterName, string userId, string elementId)
         {
-            var specifiedFilters = databaseProvider.GetTeacherFilters(userId);
+            var specifiedFilters = app.GetTeachers(userId);
             if (filterName == "Working days amount")
                 return GetWorkingDaysCountFilter(specifiedFilters, elementId);
             return GetSpecifiedWorkingDaysFilter(specifiedFilters, elementId);
@@ -54,9 +52,7 @@ namespace UserInterface
         public IActionResult GetFilters(IEnumerable<FilterUI> filters, string uid)
         {
             var applicationFilters = filters.Select(x => new Filter(x.Name, x.DaysCount, x.Days));
-
-            timetableMaker.StartMakingTimeTable(uid, databaseProvider, applicationFilters);
-            var timetableTask = new Task(() => timetableMaker.StartMakingTimeTable(uid, databaseProvider, applicationFilters));
+            app.MakeTimetable(uid, applicationFilters);
             return RedirectToAction("ToLoadingPage", new { uid = uid });
         }
         

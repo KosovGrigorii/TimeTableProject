@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 
 namespace TimetableApplication
 {
@@ -6,6 +7,6 @@ namespace TimetableApplication
     {
         public OutputExtension Extension { get; }
         
-        public void MakeOutputFile(string filePath, Dictionary<string, string[,]> tables);
+        public Stream MakeOutputFile(Dictionary<string, string[,]> tables);
     }
 }

@@ -18,7 +18,7 @@ namespace TimetableApplication
             Console.WriteLine(file.FullName);
             var formatter = new PdfOutputFormatter();
             var converter = new OutputConverter();
-            formatter.MakeOutputFile(file.FullName, converter.ConvertTimeslotsToDictionary(GetSlots()));
+            formatter.MakeOutputFile(converter.ConvertTimeslotsToDictionary(GetSlots()));
             Process.Start(new ProcessStartInfo(file.FullName) { UseShellExecute = true });
         }
     

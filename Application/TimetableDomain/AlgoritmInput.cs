@@ -7,7 +7,7 @@ namespace TimetableDomain
     {
         public IEnumerable<Course> Courses { get; init; }
         public IEnumerable<Teacher> TeacherFilters { get; init; }
-        public List<TimeSpan> LessonStarts { get; init; }
+        public IEnumerable<TimeSpan> LessonStarts { get; init; }
         public int LessonLengthMinutes { get; init; }
     }
 }

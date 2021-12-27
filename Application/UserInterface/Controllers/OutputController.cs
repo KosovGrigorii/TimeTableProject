@@ -9,13 +9,11 @@ namespace UserInterface
 {
     public class OutputController: Controller
     {
-        private readonly OutputProvider outputProvider;
-        private readonly DatabaseProvider databaseProvider;
+        private readonly App app;
 
-        public OutputController( OutputProvider outputProvider, DatabaseProvider databaseProvider)
+        public OutputController(App app)
         {
-            this.outputProvider = outputProvider;
-            this.databaseProvider = databaseProvider;
+            this.app = app;
         }
 
         [HttpGet]
@@ -29,11 +27,9 @@ namespace UserInterface
         public FileResult DownloadFile(string extension, string uid)
         {
             var translated = Enum.TryParse<OutputExtension>(extension, out var outputExtension);
-            var timeslots = databaseProvider.GetTimeslots(uid);
-            
-            var bytes =  outputProvider.GetPathToOutputFile(outputExtension, uid, timeslots);
-            databaseProvider.DeleteUserData(uid);
-            return File(bytes, "application/octet-stream", $"Timetable.{extension.ToLower()}");
+
+            var fileStream = app.GetOutput(uid, outputExtension);
+            return File(fileStream, "application/octet-stream", $"Timetable.{extension.ToLower()}");
         }
     }
 }

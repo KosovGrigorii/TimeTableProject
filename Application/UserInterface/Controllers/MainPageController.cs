@@ -13,13 +13,12 @@ namespace UserInterface
     public class MainPageController : Controller
     {
         private readonly InputProvider inputProvider;
-        private readonly DatabaseProvider databaseProvider;
+        private readonly App app;
 
-        public MainPageController(InputProvider inputProvider,
-            DatabaseProvider databaseProvider)
+        public MainPageController(InputProvider inputProvider, App app)
         {
             this.inputProvider = inputProvider;
-            this.databaseProvider = databaseProvider;
+            this.app = app;
         }
         
         public ActionResult Index()
@@ -37,8 +36,7 @@ namespace UserInterface
             var translated = Enum.TryParse<ParserExtension>(strExtension, out var extension);
             
             var userInput = inputProvider.ParseInput(fileInfo, extension);
-            databaseProvider.AddInputSlotInfo(uid, userInput.CourseSlots);
-            databaseProvider.AddTimeSchedule(uid, userInput.TimeSchedule);
+            app.SaveInput(uid, userInput.CourseSlots, userInput.TimeSchedule);
             
             return RedirectToAction("ToFiltersInput", new { uid = uid});
         }

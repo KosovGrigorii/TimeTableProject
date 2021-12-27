@@ -8,8 +8,8 @@ namespace TimetableDomain
     public class GeneticAlgorithm : ITimetableMaker
     {
         public Algorithm Name => Algorithm.Genetic;
-        private EliteSelection eliteSelection;
-        private FitnessFunction fitnessFunction;
+        private readonly EliteSelection eliteSelection;
+        private readonly FitnessFunction fitnessFunction;
 
         public GeneticAlgorithm(EliteSelection eliteSelection, FitnessFunction fitnessFunction)
         {
