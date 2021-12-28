@@ -5,14 +5,21 @@
     Layout = "_Layout";
 }
 
-<div>
-    <h3>Upload data files</h3>
-    <form asp-controller="MainPage" asp-action="FileFormUpload" method="post" enctype="multipart/form-data">
-        <div>
-            <input type="file" name="file" accept=".xlsx, .txt" required/>
-        </div>
-        <div>
-             <input type="submit" value="Upload" />
-        </div>
-    </form>
-</div>
+<p>
+    Upload data files
+</p>
+<form asp-controller="MainPage" asp-action="FileFormUpload" method="post" enctype="multipart/form-data">
+    <div class="button">
+        <label for="file-upload" class="button">
+            Upload file
+        </label>
+        <input id="file-upload" class="hide" type="file" name="file" accept=".xlsx, .txt" required/>
+    </div>
+    <div class="button">
+        <label for="upload-submit" class="button">
+            Continue
+        </label>
+        <input id="upload-submit" class="hide" type="submit"/>
+    </div>
+</form>
+

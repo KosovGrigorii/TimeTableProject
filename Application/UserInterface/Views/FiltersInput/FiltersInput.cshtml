@@ -5,15 +5,24 @@
     Layout = "_Layout";
 }
 
-<div>
-    <h1>Add limitations of working hours</h1>
-    @using (Html.BeginForm("GetFilters", "FiltersInput", new { uid = Model.ID }, FormMethod.Post))
-    {
-        <div id="filtersForm"></div>
-        <input type="button" onclick="AddInputDiv()" value="+"/>
-        <div><input type="submit" value="Submit"/></div>
-    }
-</div>
+<p>
+    Add limitations of working hours
+</p>
+@using (Html.BeginForm("GetFilters", "FiltersInput", new { uid = Model.ID }, FormMethod.Post))
+{
+    <div class="button" id="filtersForm"></div>
+    <label for="filter-add" class="button">
+        +
+    </label>
+    <input id="filter-add" class="hide" type="button" onclick="AddInputDiv()" value="+"/>
+    <div class="button">
+        <label for="filter-submit" class="button">
+            Continue
+        </label>
+        <input id="filter-submit" class="hide" type="submit" value="Submit"/>
+    </div>
+}
+
 
 <script>
 function ChooseFilter(div_to_insert, input, uid, insert_index) {
@@ -30,6 +39,7 @@ function ChooseFilter(div_to_insert, input, uid, insert_index) {
 function AddInputDiv(){
     var filterForm = document.getElementById('filtersForm');
     var div = document.createElement('div');
+    div.classList.add('filter');
     var insert_id = filterForm.childElementCount.toString();
     div.id = insert_id;
     filterForm.appendChild(div);

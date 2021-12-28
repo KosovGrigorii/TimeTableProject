@@ -4,21 +4,15 @@
     Layout = "_Layout";
 }
 
-<html lang="en">
-    <head>
-        <link href="~/css/fonts/output.css" rel="stylesheet"/>
-        <title>Output</title>
-    </head>
-    <body>
-    <div class="output">
-        @using (Html.BeginForm("DownloadFile", "Output", new { uid = Model.ID }))
-        {
-            <fieldset>
-                <legend>Choose extension</legend>
-                @Html.DropDownList("extension", ViewBag.Extensions as SelectList)
-                <input type="submit" value="Download">
-            </fieldset>
-        }
-    </div>
-    </body>
-</html>
+
+@using (Html.BeginForm("DownloadFile", "Output", new { uid = Model.ID }))
+{
+    <fieldset>
+        <legend>Choose extension</legend>
+        @Html.DropDownList("extension", ViewBag.Extensions as SelectList)
+        <label for="download" class="button">
+            Download
+        </label>
+        <input id="download" class="hide" type="submit">
+    </fieldset>
+}
