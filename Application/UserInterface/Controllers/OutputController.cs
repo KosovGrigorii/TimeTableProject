@@ -9,31 +9,40 @@ namespace UserInterface
 {
     public class OutputController: Controller
     {
-        private readonly OutputProvider outputProvider;
-        private readonly DatabaseProvider databaseProvider;
+        private readonly App app;
 
-        public OutputController( OutputProvider outputProvider, DatabaseProvider databaseProvider)
+        public OutputController(App app)
         {
-            this.outputProvider = outputProvider;
-            this.databaseProvider = databaseProvider;
+            this.app = app;
         }
 
         [HttpGet]
         public IActionResult Index(string uid)
         {
-            var extensions = new SelectList(Enum.GetValues(typeof(OutputExtension)));
-            ViewBag.Extensions = extensions;
-            return View("Output", new UserID {ID = uid});
+            var extensions = new SelectList(app.GetOutputExtensions());
+            return View("Output", new OutputPageData()
+            {
+                OutputExtensions = extensions,
+                UserId = uid
+            });
         }
 
         public FileResult DownloadFile(string extension, string uid)
         {
             var translated = Enum.TryParse<OutputExtension>(extension, out var outputExtension);
-            var timeslots = databaseProvider.GetTimeslots(uid);
-            
-            var bytes =  outputProvider.GetPathToOutputFile(outputExtension, uid, timeslots);
-            databaseProvider.DeleteUserData(uid);
-            return File(bytes, "application/octet-stream", $"Timetable.{extension.ToLower()}");
+
+            if (!translated)
+            {
+                RedirectToAction("ErrorAction", uid);
+            }
+
+            var fileByteArray = app.GetOutput(uid, outputExtension);
+            return File(fileByteArray, "application/octet-stream", $"Timetable.{extension.ToLower()}");
+        }
+
+        public IActionResult ErrorAction(string uid)
+        {
+            return View(new UserID(){ID = uid});
         }
     }
 }

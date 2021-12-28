@@ -1,0 +1,15 @@
+@model string
+
+@{
+    Layout = "_Layout";
+}
+<h1>
+    Error. Please use files with .xlsx or .txt extensions
+</h1>
+
+<div>
+    @using (Html.BeginForm("Index", "MainPage"))
+        {
+            <input type="submit" value="Got it"/>
+        }
+</div>

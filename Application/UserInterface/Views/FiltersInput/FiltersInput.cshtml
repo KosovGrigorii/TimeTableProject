@@ -1,9 +1,10 @@
-@model UserInterface.Models.UserID
+@model UserInterface.Models.FiltersPageData
 
 
 @{
     Layout = "_Layout";
 }
+
 
 <p>
     Add limitations of working hours
@@ -16,12 +17,17 @@
     </label>
     <input id="filter-add" class="hide" type="button" onclick="AddInputDiv()" value="+"/>
     <div class="button">
+        Choose algorithm to generate timetable<br>
+        @Html.DropDownList("algorithm", Model.Algorithms)
+    </div>
+    <div class="button">
         <label for="filter-submit" class="button">
             Continue
         </label>
         <input id="filter-submit" class="hide" type="submit" value="Submit"/>
     </div>
 }
+
 
 
 <script>
@@ -44,7 +50,7 @@ function AddInputDiv(){
     div.id = insert_id;
     filterForm.appendChild(div);
     $.ajax({
-        url: '@Url.Action("_FilterChoosingForm", "FiltersInput", new { userId = Model.ID })',
+        url: '@Url.Action("_FilterChoosingForm", "FiltersInput", new { userId = Model.UserId })',
         data: {elementId: insert_id},
         success: function (data) {
             $('#' + insert_id).html(data);

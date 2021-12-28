@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 
-namespace UserInterface.Models
+namespace UserInterface
 {
     public class FilterUI
     {
         public string Name { get; set; }
         public int? DaysCount { get; set; }
-        public List<DayOfWeek> Days { get; set; }
+        public List<int> Days { get; set; }
     }
 }

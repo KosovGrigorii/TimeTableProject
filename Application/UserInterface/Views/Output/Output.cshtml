@@ -1,15 +1,14 @@
-@model UserInterface.Models.UserID
+@model UserInterface.Models.OutputPageData
  
 @{
     Layout = "_Layout";
 }
 
-
 @using (Html.BeginForm("DownloadFile", "Output", new { uid = Model.ID }))
 {
     <fieldset>
         <legend>Choose extension</legend>
-        @Html.DropDownList("extension", ViewBag.Extensions as SelectList)
+        @Html.DropDownList("extension", Model.OutputExtensions)
         <label for="download" class="button">
             Download
         </label>

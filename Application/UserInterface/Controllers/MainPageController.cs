@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Linq;
@@ -13,13 +14,12 @@ namespace UserInterface
     public class MainPageController : Controller
     {
         private readonly InputProvider inputProvider;
-        private readonly DatabaseProvider databaseProvider;
+        private readonly App app;
 
-        public MainPageController(InputProvider inputProvider,
-            DatabaseProvider databaseProvider)
+        public MainPageController(InputProvider inputProvider, App app)
         {
             this.inputProvider = inputProvider;
-            this.databaseProvider = databaseProvider;
+            this.app = app;
         }
         
         public ActionResult Index()
@@ -35,12 +35,16 @@ namespace UserInterface
             var fileInfo = Request.Form.Files[0];
             var strExtension = Path.GetExtension(fileInfo.FileName).Split('.').Last();
             var translated = Enum.TryParse<ParserExtension>(strExtension, out var extension);
-            
-            using (var stream = fileInfo.OpenReadStream())
+            if (!translated)
             {
-                var slots = inputProvider.ParseInput(stream, extension);
-                databaseProvider.AddInputSlotInfo(uid, slots);
+                return View("ErrorFileFormat");
+                //ModelState.AddModelError("FileData", "Incorrect extension");
+                //return RedirectToAction("Index");
+                //return new ValidationResult("Incorrect extension");
             }
+
+            var userInput = inputProvider.ParseInput(fileInfo, extension);
+            app.SaveInput(uid, userInput.CourseSlots, userInput.TimeSchedule);
             
             return RedirectToAction("ToFiltersInput", new { uid = uid});
         }

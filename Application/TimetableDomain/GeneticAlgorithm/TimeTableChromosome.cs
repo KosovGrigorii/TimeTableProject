@@ -8,53 +8,49 @@ namespace TimetableDomain
 {
     class TimeTableChromosome : ChromosomeBase
     {
-        static Random Random=new Random();
+        private static Random random = new ();
         private IEnumerable<Course> dataCourses;
         private List<TimeSpan> lessonStarts;
-        
-
-        private TimeSpan RandomStartTime()
-        {
-            return lessonStarts[Random.Next(lessonStarts.Count)];
-        }
-
-
         public List<TimeSlotChromosome> Value;
-
+        
         public TimeTableChromosome(IEnumerable<Course> courses, IEnumerable<TimeSpan> lessonStarts)
         {
             dataCourses = courses;
             this.lessonStarts = lessonStarts.ToList();
             Generate();
         }
-        public TimeTableChromosome(List<TimeSlotChromosome> slots, IEnumerable<Course> courses,
+        
+        private TimeTableChromosome(List<TimeSlotChromosome> slots, IEnumerable<Course> courses,
             List<TimeSpan> lessonStarts)
         {
             dataCourses = courses;
             this.lessonStarts = lessonStarts;
             Value = slots.ToList();
         }
+
+        private TimeSpan RandomStartTime()
+        {
+            return lessonStarts[random.Next(lessonStarts.Count)];
+        }
+        
         public override void Generate()
         {
-            IEnumerable<TimeSlotChromosome> generateRandomSlots()
+            IEnumerable<TimeSlotChromosome> GenerateRandomSlots()
             {
                 foreach (var course in dataCourses)
                 {
                     yield return new TimeSlotChromosome()
                     {
                         Group = course.Group,
-                        //CourseId = course.Id,
                         StartAt = RandomStartTime(),
                         Course = course,
-                        //Place = dataClasses.OrderBy(_class => Guid.NewGuid()).FirstOrDefault(),
-                        Teacher = course.Teacher, //Teacher themselves, but not id
-                        Day=Random.Next(1,5)
+                        Teacher = course.Teacher,
+                        Day=random.Next(1,5)
                     };
                 }
             }
 
-            Value= generateRandomSlots().ToList();
-            
+            Value= GenerateRandomSlots().ToList();
         }
 
         public override IChromosome CreateNew()
@@ -72,17 +68,17 @@ namespace TimetableDomain
 
         public override void Mutate()
         {
-            var index = Random.Next(0, Value.Count - 1);
+            var index = random.Next(0, Value.Count - 1);
             var timeSlotChromosome = Value.ElementAt(index);
-            timeSlotChromosome.StartAt = RandomStartTime(); //изменить срочно
-            timeSlotChromosome.Day = Random.Next(1, 5);
+            timeSlotChromosome.StartAt = RandomStartTime();
+            timeSlotChromosome.Day = random.Next(1, 5);
             Value[index] = timeSlotChromosome;
             
         }
 
         public override void Crossover(IChromosome pair)
         {
-            var randomVal = Random.Next(0, Value.Count - 2);
+            var randomVal = random.Next(0, Value.Count - 2);
             var otherChromsome = pair as TimeTableChromosome;
             for (int index = randomVal; index < otherChromsome.Value.Count; index++)
             {

@@ -29,6 +29,32 @@ namespace TimetableApplication
             };
         }
 
+        public DatabaseTimeSchedule TimeSpanToDbClass(TimeSpan time, string uid)
+        {
+            return new DatabaseTimeSchedule()
+            {
+                Id = Guid.NewGuid().ToString(),
+                StartTime = time.ToString(),
+                KeyId = uid
+            };
+        }
+        
+        public TimeSpan DbClassToTimeSpan(DatabaseTimeSchedule time)
+            => TimeSpan.Parse(time.StartTime);
+
+        public DatabaseLessonMinutesDuration MinutesDurationToDbClass(int time, string uid)
+        {
+            return new DatabaseLessonMinutesDuration()
+            {
+                Id = Guid.NewGuid().ToString(),
+                DurationInMinutes = time.ToString(),
+                KeyId = uid
+            };
+        }
+
+        public int DbDurationToInt(DatabaseLessonMinutesDuration duration)
+            => int.Parse(duration.DurationInMinutes);
+
         public DatabaseTimeslot TimeslotToDatabaseClass(TimeSlot timeSlot, string uid)
         {
             return new DatabaseTimeslot()

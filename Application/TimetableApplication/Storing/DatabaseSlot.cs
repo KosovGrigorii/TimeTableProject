@@ -3,7 +3,7 @@ using Infrastructure;
 
 namespace TimetableApplication
 {
-    public class DatabaseSlot : DatabaseEbtity<string>
+    public class DatabaseSlot : DatabaseEntity<string>
     {
         public string Course { get; set; }
         public string Group { get; set; }

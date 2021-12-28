@@ -1,0 +1,15 @@
+@model UserInterface.Models.UserID
+
+@{
+    Layout = "_Layout";
+}
+<h1>
+    Please use .xlsx or .pdf as extensions
+</h1>
+
+<div>
+    @using (Html.BeginForm("Index", "Output", new {uid = Model.ID}))
+        {
+            <input type="submit" value="Got it"/>
+        }
+</div>
