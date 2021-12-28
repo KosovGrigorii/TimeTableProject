@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Linq;
@@ -34,7 +35,14 @@ namespace UserInterface
             var fileInfo = Request.Form.Files[0];
             var strExtension = Path.GetExtension(fileInfo.FileName).Split('.').Last();
             var translated = Enum.TryParse<ParserExtension>(strExtension, out var extension);
-            
+            if (!translated)
+            {
+                return View("ErrorFileFormat");
+                //ModelState.AddModelError("FileData", "Incorrect extension");
+                //return RedirectToAction("Index");
+                //return new ValidationResult("Incorrect extension");
+            }
+
             var userInput = inputProvider.ParseInput(fileInfo, extension);
             app.SaveInput(uid, userInput.CourseSlots, userInput.TimeSchedule);
             

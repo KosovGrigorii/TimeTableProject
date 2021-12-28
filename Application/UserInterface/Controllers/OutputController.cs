@@ -31,8 +31,18 @@ namespace UserInterface
         {
             var translated = Enum.TryParse<OutputExtension>(extension, out var outputExtension);
 
+            if (!translated)
+            {
+                RedirectToAction("ErrorAction", uid);
+            }
+
             var fileByteArray = app.GetOutput(uid, outputExtension);
             return File(fileByteArray, "application/octet-stream", $"Timetable.{extension.ToLower()}");
+        }
+
+        public IActionResult ErrorAction(string uid)
+        {
+            return View(new UserID(){ID = uid});
         }
     }
 }

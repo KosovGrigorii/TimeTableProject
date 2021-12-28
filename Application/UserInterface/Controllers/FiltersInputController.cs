@@ -56,6 +56,11 @@ namespace UserInterface
         {
             var applicationFilters = filters.Select(x => new Filter(x.Name, x.DaysCount, x.Days));
             var algoConverted = Enum.TryParse<Algorithm>(algorithm, out var algo);
+
+            if (!algoConverted)
+            {
+                return View("ErrorPage");
+            }
             app.MakeTimetable(uid, algo, applicationFilters);
             return RedirectToAction("ToLoadingPage", new { uid = uid });
         }
