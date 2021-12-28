@@ -4,19 +4,19 @@ using System.IO;
 using ExcelDataReader;
 using Microsoft.AspNetCore.Http;
 using TimetableApplication;
+using UserInterface.Models;
 
 namespace UserInterface
 {
     public class XlsxInputParser : IInputParser
     {
         public ParserExtension Extension => ParserExtension.xlsx;
-
-        public IEnumerable<SlotInfo> ParseFile(IFormFile file)
+        
+        public UserInput ParseFile(IFormFile file)
         {
             using var stream = file.OpenReadStream();
             var slots = new List<SlotInfo>();
-            var starts = new List<TimeSpan>() { new TimeSpan(9, 0, 0) };
-            var duration = 40;
+            var times = new Times() { LessonStarts = new List<TimeSpan>() };
             stream.Position = 0;
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             using var reader = ExcelReaderFactory.CreateReader(stream);
@@ -26,7 +26,7 @@ namespace UserInterface
                 {
                     if (reader.GetValue(0).ToString() == "-")
                     {
-                        (starts, duration) = GetStartsAndDuration(reader);
+                        times = GetTimes(reader);
                         break; 
                     }
                     slots.Add(new SlotInfo
@@ -44,17 +44,17 @@ namespace UserInterface
             {
                 throw new ArgumentException(".xlsx file was filled out wrongly");
             }
-            return slots;
-            //return (slots, starts, duration);
+
+            return new UserInput() {CourseSlots = slots, TimeSchedule = times};
         }
         
-        public (List<TimeSpan>, int) GetStartsAndDuration(IExcelDataReader reader)
+        public Times GetTimes(IExcelDataReader reader)
         {
             reader.Read();
-            var starts = new List<TimeSpan>();
             var (begin, end) = GetSpan(reader.GetValue(0).ToString(), reader.GetValue(1).ToString());
             var (duration, rest) = (int.Parse(reader.GetValue(2).ToString()), int.Parse(reader.GetValue(3).ToString()));
             var special_rest = new List<double>();
+            var times = new Times() { Duration = duration, LessonStarts = new List<TimeSpan>() };
             var temp = 4;
             while (reader.GetValue(temp) != null)
             {
@@ -65,17 +65,16 @@ namespace UserInterface
             }
             while (begin < end)
             {
+                times.LessonStarts.Add(TimeSpan.FromMinutes(begin));
                 if (special_rest.Count == 0 || begin + duration < special_rest[0])
                 {
-                    starts.Add(TimeSpan.FromMinutes(begin));
                     begin += duration + rest;
                     continue;
                 }
-                starts.Add(TimeSpan.FromMinutes(begin));
                 begin = special_rest[1];
                 special_rest.RemoveRange(0, 2);
             }
-            return (starts, duration);
+            return times;
         }
 
         public (double, double) GetSpan(string begin, string end)

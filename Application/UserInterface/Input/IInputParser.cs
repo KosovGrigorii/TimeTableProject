@@ -8,6 +8,6 @@ namespace UserInterface
     public interface IInputParser
     {
         ParserExtension Extension {get;}
-        IEnumerable<SlotInfo> ParseFile(IFormFile file);
+        UserInput ParseFile(IFormFile file);
     }
 }

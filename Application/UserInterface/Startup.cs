@@ -29,35 +29,67 @@ namespace UserInterface
             services.AddControllers();
             services.AddMvc();
 
-            ConfigureDatabases(services);
+            ConfigureDatabase(services);
+            services.AddSingleton<DatabaseEntityConverter>();
+            services.AddSingleton<TimetableDatabases>();
+            services.AddSingleton<DatabaseProvider>();
 
-            services.AddScoped<ParserChooser>();
-            services.AddScoped<InputProvider>();
-            services.AddScoped<AlgorithmChooser>();
-            services.AddScoped<TimetableMakingProvider>();
-            services.AddScoped<DatabaseProvider>();
-            services.AddScoped<DatabasesChooser>();
-            services.AddScoped<OutputConverter>();
-            services.AddScoped<OutputProvider>();
-            services.AddScoped<FormatterChooser>();
-            services.AddScoped<DatabaseEntityConverter>();
+            services.AddSingleton<App>();
 
-            services.AddScoped<FilterHandler>();
-            services.AddScoped<EliteSelection>();
-            services.AddScoped<FitnessFunction>();
+            services.AddSingleton<IInputParser, XlsxInputParser>();
+            services.AddSingleton<IInputParser, TxtInputParser>();
+            services.AddSingleton<ParserChooser>();
+            services.AddSingleton<InputProvider>(); //Input
+
+            services.AddSingleton<ConverterToAlgoritmInput>();
+            services.AddSingleton<ITimetableMaker, GeneticAlgorithm>();
+            services.AddSingleton<ITimetableMaker, GraphAlgorithm>();
+            services.AddSingleton<FilterHandler>();
+            services.AddSingleton<EliteSelection>();
+            services.AddSingleton<FitnessFunction>();
+            services.AddSingleton<AlgorithmChooser>();    //Algo
             
-            services.AddScoped<IInputParser, XlsxInputParser>();
-            services.AddScoped<IInputParser, TxtInputParser>();
-            services.AddScoped<ITimetableMaker, GeneticAlgorithm>();
-            services.AddScoped<ITimetableMaker, GraphAlgorithm>();
-            services.AddScoped<IOutputFormatter, XlsxOutputFormatter>();
-            services.AddScoped<IOutputFormatter, PdfOutputFormatter>();
+            services.AddSingleton<IOutputFormatter, XlsxOutputFormatter>();
+            services.AddSingleton<IOutputFormatter, PdfOutputFormatter>();
+            services.AddSingleton<OutputConverter>();
+            services.AddSingleton<FormatterChooser>(); 
+            services.AddSingleton<OutputProvider>();          //Output
         }
 
-        private void ConfigureDatabases(IServiceCollection services)
+        private void ConfigureDatabase(IServiceCollection services)
         {
             var firebaseUrl = configuration.GetConnectionString("FirebaseUrl");
-            if (!firebaseUrl.IsNullOrEmpty())
+            if (firebaseUrl.IsNullOrEmpty())
+            {
+                var mysqlConnectionString = configuration.GetConnectionString("MySQLConnection");
+                if (mysqlConnectionString.IsNullOrEmpty())
+                {
+                    services.AddSingleton<IDatabaseWrapper<string, DatabaseSlot>, DictionaryWrapper<string, DatabaseSlot>>();
+                    services.AddSingleton<IDatabaseWrapper<string, DatabaseTimeslot>, DictionaryWrapper<string, DatabaseTimeslot>>();
+                    services.AddSingleton<IDatabaseWrapper<string, DatabaseTimeSchedule>, DictionaryWrapper<string, DatabaseTimeSchedule>>();
+                    services.AddSingleton<IDatabaseWrapper<string, DatabaseLessonMinutesDuration>, 
+                        DictionaryWrapper<string, DatabaseLessonMinutesDuration>>();
+                }
+                else
+                {
+                    services.AddDbContext<MySQLContext<string, DatabaseSlot>>(options  => options
+                        .UseMySql(mysqlConnectionString, ServerVersion.AutoDetect(mysqlConnectionString)));
+                    services.AddScoped<IDatabaseWrapper<string, DatabaseSlot>, MySQLWrapper<string, DatabaseSlot>>();
+                
+                    services.AddDbContext<MySQLContext<string, DatabaseTimeslot>>(options  => options
+                        .UseMySql(mysqlConnectionString, ServerVersion.AutoDetect(mysqlConnectionString)));
+                    services.AddScoped<IDatabaseWrapper<string, DatabaseTimeslot>, MySQLWrapper<string, DatabaseTimeslot>>();
+                
+                    services.AddDbContext<MySQLContext<string, DatabaseTimeSchedule>>(options  => options
+                        .UseMySql(mysqlConnectionString, ServerVersion.AutoDetect(mysqlConnectionString)));
+                    services.AddScoped<IDatabaseWrapper<string, DatabaseTimeSchedule>, MySQLWrapper<string, DatabaseTimeSchedule>>();
+                    
+                    services.AddDbContext<MySQLContext<string, DatabaseLessonMinutesDuration>>(options  => options
+                        .UseMySql(mysqlConnectionString, ServerVersion.AutoDetect(mysqlConnectionString)));
+                    services.AddScoped<IDatabaseWrapper<string, DatabaseLessonMinutesDuration>, MySQLWrapper<string, DatabaseLessonMinutesDuration>>();
+                }
+            }
+            else
             {
                 services.AddSingleton(new FirebaseClient(firebaseUrl));
                 services
@@ -65,27 +97,13 @@ namespace UserInterface
                 services
                     .AddSingleton<IDatabaseWrapper<string, DatabaseTimeslot>,
                         FirebaseWrapper<string, DatabaseTimeslot>>();
-
+                services
+                    .AddSingleton<IDatabaseWrapper<string, DatabaseTimeSchedule>,
+                        FirebaseWrapper<string, DatabaseTimeSchedule>>();
+                services
+                    .AddSingleton<IDatabaseWrapper<string, DatabaseLessonMinutesDuration>,
+                        FirebaseWrapper<string, DatabaseLessonMinutesDuration>>();
             }
-            
-            var mysqlSlotsConnectionString = configuration.GetConnectionString("MySQLSlotConnection");
-            if (!mysqlSlotsConnectionString.IsNullOrEmpty())
-            {
-                services.AddDbContext<MySQLContext<string, DatabaseSlot>>(options  => options
-                    .UseMySql(mysqlSlotsConnectionString, ServerVersion.AutoDetect(mysqlSlotsConnectionString)));
-                services.AddSingleton<IDatabaseWrapper<string, DatabaseSlot>, MySQLWrapper<string, DatabaseSlot>>();
-            }
-            
-            var mysqlTimeslotsConnectionString = configuration.GetConnectionString("MySQLTimeslotConnection");
-            if (!mysqlSlotsConnectionString.IsNullOrEmpty())
-            {
-                services.AddDbContext<MySQLContext<string, DatabaseTimeslot>>(options  => options
-                    .UseMySql(mysqlTimeslotsConnectionString, ServerVersion.AutoDetect(mysqlTimeslotsConnectionString)));
-                services.AddSingleton<IDatabaseWrapper<string, DatabaseTimeslot>, MySQLWrapper<string, DatabaseTimeslot>>();
-            }
-            
-            services.AddSingleton<IDatabaseWrapper<string, DatabaseSlot>, DictionaryWrapper<string, DatabaseSlot>>();
-            services.AddSingleton<IDatabaseWrapper<string, DatabaseTimeslot>, DictionaryWrapper<string, DatabaseTimeslot>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -5,7 +5,6 @@ namespace Infrastructure
 {
     public class DictionaryWrapper<TKey, TValue> : IDatabaseWrapper<TKey, TValue>
     {
-        public Database BaseName => Database.Dictionary;
         private IDictionary<TKey, IEnumerable<TValue>> dictionary = new Dictionary<TKey, IEnumerable<TValue>>();
 
         public void AddRange(TKey key, IEnumerable<TValue> content)

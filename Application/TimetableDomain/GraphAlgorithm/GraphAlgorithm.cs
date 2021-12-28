@@ -15,20 +15,20 @@ namespace TimetableDomain
             this.handler = handler;
         }
         
-        public IEnumerable<TimeSlot> GetTimetable(IEnumerable<Course> courses, IEnumerable<Teacher> teachers, IEnumerable<TimeSpan> lessonStarts)
+        public IEnumerable<TimeSlot> GetTimetable(AlgoritmInput input)
         {
-            var teacherTime = courses.Select(c => c.Teacher).Distinct()
+            var teacherTime = input.Courses.Select(c => c.Teacher).Distinct()
                 .ToDictionary(t => t, t => new List<(int, TimeSpan)>());
-            var groupTime = courses.Select(c => c.Group).Distinct()
+            var groupTime = input.Courses.Select(c => c.Group).Distinct()
                 .ToDictionary(g => g, g => new List<(int, TimeSpan)>());
-            var teachersFilter = teachers.ToDictionary(t => t.Name);
+            var teachersFilter = input.TeacherFilters.ToDictionary(t => t.Name);
             
             var courseTime = new Dictionary<int, List<CourseTime>>();
 
-            foreach (var course in courses)
+            foreach (var course in input.Courses)
             {
                 var attemptResult = FindAvailablePosition(course, courseTime, teacherTime, groupTime,
-                    lessonStarts, teachersFilter);
+                    input.LessonStarts, teachersFilter);
 
                 if (!attemptResult)
                 {
@@ -38,13 +38,13 @@ namespace TimetableDomain
                     if (!transformedCourse.Equals(null))
                     {
                         FindAvailablePosition(transformedCourse, courseTime, teacherTime,
-                            groupTime, lessonStarts, teachersFilter);
+                            groupTime, input.LessonStarts, teachersFilter);
                     }
                     else
                     {
                         teachersFilter.Remove(course.Teacher);
                         FindAvailablePosition(course, courseTime, teacherTime,
-                            groupTime, lessonStarts, teachersFilter);
+                            groupTime, input.LessonStarts, teachersFilter);
                     }
                 }
             }
@@ -58,7 +58,7 @@ namespace TimetableDomain
                     {
                         Day = (DayOfWeek)chromosome.Key,
                         Start = chromosome.courseInfo.Time,
-                        End = chromosome.courseInfo.Time.Add(TimeSpan.FromHours(1.5)),
+                        End = chromosome.courseInfo.Time.Add(TimeSpan.FromMinutes(input.LessonLengthMinutes)),
                         Place = chromosome.courseInfo.Course.Place,
                         Course = chromosome.courseInfo.Course.Title,
                         Teacher = chromosome.courseInfo.Course.Teacher,

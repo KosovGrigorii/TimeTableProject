@@ -14,8 +14,8 @@ namespace UserInterface
         {
             this.chooser = chooser;
         }
-
-        public IEnumerable<SlotInfo> ParseInput(IFormFile file, ParserExtension extension)
+        
+        public UserInput ParseInput(IFormFile file, ParserExtension extension)
         {
             var parser = chooser.ChooseParser(extension);
             return parser.ParseFile(file);

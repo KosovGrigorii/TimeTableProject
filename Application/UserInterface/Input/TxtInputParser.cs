@@ -11,13 +11,12 @@ namespace UserInterface
     class TxtInputParser : IInputParser
     {
         public ParserExtension Extension => ParserExtension.txt;
-
-        public IEnumerable<SlotInfo> ParseFile(IFormFile file)
+        
+        public UserInput ParseFile(IFormFile file)
         {
             using var stream = file.OpenReadStream();
             var slots = new List<SlotInfo>();
-            var starts = new List<TimeSpan>() { new TimeSpan(9, 0, 0) };
-            var duration = 40;
+            var times = new Times();
             stream.Position = 0;
             using var reader = new StreamReader(stream);
             try
@@ -27,7 +26,7 @@ namespace UserInterface
                 {
                     if (line == "-")
                     {
-                        (starts, duration) = GetStartsAndDuration(reader);
+                        times = GetTimes(reader);
                         break;
                     }
                     var slot = line.Split('|');
@@ -46,18 +45,16 @@ namespace UserInterface
             {
                 throw new ArgumentException(".xlsx file was filled out wrongly");
             }
-            return slots;
-
-            //return (slots, starts, duration);
+            return new UserInput() {CourseSlots = slots, TimeSchedule = times};
         }
 
-        public (List<TimeSpan>, int) GetStartsAndDuration(StreamReader reader)
+        public Times GetTimes(StreamReader reader)
         {
-            var starts = new List<TimeSpan>();
             var info = reader.ReadLine().Split();
             var (begin, end) = GetSpan(info[0], info[1]);
             var (duration, rest) = (int.Parse(info[2]), int.Parse(info[3]));
             var special_rest = new List<double>();
+            var times = new Times() { Duration = duration, LessonStarts = new List<TimeSpan>() };
             for (var i = 4; i < info.Length; i += 2)
             {
                 var (start_rest, end_rest) = GetSpan(info[i], info[i + 1]);
@@ -66,17 +63,16 @@ namespace UserInterface
             }
             while (begin < end)
             {
+                times.LessonStarts.Add(TimeSpan.FromMinutes(begin));
                 if (special_rest.Count == 0 || begin + duration < special_rest[0])
                 {
-                    starts.Add(TimeSpan.FromMinutes(begin));
                     begin += duration + rest;
                     continue;
                 }
-                starts.Add(TimeSpan.FromMinutes(begin));
                 begin = special_rest[1];
                 special_rest.RemoveRange(0, 2);
             }
-            return (starts, duration);
+            return times;
         }
 
         public (double, double) GetSpan(string begin, string end)

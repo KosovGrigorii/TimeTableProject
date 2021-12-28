@@ -1,0 +1,15 @@
+@model string
+
+@{
+    Layout = "_Layout";
+}
+<h1>
+    Error. Please choose existing algorithm
+</h1>
+
+<div>
+    @using (Html.BeginForm("FiltersInput", "FiltersInput"))
+    {
+        <input type="submit" value="Got it"/>
+    }
+</div>
