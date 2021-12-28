@@ -4,9 +4,11 @@
     Layout = "_Layout";
 }
 
-<div>
-    @using (Html.BeginForm("ToOutput", "LoadingPage", new {uid = Model.ID}))
-    {
-        <input type="submit" value="Submit"/>
-    }
-</div>
+<p>
+    Please, wait
+</p>
+@using (Html.BeginForm("ToOutput", "LoadingPage", new { uid = Model.ID }))
+{
+    <div class="loading loading--full-height"></div>
+    <input type="submit" value="Submit"/>
+}
