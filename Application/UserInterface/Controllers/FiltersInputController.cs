@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using TimetableApplication;
+using TimetableDomain;
 using UserInterface.Models;
 
 namespace UserInterface
@@ -18,7 +21,7 @@ namespace UserInterface
         
         public IActionResult FiltersInput(string uid)
         {
-            var model = new UserID { ID = uid };
+            var model = new FiltersPageData() { Algorithms = new SelectList(app.GetAlgorithmNames()), UserId = uid };
             return View(model);
         }
         
@@ -49,10 +52,11 @@ namespace UserInterface
         }
         
         [HttpPost]
-        public IActionResult GetFilters(IEnumerable<FilterUI> filters, string uid)
+        public IActionResult GetFilters(IEnumerable<FilterUI> filters, string algorithm, string uid)
         {
             var applicationFilters = filters.Select(x => new Filter(x.Name, x.DaysCount, x.Days));
-            app.MakeTimetable(uid, applicationFilters);
+            var algoConverted = Enum.TryParse<Algorithm>(algorithm, out var algo);
+            app.MakeTimetable(uid, algo, applicationFilters);
             return RedirectToAction("ToLoadingPage", new { uid = uid });
         }
         

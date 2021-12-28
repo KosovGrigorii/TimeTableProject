@@ -19,9 +19,12 @@ namespace UserInterface
         [HttpGet]
         public IActionResult Index(string uid)
         {
-            var extensions = new SelectList(Enum.GetValues(typeof(OutputExtension)));
-            ViewBag.Extensions = extensions;
-            return View("Output", new UserID {ID = uid});
+            var extensions = new SelectList(app.GetOutputExtensions());
+            return View("Output", new OutputPageData()
+            {
+                OutputExtensions = extensions,
+                UserId = uid
+            });
         }
 
         public FileResult DownloadFile(string extension, string uid)
@@ -29,7 +32,6 @@ namespace UserInterface
             var translated = Enum.TryParse<OutputExtension>(extension, out var outputExtension);
 
             var fileByteArray = app.GetOutput(uid, outputExtension);
-            //"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             return File(fileByteArray, "application/octet-stream", $"Timetable.{extension.ToLower()}");
         }
     }

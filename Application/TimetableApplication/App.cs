@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using TimetableDomain;
 
@@ -10,18 +9,18 @@ namespace TimetableApplication
     {
         private readonly DatabaseProvider databaseProvider;
         private readonly ConverterToAlgoritmInput converter;
-        private readonly ITimetableMaker algorithm;
+        private readonly AlgorithmChooser chooser;
         private readonly OutputProvider outputProvider;
         
         public App(DatabaseProvider databaseProvider, 
             ConverterToAlgoritmInput converter,
-            ITimetableMaker algorithm,
-            OutputProvider outputProvider)
+            OutputProvider outputProvider,
+            AlgorithmChooser chooser)
         {
             this.databaseProvider = databaseProvider;
             this.converter = converter;
-            this.algorithm = algorithm;
             this.outputProvider = outputProvider;
+            this.chooser = chooser;
         }
 
         public void SaveInput(string uid, IEnumerable<SlotInfo> slotInput, Times TimeSchedule)
@@ -29,11 +28,13 @@ namespace TimetableApplication
             databaseProvider.AddInputSlotInfo(uid, slotInput);
             databaseProvider.AddTimeSchedule(uid, TimeSchedule);
         }
-
+        
+        public Array GetAlgorithmNames()
+        => Enum.GetValues(typeof(Algorithm));
         public IEnumerable<string> GetTeachers(string uid)
         => databaseProvider.GetTeacherFilters(uid);
 
-        public void MakeTimetable(string uid, IEnumerable<Filter> filters)
+        public void MakeTimetable(string uid, Algorithm algorithmName, IEnumerable<Filter> filters)
         {
             var lessonStarts = databaseProvider.GetTimeSchedule(uid);
             if (!lessonStarts.Any())
@@ -44,10 +45,13 @@ namespace TimetableApplication
             var lessonDuration = databaseProvider.GetLessonDuration(uid);
             
             var algoInput = converter.Convert(courses, filters, lessonStarts, lessonDuration);
-            
+            var algorithm = chooser.ChooseAlgorithm(algorithmName);
             var timeslots = algorithm.GetTimetable(algoInput);
             databaseProvider.SetTimeslots(uid, timeslots);
         }
+
+        public Array GetOutputExtensions()
+            => Enum.GetValues(typeof(OutputExtension));
 
         public byte[] GetOutput(string uid, OutputExtension extension)
         {
