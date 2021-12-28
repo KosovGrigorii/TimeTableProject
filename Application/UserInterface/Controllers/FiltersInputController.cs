@@ -21,7 +21,7 @@ namespace UserInterface
         
         public IActionResult FiltersInput(string uid)
         {
-            var model = new FiltersPageData() { Algorithms = new SelectList(app.GetAlgorithmNames()), UserId = uid };
+            var model = new FiltersPageData() { Algorithms = new SelectList(app.GetAlgorithmNames()), UserID = uid };
             return View(model);
         }
         

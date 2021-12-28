@@ -4,7 +4,7 @@
     Layout = "_Layout";
 }
 
-@using (Html.BeginForm("DownloadFile", "Output", new { uid = Model.ID }))
+@using (Html.BeginForm("DownloadFile", "Output", new { uid = Model.UserID }))
 {
     <fieldset>
         <legend>Choose extension</legend>

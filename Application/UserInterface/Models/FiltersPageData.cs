@@ -5,6 +5,6 @@ namespace UserInterface.Models
     public class FiltersPageData
     {
         public SelectList Algorithms;
-        public string UserId;
+        public string UserID;
     }
 }

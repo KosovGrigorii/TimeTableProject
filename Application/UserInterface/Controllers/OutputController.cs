@@ -23,7 +23,7 @@ namespace UserInterface
             return View("Output", new OutputPageData()
             {
                 OutputExtensions = extensions,
-                UserId = uid
+                UserID = uid
             });
         }
 
