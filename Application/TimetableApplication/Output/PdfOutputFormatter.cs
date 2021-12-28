@@ -9,10 +9,10 @@ namespace TimetableApplication
     {
         public OutputExtension Extension => OutputExtension.Pdf;
 
-        public Stream MakeOutputFile(Dictionary<string, string[,]> tables)
+        public byte[] MakeOutputFile(Dictionary<string, string[,]> tables)
         {
             var doc = new Document();
-            var resultStream = new MemoryStream();
+            using var resultStream = new MemoryStream();
             PdfWriter.GetInstance(doc, resultStream);
             doc.Open();
             var count = 0;
@@ -32,7 +32,7 @@ namespace TimetableApplication
                 doc.Add(new Phrase("\n"));
             }
             doc.Close();
-            return resultStream;
+            return resultStream.ToArray();
         }
     }
 }

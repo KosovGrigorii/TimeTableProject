@@ -15,7 +15,7 @@ namespace TimetableApplication
             this.converter = converter;
         }
 
-        public Stream GetOutputFileStream(OutputExtension extension, string uid, IEnumerable<TimeSlot> timeslots)
+        public byte[] GetOutputFileStream(OutputExtension extension, string uid, IEnumerable<TimeSlot> timeslots)
         {
             var formatter = chooser.ChooseFormatter(extension);
             return formatter.MakeOutputFile(converter.ConvertTimeslotsToDictionary(timeslots));

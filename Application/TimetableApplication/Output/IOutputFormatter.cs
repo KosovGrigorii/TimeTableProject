@@ -7,6 +7,6 @@ namespace TimetableApplication
     {
         public OutputExtension Extension { get; }
         
-        public Stream MakeOutputFile(Dictionary<string, string[,]> tables);
+        public byte[] MakeOutputFile(Dictionary<string, string[,]> tables);
     }
 }

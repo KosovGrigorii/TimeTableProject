@@ -28,8 +28,9 @@ namespace UserInterface
         {
             var translated = Enum.TryParse<OutputExtension>(extension, out var outputExtension);
 
-            var fileStream = app.GetOutput(uid, outputExtension);
-            return File(fileStream, "application/octet-stream", $"Timetable.{extension.ToLower()}");
+            var fileByteArray = app.GetOutput(uid, outputExtension);
+            //"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            return File(fileByteArray, "application/octet-stream", $"Timetable.{extension.ToLower()}");
         }
     }
 }

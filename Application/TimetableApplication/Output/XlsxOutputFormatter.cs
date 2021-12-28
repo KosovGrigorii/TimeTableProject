@@ -9,7 +9,7 @@ namespace TimetableApplication
     {
         public OutputExtension Extension => OutputExtension.Xlsx;
         
-        public Stream MakeOutputFile(Dictionary<string, string[,]> tables)
+        public byte[] MakeOutputFile(Dictionary<string, string[,]> tables)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using var package = new ExcelPackage();
@@ -24,7 +24,8 @@ namespace TimetableApplication
                 worksheet.Cells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 worksheet.Cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             }
-            return new MemoryStream(package.GetAsByteArray());
+            package.Save();
+            return package.GetAsByteArray();
         }
     }
 }

@@ -67,6 +67,8 @@ namespace UserInterface
                     services.AddSingleton<IDatabaseWrapper<string, DatabaseSlot>, DictionaryWrapper<string, DatabaseSlot>>();
                     services.AddSingleton<IDatabaseWrapper<string, DatabaseTimeslot>, DictionaryWrapper<string, DatabaseTimeslot>>();
                     services.AddSingleton<IDatabaseWrapper<string, DatabaseTimeSchedule>, DictionaryWrapper<string, DatabaseTimeSchedule>>();
+                    services.AddSingleton<IDatabaseWrapper<string, DatabaseLessonMinutesDuration>, 
+                        DictionaryWrapper<string, DatabaseLessonMinutesDuration>>();
                 }
                 else
                 {
@@ -81,6 +83,10 @@ namespace UserInterface
                     services.AddDbContext<MySQLContext<string, DatabaseTimeSchedule>>(options  => options
                         .UseMySql(mysqlConnectionString, ServerVersion.AutoDetect(mysqlConnectionString)));
                     services.AddScoped<IDatabaseWrapper<string, DatabaseTimeSchedule>, MySQLWrapper<string, DatabaseTimeSchedule>>();
+                    
+                    services.AddDbContext<MySQLContext<string, DatabaseLessonMinutesDuration>>(options  => options
+                        .UseMySql(mysqlConnectionString, ServerVersion.AutoDetect(mysqlConnectionString)));
+                    services.AddScoped<IDatabaseWrapper<string, DatabaseLessonMinutesDuration>, MySQLWrapper<string, DatabaseLessonMinutesDuration>>();
                 }
             }
             else
@@ -94,6 +100,9 @@ namespace UserInterface
                 services
                     .AddSingleton<IDatabaseWrapper<string, DatabaseTimeSchedule>,
                         FirebaseWrapper<string, DatabaseTimeSchedule>>();
+                services
+                    .AddSingleton<IDatabaseWrapper<string, DatabaseLessonMinutesDuration>,
+                        FirebaseWrapper<string, DatabaseLessonMinutesDuration>>();
             }
         }
 

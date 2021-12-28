@@ -41,7 +41,7 @@ namespace TimetableApplication
                     new TimeSpan(9, 0, 0),
                     new TimeSpan(10, 40, 0)};
             var courses = databaseProvider.GetInputInfo(uid);
-            var lessonDuration = databaseProvider.LessonDuration;
+            var lessonDuration = databaseProvider.GetLessonDuration(uid);
             
             var algoInput = converter.Convert(courses, filters, lessonStarts, lessonDuration);
             
@@ -49,7 +49,7 @@ namespace TimetableApplication
             databaseProvider.SetTimeslots(uid, timeslots);
         }
 
-        public Stream GetOutput(string uid, OutputExtension extension)
+        public byte[] GetOutput(string uid, OutputExtension extension)
         {
             var timeslots = databaseProvider.GetTimeslots(uid);
             return outputProvider.GetOutputFileStream(extension, uid, timeslots);

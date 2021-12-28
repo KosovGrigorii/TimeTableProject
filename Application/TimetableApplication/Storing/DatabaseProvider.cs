@@ -7,7 +7,6 @@ namespace TimetableApplication
 {
     public class DatabaseProvider
     {
-        public int LessonDuration { get; private set; }
         private TimetableDatabases databases;
         private DatabaseEntityConverter converter;
 
@@ -22,7 +21,7 @@ namespace TimetableApplication
 
         public void AddTimeSchedule(string uid, Times timeSchedule)
         {
-            LessonDuration = timeSchedule.Duration;
+            databases.DurationWrapper.AddRange(uid, new []{converter.MinutesDurationToDbClass(timeSchedule.Duration, uid)});
             databases.TimeScheduleWrapper.AddRange(uid, 
                 timeSchedule.LessonStarts.Select(x => converter.TimeSpanToDbClass(x, uid)));
         }
@@ -42,16 +41,13 @@ namespace TimetableApplication
                 .Distinct();
         }
 
+        public int GetLessonDuration(string uid)
+            => converter.DbDurationToInt(databases.DurationWrapper.ReadBy(uid).First());
+
         public void SetTimeslots(string uid, IEnumerable<TimeSlot> timeslots)
         => databases.TimeslotWrapper.AddRange(uid, timeslots.Select(t => converter.TimeslotToDatabaseClass(t, uid)));
 
         public IEnumerable<TimeSlot> GetTimeslots(string uid)
             => databases.TimeslotWrapper.ReadBy(uid).Select(x => converter.DbTimeslotToTimeslot(x));
-
-        public void DeleteUserData(string uid)
-        {
-            databases.SlotWrapper.DeleteKey(uid);
-            databases.TimeslotWrapper.DeleteKey(uid);
-        }
     }
 }

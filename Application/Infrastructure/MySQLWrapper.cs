@@ -5,7 +5,6 @@ namespace Infrastructure
 {
     public class MySQLWrapper<TKey, TValue> : IDatabaseWrapper<TKey, TValue> where TValue : DatabaseEntity<TKey>
     {
-        public Database BaseName => Database.MySQL;
         private readonly MySQLContext<TKey, TValue> context;
 
         public MySQLWrapper(MySQLContext<TKey, TValue> context)
