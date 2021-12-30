@@ -11,16 +11,19 @@ namespace TimetableApplication
         private readonly ConverterToAlgoritmInput converter;
         private readonly AlgorithmChooser chooser;
         private readonly OutputProvider outputProvider;
+        private readonly IncompleteTasksKeys processIds;
         
         public App(DatabaseProvider databaseProvider, 
             ConverterToAlgoritmInput converter,
             OutputProvider outputProvider,
-            AlgorithmChooser chooser)
+            AlgorithmChooser chooser,
+            IncompleteTasksKeys processIds)
         {
             this.databaseProvider = databaseProvider;
             this.converter = converter;
             this.outputProvider = outputProvider;
             this.chooser = chooser;
+            this.processIds = processIds;
         }
 
         public void SaveInput(string uid, IEnumerable<SlotInfo> slotInput, Times TimeSchedule)
@@ -30,9 +33,12 @@ namespace TimetableApplication
         }
         
         public Array GetAlgorithmNames()
-        => Enum.GetValues(typeof(Algorithm));
+            => Enum.GetValues(typeof(Algorithm));
         public IEnumerable<string> GetTeachers(string uid)
-        => databaseProvider.GetTeacherFilters(uid);
+            => databaseProvider.GetTeacherFilters(uid);
+        
+        public void AddUserWaitingForTimetable(string uid)
+        => processIds.UserIds.Add(uid);
 
         public void MakeTimetable(string uid, Algorithm algorithmName, IEnumerable<Filter> filters)
         {
@@ -48,7 +54,11 @@ namespace TimetableApplication
             var algorithm = chooser.ChooseAlgorithm(algorithmName);
             var timeslots = algorithm.GetTimetable(algoInput);
             databaseProvider.SetTimeslots(uid, timeslots);
+            processIds.UserIds.Remove(uid);
         }
+
+        public bool IsMakingTimetableFinished(string uid)
+            => !processIds.UserIds.Contains(uid);
 
         public Array GetOutputExtensions()
             => Enum.GetValues(typeof(OutputExtension));

@@ -1,0 +1,22 @@
+@model UserInterface.Models.UserID
+
+@{
+    Layout = "_Layout";
+}
+
+<p>
+    Please, wait
+</p>
+<div class="loading loading--full-height"></div> 
+
+<script type="text/javascript">
+     window.onload = function() {
+         $.ajax({
+         url: '@Url.Action("CheckCompleteness", "FiltersInput", new { uid = Model.ID })',
+         type: "POST",
+                 success: function(data) {
+                     $('#' + div_to_insert).html(data);
+                 }
+         })
+      }
+  </script>
