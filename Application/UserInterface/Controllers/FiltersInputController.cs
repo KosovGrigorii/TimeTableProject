@@ -82,7 +82,6 @@ namespace UserInterface
             return View("LoadingPage", new UserID() { ID = uid });
         }
         
-        [HttpPost]
         public IActionResult CheckCompleteness(string uid)
         {
             while (!app.IsMakingTimetableFinished(uid))

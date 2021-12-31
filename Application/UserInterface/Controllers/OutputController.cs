@@ -16,7 +16,7 @@ namespace UserInterface
             this.app = app;
         }
 
-        //[HttpGet]
+        [HttpGet]
         public IActionResult Index(string uid)
         {
             var extensions = new SelectList(app.GetOutputExtensions());
