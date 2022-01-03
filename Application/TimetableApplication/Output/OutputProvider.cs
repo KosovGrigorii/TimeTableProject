@@ -6,8 +6,8 @@ namespace TimetableApplication
 {
     public class OutputProvider
     {
-        private FormatterChooser chooser;
-        private OutputConverter converter;
+        private readonly FormatterChooser chooser;
+        private readonly OutputConverter converter;
 
         public OutputProvider(FormatterChooser chooser, OutputConverter converter)
         {

@@ -5,8 +5,8 @@ namespace UserInterface
 {
     public class InputProvider
     {
-        private ParserChooser chooser;
-        private ParserExtensions extensions;
+        private readonly ParserChooser chooser;
+        private readonly ParserExtensions extensions;
 
         public InputProvider(ParserChooser chooser, ParserExtensions extensions)
         {
