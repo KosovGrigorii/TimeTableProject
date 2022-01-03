@@ -68,25 +68,26 @@ namespace UserInterface
 
             app.AddUserWaitingForTimetable(uid);
             taskQueue.QueueBackgroundWorkItemAsync(
-                async  (token) => {
+                async  (token) =>
+                {
                     if (!token.IsCancellationRequested)
                     {
                         try
                         {
-                            app.MakeTimetable(uid, algo, applicationFilters);
-                            await Task.CompletedTask;
+                            var task = new Task(() => app.MakeTimetable(uid, algo, applicationFilters));
+                            task.Start();
+                            await task;
                         }
-                        catch (OperationCanceledException){ }
+                        catch (OperationCanceledException)
+                        {
+                        }
                     }
                 });
-            return View("LoadingPage", new UserID() { ID = uid });
+            return RedirectToAction("ToOutputPage", new { uid = uid });
         }
         
-        public IActionResult CheckCompleteness(string uid)
+        public IActionResult ToOutputPage(string uid)
         {
-            while (!app.IsMakingTimetableFinished(uid))
-                Thread.Sleep(300);
-
             return RedirectToRoutePermanent("default", new
             {
                 controller = "Output", action = "Index", uid = uid
