@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using TimetableApplication;
@@ -12,16 +11,18 @@ namespace UserInterface
 {
     public class FiltersInputController : Controller
     {
-        private readonly App app;
+        private readonly FilterInterface filterInterface;
+        private readonly TimetableMaker timetableMaker;
 
-        public FiltersInputController(App app)
+        public FiltersInputController(FilterInterface filterInterface, TimetableMaker timetableMaker)
         {
-            this.app = app;
+            this.filterInterface = filterInterface;
+            this.timetableMaker = timetableMaker;
         }
         
         public IActionResult FiltersInput(string uid)
         {
-            var model = new FiltersPageData() { Algorithms = new SelectList(app.GetAlgorithmNames()), UserID = uid };
+            var model = new FiltersPageData() { Algorithms = new SelectList(filterInterface.GetAlgorithmNames()), UserID = uid };
             return View(model);
         }
         
@@ -33,7 +34,8 @@ namespace UserInterface
 
         public PartialViewResult ChooseSingleFilter(string filterName, string userId, string elementId)
         {
-            var specifiedFilters = app.GetTeachers(userId);
+            var user = new User() {Id = userId};
+            var specifiedFilters = filterInterface.GetTeachers(user);
             if (filterName == "Working days amount")
                 return GetWorkingDaysCountFilter(specifiedFilters, elementId);
             return GetSpecifiedWorkingDaysFilter(specifiedFilters, elementId);
@@ -58,10 +60,10 @@ namespace UserInterface
             var algoConverted = Enum.TryParse<Algorithm>(algorithm, out var algo);
 
             if (!algoConverted)
-            {
                 return View("ErrorPage");
-            }
-            app.MakeTimetable(uid, algo, applicationFilters);
+            
+            var user = new User() {Id = uid};
+            timetableMaker.MakeTimetable(user, algo, applicationFilters);
             return RedirectToAction("ToLoadingPage", new { uid = uid });
         }
         

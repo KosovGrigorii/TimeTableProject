@@ -13,9 +13,6 @@ namespace TimetableApplication
             timetableMakers = algorithms.ToDictionary(x => x.Name);
         }
 
-        public ITimetableMaker ChooseFirstAlgorithm()
-            => timetableMakers.First().Value;
-
         public ITimetableMaker ChooseAlgorithm(Algorithm name)
             => timetableMakers[name];
     }

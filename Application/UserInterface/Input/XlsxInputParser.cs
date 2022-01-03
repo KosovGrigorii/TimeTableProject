@@ -10,7 +10,13 @@ namespace UserInterface
 {
     public class XlsxInputParser : IInputParser
     {
-        public ParserExtension Extension => ParserExtension.xlsx;
+        public string Extension { get; } //new ParserExtension(".xlsx");
+
+        public XlsxInputParser(ParserExtensions extensions)
+        {
+            Extension = "xlsx";
+            extensions.Extensions.Add(Extension);
+        }
         
         public UserInput ParseFile(IFormFile file)
         {

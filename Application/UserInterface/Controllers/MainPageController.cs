@@ -1,12 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Linq;
-using Infrastructure;
 using TimetableApplication;
-using UserInterface.Models;
 
 
 namespace UserInterface
@@ -14,16 +10,17 @@ namespace UserInterface
     public class MainPageController : Controller
     {
         private readonly InputProvider inputProvider;
-        private readonly App app;
+        private readonly InputExecutor inputExecutor;
 
-        public MainPageController(InputProvider inputProvider, App app)
+        public MainPageController(InputProvider inputProvider, InputExecutor inputExecutor)
         {
             this.inputProvider = inputProvider;
-            this.app = app;
+            this.inputExecutor = inputExecutor;
         }
         
         public ActionResult Index()
         {
+            //InputParsers 
             return View();
         }
 
@@ -31,20 +28,16 @@ namespace UserInterface
         public IActionResult FileFormUpload()
         {
             var uid = Guid.NewGuid().ToString();
+            var user = new User() {Id = uid};
             
             var fileInfo = Request.Form.Files[0];
-            var strExtension = Path.GetExtension(fileInfo.FileName).Split('.').Last();
-            var translated = Enum.TryParse<ParserExtension>(strExtension, out var extension);
-            if (!translated)
-            {
+            var extension = Path.GetExtension(fileInfo.FileName).Split('.').Last();
+            var availableExtension = inputProvider.IsExtensionAvailable(extension);
+            if (!availableExtension)
                 return View("ErrorFileFormat");
-                //ModelState.AddModelError("FileData", "Incorrect extension");
-                //return RedirectToAction("Index");
-                //return new ValidationResult("Incorrect extension");
-            }
 
             var userInput = inputProvider.ParseInput(fileInfo, extension);
-            app.SaveInput(uid, userInput.CourseSlots, userInput.TimeSchedule);
+            inputExecutor.SaveInput(user, userInput.CourseSlots, userInput.TimeSchedule);
             
             return RedirectToAction("ToFiltersInput", new { uid = uid});
         }

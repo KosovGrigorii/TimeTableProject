@@ -15,16 +15,10 @@ namespace TimetableApplication
             this.converter = converter;
         }
 
-        public byte[] GetOutputFileStream(OutputExtension extension, string uid, IEnumerable<TimeSlot> timeslots)
+        public byte[] GetOutputFileStream(OutputExtension extension, IEnumerable<TimeSlot> timeslots)
         {
             var formatter = chooser.ChooseFormatter(extension);
             return formatter.MakeOutputFile(converter.ConvertTimeslotsToDictionary(timeslots));
-        }
-
-        private string GetPath(OutputExtension extension, string uid)
-        {
-            var fileName = $"{uid}.{extension.ToString().ToLower()}";
-            return Path.Combine(Path.GetTempPath(), fileName);
         }
     }
 }

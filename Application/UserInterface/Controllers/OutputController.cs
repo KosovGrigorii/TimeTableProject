@@ -9,17 +9,17 @@ namespace UserInterface
 {
     public class OutputController: Controller
     {
-        private readonly App app;
+        private readonly OutputExecutor outputExecutor;
 
-        public OutputController(App app)
+        public OutputController(OutputExecutor outputExecutor)
         {
-            this.app = app;
+            this.outputExecutor = outputExecutor;
         }
 
         [HttpGet]
         public IActionResult Index(string uid)
         {
-            var extensions = new SelectList(app.GetOutputExtensions());
+            var extensions = new SelectList(outputExecutor.GetOutputExtensions());
             return View("Output", new OutputPageData()
             {
                 OutputExtensions = extensions,
@@ -36,7 +36,8 @@ namespace UserInterface
                 RedirectToAction("ErrorAction", uid);
             }
 
-            var fileByteArray = app.GetOutput(uid, outputExtension);
+            var user = new User() {Id = uid};
+            var fileByteArray = outputExecutor.GetOutput(user, outputExtension);
             return File(fileByteArray, "application/octet-stream", $"Timetable.{extension.ToLower()}");
         }
 

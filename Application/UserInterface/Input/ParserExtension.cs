@@ -1,8 +1,14 @@
+using System.Collections.Generic;
+
 namespace UserInterface
 {
-    public enum ParserExtension
+    public class ParserExtensions
     {
-        xlsx,
-        txt
+        public HashSet<string> Extensions { get; }
+
+        public ParserExtensions()
+        {
+            Extensions = new HashSet<string>();
+        }
     }
 }

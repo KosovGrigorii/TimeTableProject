@@ -1,3 +1,4 @@
+using System;
 using Accord.Genetic;
 using Castle.Core.Internal;
 using Firebase.Database;
@@ -30,14 +31,19 @@ namespace UserInterface
             services.AddMvc();
 
             ConfigureDatabase(services);
-            services.AddSingleton<DatabaseEntityConverter>();
-            services.AddSingleton<TimetableDatabases>();
-            services.AddSingleton<DatabaseProvider>();
+            services.AddSingleton<TimespanDbConverter>(); 
+            services.AddSingleton<TimeslotDbConverter>(); 
+            services.AddSingleton<TimeDurationDbConverter>();
+            services.AddSingleton<SlotInfoDbConverter>();
 
-            services.AddSingleton<App>();
+            services.AddScoped<InputExecutor>();
+            services.AddScoped<FilterInterface>();
+            services.AddScoped<TimetableMaker>();
+            services.AddScoped<OutputExecutor>();  //App
 
             services.AddSingleton<IInputParser, XlsxInputParser>();
             services.AddSingleton<IInputParser, TxtInputParser>();
+            services.AddSingleton<ParserExtensions>();
             services.AddSingleton<ParserChooser>();
             services.AddSingleton<InputProvider>(); //Input
 
