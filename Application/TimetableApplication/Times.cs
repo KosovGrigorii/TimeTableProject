@@ -5,7 +5,7 @@ namespace TimetableApplication
 {
     public class Times
     {
-        public int Duration { get; set; }
-        public List<TimeSpan> LessonStarts { get; set; }
+        public int Duration { get; init; }
+        public List<TimeSpan> LessonStarts { get; init; }
     }
 }

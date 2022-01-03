@@ -7,7 +7,7 @@ namespace UserInterface
 {
     public interface IInputParser
     {
-        string Extension {get;}
+        string Extension { get; }
         UserInput ParseFile(IFormFile file);
     }
 }

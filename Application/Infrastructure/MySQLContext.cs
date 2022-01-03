@@ -5,7 +5,7 @@ namespace Infrastructure
 {
     public class MySQLContext<TKey, TValue> : DbContext where TValue : DatabaseEntity<TKey>
     {
-        public DbSet<TValue> Table { get; set; }
+        public DbSet<TValue> Table { get; init; }
 
         public MySQLContext(DbContextOptions<MySQLContext<TKey, TValue>> options) : base(options) { }
         

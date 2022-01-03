@@ -4,12 +4,12 @@ namespace TimetableApplication
 {
     public class DatabaseTimeslot : DatabaseEntity<string>
     {
-        public int Day { get; set; }
-        public int Start { get; set; }
-        public int End { get; set; }
-        public string Place { get; set; }
-        public string Course { get; set; }
-        public string Teacher { get; set; }
-        public string Group { get; set; }
+        public int Day { get; init; }
+        public int Start { get; init; }
+        public int End { get; init; }
+        public string Place { get; init; }
+        public string Course { get; init; }
+        public string Teacher { get; init; }
+        public string Group { get; init; }
     }
 }
