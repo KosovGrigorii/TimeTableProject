@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 
@@ -7,7 +6,12 @@ namespace TimetableApplication
 {
     public class XlsxOutputFormatter: IOutputFormatter
     {
-        public OutputExtension Extension => OutputExtension.Xlsx;
+        public OutputExtension Extension { get; }
+
+        public XlsxOutputFormatter()
+        {
+            Extension = new OutputExtension("xlsx");
+        }
         
         public byte[] MakeOutputFile(Dictionary<string, string[,]> tables)
         {

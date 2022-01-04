@@ -6,14 +6,14 @@ namespace TimetableApplication
 {
     public class AlgorithmChooser
     {
-        private readonly IReadOnlyDictionary<Algorithm, ITimetableMaker> timetableMakers;
+        private readonly IReadOnlyDictionary<string, ITimetableMaker> timetableMakers;
         
         public AlgorithmChooser(IEnumerable<ITimetableMaker> algorithms)
         {
-            timetableMakers = algorithms.ToDictionary(x => x.Name);
+            timetableMakers = algorithms.ToDictionary(x => x.Algorithm.Name);
         }
 
-        public ITimetableMaker ChooseAlgorithm(Algorithm name)
+        public ITimetableMaker ChooseAlgorithm(string name)
             => timetableMakers[name];
     }
 }

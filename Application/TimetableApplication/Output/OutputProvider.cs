@@ -15,7 +15,7 @@ namespace TimetableApplication
             this.converter = converter;
         }
 
-        public byte[] GetOutputFileStream(OutputExtension extension, IEnumerable<TimeSlot> timeslots)
+        public byte[] GetOutputFileStream(string extension, IEnumerable<TimeSlot> timeslots)
         {
             var formatter = chooser.ChooseFormatter(extension);
             return formatter.MakeOutputFile(converter.ConvertTimeslotsToDictionary(timeslots));

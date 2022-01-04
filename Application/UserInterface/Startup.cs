@@ -43,7 +43,6 @@ namespace UserInterface
 
             services.AddSingleton<IInputParser, XlsxInputParser>();
             services.AddSingleton<IInputParser, TxtInputParser>();
-            services.AddSingleton<ParserExtensions>();
             services.AddSingleton<ParserChooser>();
             services.AddSingleton<InputProvider>(); //Input
 

@@ -9,14 +9,16 @@ namespace TimetableApplication
     public class FilterInterface
     {
         private readonly IDatabaseWrapper<string, DatabaseSlot> slotWrapper;
-        
-        public FilterInterface(IDatabaseWrapper<string, DatabaseSlot> slotWrapper)
+        private readonly IEnumerable<string> algorithms;
+
+        public FilterInterface(IDatabaseWrapper<string, DatabaseSlot> slotWrapper, IEnumerable<ITimetableMaker> algorithms)
         {
             this.slotWrapper = slotWrapper;
+            this.algorithms = algorithms.Select(a => a.Algorithm.Name);
         }
         
-        public Array GetAlgorithmNames()
-            => Enum.GetValues(typeof(Algorithm));
+        public IEnumerable<string> GetAlgorithmNames()
+            => algorithms;
         
         public IEnumerable<string> GetTeachers(User user)
             => slotWrapper

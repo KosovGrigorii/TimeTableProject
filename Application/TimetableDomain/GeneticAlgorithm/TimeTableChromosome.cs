@@ -8,10 +8,10 @@ namespace TimetableDomain
 {
     class TimeTableChromosome : ChromosomeBase
     {
-        private static Random random = new ();
-        private IEnumerable<Course> dataCourses;
-        private List<TimeSpan> lessonStarts;
-        public List<TimeSlotChromosome> Value;
+        public List<TimeSlotChromosome> Value { get; private set; }
+        private static readonly Random random = new ();
+        private readonly IEnumerable<Course> dataCourses;
+        private readonly List<TimeSpan> lessonStarts;
         
         public TimeTableChromosome(IEnumerable<Course> courses, IEnumerable<TimeSpan> lessonStarts)
         {
@@ -50,7 +50,7 @@ namespace TimetableDomain
                 }
             }
 
-            Value= GenerateRandomSlots().ToList();
+            Value = GenerateRandomSlots().ToList();
         }
 
         public override IChromosome CreateNew()

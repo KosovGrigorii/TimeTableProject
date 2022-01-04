@@ -8,6 +8,7 @@ namespace TimetableApplication
 {
     public class TimetableMaker
     {
+        public IEnumerable<string> Algoorithms { get; }
         private readonly ConverterToAlgoritmInput algoInputConverter;
         private readonly AlgorithmChooser chooser;
         private readonly SlotInfoDbConverter slotConverter;
@@ -28,8 +29,10 @@ namespace TimetableApplication
             IDatabaseWrapper<string, DatabaseSlot> slotWrapper,
             IDatabaseWrapper<string, DatabaseTimeslot> timeslotWrapper,
             IDatabaseWrapper<string, DatabaseTimeSchedule> timeScheduleWrapper,
-            IDatabaseWrapper<string, DatabaseLessonMinutesDuration> durationWrapper)
+            IDatabaseWrapper<string, DatabaseLessonMinutesDuration> durationWrapper,
+            IEnumerable<ITimetableMaker> algorithms)
         {
+            Algoorithms = algorithms.Select(a => a.Algorithm.Name);
             this.algoInputConverter = algoInputConverter;
             this.chooser = chooser;
             this.slotConverter = slotConverter;
@@ -42,7 +45,7 @@ namespace TimetableApplication
             this.durationWrapper = durationWrapper;
         }
         
-        public void MakeTimetable(User user, Algorithm algorithmName, IEnumerable<Filter> filters)
+        public void MakeTimetable(User user, string algorithmName, IEnumerable<Filter> filters)
         {
             var lessonStarts = timeScheduleWrapper.ReadBy(user.Id)
                 .Select(x => timespanConverter.DbClassToTimeSpan(x)).ToArray();

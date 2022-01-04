@@ -2,13 +2,13 @@ using System.Collections.Generic;
 
 namespace UserInterface
 {
-    public class ParserExtensions
+    public class ParserExtension
     {
-        public HashSet<string> Extensions { get; }
+        public string Extension { get; }
 
-        public ParserExtensions()
+        public ParserExtension(string extension)
         {
-            Extensions = new HashSet<string>();
+            Extension = extension;
         }
     }
 }

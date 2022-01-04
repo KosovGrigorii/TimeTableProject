@@ -7,7 +7,12 @@ namespace TimetableApplication
 {
     public class PdfOutputFormatter: IOutputFormatter
     {
-        public OutputExtension Extension => OutputExtension.Pdf;
+        public OutputExtension Extension { get; }
+
+        public PdfOutputFormatter()
+        {
+            Extension = new OutputExtension("pdf");
+        }
 
         public byte[] MakeOutputFile(Dictionary<string, string[,]> tables)
         {

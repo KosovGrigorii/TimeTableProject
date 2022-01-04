@@ -1,15 +1,18 @@
-@model string
+@model UserInterface.Models.PageAcceptedExtensions
 
 @{
     Layout = "_Layout";
 }
 <h1>
-    Error. Please use files with .xlsx or .txt extensions
+    Error. Please use files with @Model.Extensions extensions
 </h1>
 
-<div>
+<div class="button">
     @using (Html.BeginForm("Index", "MainPage"))
         {
-            <input type="submit" value="Got it"/>
+            <label  for="ok" class="button">
+                Got it
+            </label>
+            <input id="ok" class="hide" type="submit"/>
         }
 </div>

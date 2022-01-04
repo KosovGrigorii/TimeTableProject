@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Http;
 
 namespace UserInterface
@@ -6,19 +7,19 @@ namespace UserInterface
     public class InputProvider
     {
         private readonly ParserChooser chooser;
-        private readonly ParserExtensions extensions;
+        private readonly IEnumerable<string> extensions;
 
-        public InputProvider(ParserChooser chooser, ParserExtensions extensions)
+        public InputProvider(ParserChooser chooser, IEnumerable<IInputParser> inputParsers)
         {
             this.chooser = chooser;
-            this.extensions = extensions;
+            extensions = inputParsers.Select(x => x.Extension.Extension);
         }
 
         public IEnumerable<string> GetExtensions()
-            => extensions.Extensions;
+            => extensions;
 
         public bool IsExtensionAvailable(string extension)
-            => extensions.Extensions.Contains(extension);
+            => extensions.Contains(extension);
 
         public UserInput ParseInput(IFormFile file, string extension)
         {

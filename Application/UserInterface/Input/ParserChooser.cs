@@ -9,7 +9,7 @@ namespace UserInterface
 
         public ParserChooser(IEnumerable<IInputParser> inputParsers)
         {
-            this.inputParsers = inputParsers.ToDictionary(x => x.Extension);
+            this.inputParsers = inputParsers.ToDictionary(x => x.Extension.Extension);
         }
 
         public IInputParser ChooseParser(string parserExtension)

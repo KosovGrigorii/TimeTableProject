@@ -1,8 +1,12 @@
 namespace TimetableDomain
 {
-    public enum Algorithm
+    public class Algorithm
     {
-        Genetic,
-        Graph
+        public string Name { get; }
+
+        public Algorithm(string name)
+        {
+            Name = name;
+        }
     }
 }

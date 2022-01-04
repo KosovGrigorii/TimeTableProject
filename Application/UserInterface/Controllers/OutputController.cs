@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using UserInterface.Models;
@@ -29,15 +30,12 @@ namespace UserInterface
 
         public FileResult DownloadFile(string extension, string uid)
         {
-            var translated = Enum.TryParse<OutputExtension>(extension, out var outputExtension);
-
+            var translated = outputExecutor.GetOutputExtensions().Contains(extension);
             if (!translated)
-            {
                 RedirectToAction("ErrorAction", uid);
-            }
 
             var user = new User() {Id = uid};
-            var fileByteArray = outputExecutor.GetOutput(user, outputExtension);
+            var fileByteArray = outputExecutor.GetOutput(user, extension);
             return File(fileByteArray, "application/octet-stream", $"Timetable.{extension.ToLower()}");
         }
 
