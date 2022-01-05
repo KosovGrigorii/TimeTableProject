@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using UserInterface.Models;
@@ -25,6 +26,12 @@ namespace UserInterface
                 OutputExtensions = extensions,
                 UserID = uid
             });
+        }
+        
+        public void CheckCompleteness(string uid)
+        {
+            while (!app.IsMakingTimetableFinished(uid))
+                Thread.Sleep(300);
         }
 
         public FileResult DownloadFile(string extension, string uid)

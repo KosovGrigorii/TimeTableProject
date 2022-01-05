@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -13,10 +14,13 @@ namespace UserInterface
     public class FiltersInputController : Controller
     {
         private readonly App app;
+        private readonly IBackgroundTaskQueue taskQueue;
+        private readonly CancellationToken cancellationToken;
 
-        public FiltersInputController(App app)
+        public FiltersInputController(App app, IBackgroundTaskQueue taskQueue)
         {
             this.app = app;
+            this.taskQueue = taskQueue;
         }
         
         public IActionResult FiltersInput(string uid)
@@ -61,15 +65,32 @@ namespace UserInterface
             {
                 return View("ErrorPage");
             }
-            app.MakeTimetable(uid, algo, applicationFilters);
-            return RedirectToAction("ToLoadingPage", new { uid = uid });
+
+            app.AddUserWaitingForTimetable(uid);
+            taskQueue.QueueBackgroundWorkItemAsync(
+                async  (token) =>
+                {
+                    if (!token.IsCancellationRequested)
+                    {
+                        try
+                        {
+                            var task = new Task(() => app.MakeTimetable(uid, algo, applicationFilters));
+                            task.Start();
+                            await task;
+                        }
+                        catch (OperationCanceledException)
+                        {
+                        }
+                    }
+                });
+            return RedirectToAction("ToOutputPage", new { uid = uid });
         }
         
-        public IActionResult ToLoadingPage(string uid)
+        public IActionResult ToOutputPage(string uid)
         {
             return RedirectToRoutePermanent("default", new
             {
-                controller = "LoadingPage", action = "Index", uid = uid
+                controller = "Output", action = "Index", uid = uid
             });
         }
     }

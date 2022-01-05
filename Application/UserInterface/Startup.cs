@@ -31,10 +31,10 @@ namespace UserInterface
 
             ConfigureDatabase(services);
             services.AddSingleton<DatabaseEntityConverter>();
-            services.AddSingleton<TimetableDatabases>();
-            services.AddSingleton<DatabaseProvider>();
+            services.AddScoped<TimetableDatabases>();
+            services.AddScoped<DatabaseProvider>();
 
-            services.AddSingleton<App>();
+            services.AddScoped<App>();
 
             services.AddSingleton<IInputParser, XlsxInputParser>();
             services.AddSingleton<IInputParser, TxtInputParser>();
@@ -54,6 +54,10 @@ namespace UserInterface
             services.AddSingleton<OutputConverter>();
             services.AddSingleton<FormatterChooser>(); 
             services.AddSingleton<OutputProvider>();          //Output
+
+            services.AddSingleton<IncompleteTasksKeys>();
+            services.AddHostedService<QueuedHostedService>();
+            services.AddSingleton<IBackgroundTaskQueue>(ctx => new BackgroundTaskQueue(100));
         }
 
         private void ConfigureDatabase(IServiceCollection services)
