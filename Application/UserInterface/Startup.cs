@@ -1,4 +1,3 @@
-using System;
 using Accord.Genetic;
 using Castle.Core.Internal;
 using Firebase.Database;
@@ -31,6 +30,7 @@ namespace UserInterface
             services.AddMvc();
 
             ConfigureDatabase(services);
+
             services.AddSingleton<TimespanDbConverter>(); 
             services.AddSingleton<TimeslotDbConverter>(); 
             services.AddSingleton<TimeDurationDbConverter>();
@@ -59,6 +59,10 @@ namespace UserInterface
             services.AddSingleton<OutputConverter>();
             services.AddSingleton<FormatterChooser>(); 
             services.AddSingleton<OutputProvider>();          //Output
+
+            services.AddSingleton<IncompleteTasksKeys>();
+            services.AddHostedService<QueuedHostedService>();
+            services.AddSingleton<IBackgroundTaskQueue>(ctx => new BackgroundTaskQueue(100));
         }
 
         private void ConfigureDatabase(IServiceCollection services)

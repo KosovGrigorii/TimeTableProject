@@ -4,14 +4,37 @@
     Layout = "_Layout";
 }
 
-@using (Html.BeginForm("DownloadFile", "Output", new { uid = Model.UserID }))
-{
-    <fieldset>
-        <legend>Choose extension</legend>
-        @Html.DropDownList("extension", Model.OutputExtensions)
-        <label for="download" class="button">
-            Download
-        </label>
-        <input id="download" class="hide" type="submit">
-    </fieldset>
-}
+<div id="loading">
+    <p>
+        Please, wait
+    </p>
+    <div class="loading loading--full-height"></div>
+</div>
+
+<div id="downloadDiv" style="display:none">
+    @using (Html.BeginForm("DownloadFile", "Output", new { uid = Model.UserID }))
+    {
+        <fieldset>
+            <legend>Choose extension</legend>
+            @Html.DropDownList("extension", Model.OutputExtensions)
+            <label for="download" class="button">
+                Download
+            </label>
+            <input id="download" class="hide" type="submit">
+        </fieldset>
+    }
+</div>
+
+<script>
+     window.onload = function() {
+         var loading_div = document.getElementById('loading');
+         var download_div = document.getElementById('downloadDiv');
+         $.ajax({
+         url: '@Url.Action("CheckCompleteness", "Output", new { uid = Model.UserID })',
+         success: function () {
+             loading_div.remove();
+             download_div.style.display = 'block';
+         }
+         })
+      }
+</script>

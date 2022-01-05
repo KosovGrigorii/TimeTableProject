@@ -1,5 +1,5 @@
-using System;
 using System.Linq;
+using System.Threading;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using UserInterface.Models;
@@ -11,10 +11,12 @@ namespace UserInterface
     public class OutputController: Controller
     {
         private readonly OutputExecutor outputExecutor;
+        private readonly IncompleteTasksKeys incompleteTasks;
 
-        public OutputController(OutputExecutor outputExecutor)
+        public OutputController(OutputExecutor outputExecutor, IncompleteTasksKeys incompleteTasks)
         {
             this.outputExecutor = outputExecutor;
+            this.incompleteTasks = incompleteTasks;
         }
 
         [HttpGet]
@@ -26,6 +28,12 @@ namespace UserInterface
                 OutputExtensions = extensions,
                 UserID = uid
             });
+        }
+        
+        public void CheckCompleteness(string uid)
+        {
+            while (incompleteTasks.UserIds.Contains(uid))
+                Thread.Sleep(300);
         }
 
         public FileResult DownloadFile(string extension, string uid)

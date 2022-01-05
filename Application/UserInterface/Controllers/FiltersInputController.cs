@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using TimetableApplication;
-using TimetableDomain;
 using UserInterface.Models;
 
 namespace UserInterface
@@ -13,9 +14,11 @@ namespace UserInterface
     {
         private readonly FilterInterface filterInterface;
         private readonly TimetableMaker timetableMaker;
+        private readonly IBackgroundTaskQueue taskQueue;
+        private readonly CancellationToken cancellationToken;
         private readonly IReadOnlyDictionary<string, Func<IEnumerable<string>, string, PartialViewResult>> filterToInputForm;
 
-        public FiltersInputController(FilterInterface filterInterface, TimetableMaker timetableMaker)
+        public FiltersInputController(FilterInterface filterInterface, TimetableMaker timetableMaker, IBackgroundTaskQueue taskQueue)
         {
             this.filterInterface = filterInterface;
             this.timetableMaker = timetableMaker;
@@ -24,6 +27,7 @@ namespace UserInterface
                 { "Working days amount", GetWorkingDaysCountFilter },
                 { "Choose working days in week", GetSpecifiedWorkingDaysFilter }
             };
+            this.taskQueue = taskQueue;
         }
         
         public IActionResult FiltersInput(string uid)
@@ -76,17 +80,32 @@ namespace UserInterface
             var algoAvailable = timetableMaker.Algoorithms.Contains(algorithm);
             if (!algoAvailable)
                 return View("ErrorPage");
-            
             var user = new User() {Id = uid};
-            timetableMaker.MakeTimetable(user, algorithm, applicationFilters);
-            return RedirectToAction("ToLoadingPage", new { uid = uid });
+            timetableMaker.AddUserWaitingForTimetable(user);
+            taskQueue.QueueBackgroundWorkItemAsync(
+                async  (token) =>
+                {
+                    if (!token.IsCancellationRequested)
+                    {
+                        try
+                        {
+                            var task = new Task(() => timetableMaker.MakeTimetable(user, algorithm, applicationFilters));
+                            task.Start();
+                            await task;
+                        }
+                        catch (OperationCanceledException)
+                        {
+                        }
+                    }
+                });
+            return RedirectToAction("ToOutputPage", new { uid = uid });
         }
         
-        public IActionResult ToLoadingPage(string uid)
+        public IActionResult ToOutputPage(string uid)
         {
             return RedirectToRoutePermanent("default", new
             {
-                controller = "LoadingPage", action = "Index", uid = uid
+                controller = "Output", action = "Index", uid = uid
             });
         }
     }

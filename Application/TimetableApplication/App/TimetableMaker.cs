@@ -19,6 +19,7 @@ namespace TimetableApplication
         private readonly IDatabaseWrapper<string, DatabaseTimeslot> timeslotWrapper;
         private readonly IDatabaseWrapper<string, DatabaseTimeSchedule> timeScheduleWrapper;
         private readonly IDatabaseWrapper<string, DatabaseLessonMinutesDuration> durationWrapper;
+        private readonly IncompleteTasksKeys processIds;
         
         public TimetableMaker(ConverterToAlgoritmInput algoInputConverter,
             AlgorithmChooser chooser,
@@ -30,7 +31,8 @@ namespace TimetableApplication
             IDatabaseWrapper<string, DatabaseTimeslot> timeslotWrapper,
             IDatabaseWrapper<string, DatabaseTimeSchedule> timeScheduleWrapper,
             IDatabaseWrapper<string, DatabaseLessonMinutesDuration> durationWrapper,
-            IEnumerable<ITimetableMaker> algorithms)
+            IEnumerable<ITimetableMaker> algorithms,
+            IncompleteTasksKeys processIds)
         {
             Algoorithms = algorithms.Select(a => a.Algorithm.Name);
             this.algoInputConverter = algoInputConverter;
@@ -43,7 +45,11 @@ namespace TimetableApplication
             this.timeslotWrapper = timeslotWrapper;
             this.timeScheduleWrapper = timeScheduleWrapper;
             this.durationWrapper = durationWrapper;
+            this.processIds = processIds;
         }
+        
+        public void AddUserWaitingForTimetable(User user)
+            => processIds.UserIds.Add(user.Id);
         
         public void MakeTimetable(User user, string algorithmName, IEnumerable<Filter> filters)
         {
@@ -60,6 +66,7 @@ namespace TimetableApplication
             var algorithm = chooser.ChooseAlgorithm(algorithmName);
             var timeslots = algorithm.GetTimetable(algoInput);
             timeslotWrapper.AddRange(user.Id, timeslots.Select(t => timeslotConverter.TimeslotToDatabaseClass(t, user.Id)));
+            processIds.UserIds.Remove(user.Id);
         }
     }
 }
