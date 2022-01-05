@@ -7,8 +7,8 @@ namespace Infrastructure
 {
     public class FirebaseWrapper<TKey, TStoredObject> : IDatabaseWrapper<TKey, TStoredObject>
     {
-        private FirebaseClient firebaseClient;
-        private string category;
+        private readonly FirebaseClient firebaseClient;
+        private readonly string category;
 
         public FirebaseWrapper(FirebaseClient firebaseClient)
         {

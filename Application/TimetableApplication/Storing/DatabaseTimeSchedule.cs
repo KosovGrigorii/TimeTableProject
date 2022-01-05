@@ -5,6 +5,6 @@ namespace TimetableApplication
 {
     public class DatabaseTimeSchedule : DatabaseEntity<string>
     {
-        public string StartTime { get; set; }
+        public string StartTime { get; init; }
     }
 }

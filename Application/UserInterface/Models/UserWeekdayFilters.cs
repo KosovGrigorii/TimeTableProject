@@ -9,10 +9,7 @@ namespace UserInterface.Models
     {
         public IEnumerable<string> Filters { get; init; }
 
-        public IEnumerable<DayOfWeek> WeekDays => 
-            Enum.GetValues(typeof(DayOfWeek))
-            .OfType<DayOfWeek>()
-            .Skip(1);
+        public IEnumerable<DayOfWeek> WeekDays { get; init; }
         public string Index { get; init; }
     }
 }

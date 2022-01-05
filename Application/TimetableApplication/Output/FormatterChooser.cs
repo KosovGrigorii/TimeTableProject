@@ -5,14 +5,14 @@ namespace TimetableApplication
 {
     public class FormatterChooser
     {
-        private readonly IReadOnlyDictionary<OutputExtension, IOutputFormatter> formatters;
+        private readonly IReadOnlyDictionary<string, IOutputFormatter> formatters;
 
         public FormatterChooser(IEnumerable<IOutputFormatter> outputFormatters)
         {
-            formatters = outputFormatters.ToDictionary(x => x.Extension);
+            formatters = outputFormatters.ToDictionary(x => x.Extension.Extension);
         }
 
-        public IOutputFormatter ChooseFormatter(OutputExtension extension) 
+        public IOutputFormatter ChooseFormatter(string extension) 
             => formatters[extension];
     }
 }

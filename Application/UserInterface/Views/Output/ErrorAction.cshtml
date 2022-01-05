@@ -4,12 +4,15 @@
     Layout = "_Layout";
 }
 <h1>
-    Please use .xlsx or .pdf as extensions
+    Please use available extensions.
 </h1>
 
-<div>
+<div class="button">
     @using (Html.BeginForm("Index", "Output", new {uid = Model.ID}))
         {
-            <input type="submit" value="Got it"/>
+            <label for="ok" class="button">
+                Got it
+            </label>
+            <input id="ok" class="hide" type="submit"/>
         }
 </div>

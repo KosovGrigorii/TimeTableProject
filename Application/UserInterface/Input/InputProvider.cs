@@ -1,21 +1,27 @@
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
-using TimetableApplication;
 
 namespace UserInterface
 {
     public class InputProvider
     {
-        private ParserChooser chooser;
+        private readonly ParserChooser chooser;
+        private readonly IEnumerable<string> extensions;
 
-        public InputProvider(ParserChooser chooser)
+        public InputProvider(ParserChooser chooser, IEnumerable<IInputParser> inputParsers)
         {
             this.chooser = chooser;
+            extensions = inputParsers.Select(x => x.Extension.Extension);
         }
-        
-        public UserInput ParseInput(IFormFile file, ParserExtension extension)
+
+        public IEnumerable<string> GetExtensions()
+            => extensions;
+
+        public bool IsExtensionAvailable(string extension)
+            => extensions.Contains(extension);
+
+        public UserInput ParseInput(IFormFile file, string extension)
         {
             var parser = chooser.ChooseParser(extension);
             return parser.ParseFile(file);

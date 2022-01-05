@@ -4,9 +4,9 @@ namespace TimetableDomain
 {
     public class CourseTime
     {
-        public Course Course { get; set; }
-        public TimeSpan Time { get; set; } 
-        public bool IsTransformable { get; set; }
+        public Course Course { get; }
+        public TimeSpan Time { get; } 
+        public bool IsTransformable { get; }
 
         public CourseTime(Course course, TimeSpan time, bool isTransformable)
         {

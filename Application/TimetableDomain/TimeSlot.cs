@@ -5,12 +5,12 @@ namespace TimetableDomain
 {
     public class TimeSlot
     {
-        public DayOfWeek Day { get; set; }
-        public TimeSpan Start { get; set; }
-        public TimeSpan End { get; set; }
-        public string Place { get; set; }
-        public string Course { get; set; }
-        public string Teacher { get; set; }
-        public string Group { get; set; }
+        public DayOfWeek Day { get; init; }
+        public TimeSpan Start { get; init; }
+        public TimeSpan End { get; init; }
+        public string Place { get; init; }
+        public string Course { get; init; }
+        public string Teacher { get; init; }
+        public string Group { get; init; }
     }
 }

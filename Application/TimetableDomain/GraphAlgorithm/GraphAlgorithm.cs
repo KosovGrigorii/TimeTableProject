@@ -7,12 +7,13 @@ namespace TimetableDomain
 {
     public class GraphAlgorithm : ITimetableMaker
     {
-        private FilterHandler handler;
-        public Algorithm Name => Algorithm.Graph;
+        public Algorithm Algorithm { get; }
+        private readonly FilterHandler handler;
 
         public GraphAlgorithm(FilterHandler handler)
         {
             this.handler = handler;
+            Algorithm = new Algorithm("Graph");
         }
         
         public IEnumerable<TimeSlot> GetTimetable(AlgoritmInput input)

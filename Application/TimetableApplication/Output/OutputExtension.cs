@@ -1,7 +1,12 @@
 namespace TimetableApplication
 {
-    public enum OutputExtension
+    public class OutputExtension
     {
-        Xlsx, Pdf
+        public string Extension { get; }
+
+        public OutputExtension(string extension)
+        {
+            Extension = extension;
+        }
     }
 }

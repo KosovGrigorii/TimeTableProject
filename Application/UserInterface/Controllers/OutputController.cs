@@ -1,4 +1,4 @@
-using System;
+using System.Linq;
 using System.Threading;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -10,17 +10,19 @@ namespace UserInterface
 {
     public class OutputController: Controller
     {
-        private readonly App app;
+        private readonly OutputExecutor outputExecutor;
+        private readonly IncompleteTasksKeys incompleteTasks;
 
-        public OutputController(App app)
+        public OutputController(OutputExecutor outputExecutor, IncompleteTasksKeys incompleteTasks)
         {
-            this.app = app;
+            this.outputExecutor = outputExecutor;
+            this.incompleteTasks = incompleteTasks;
         }
 
         [HttpGet]
         public IActionResult Index(string uid)
         {
-            var extensions = new SelectList(app.GetOutputExtensions());
+            var extensions = new SelectList(outputExecutor.GetOutputExtensions());
             return View("Output", new OutputPageData()
             {
                 OutputExtensions = extensions,
@@ -30,20 +32,18 @@ namespace UserInterface
         
         public void CheckCompleteness(string uid)
         {
-            while (!app.IsMakingTimetableFinished(uid))
+            while (incompleteTasks.UserIds.Contains(uid))
                 Thread.Sleep(300);
         }
 
         public FileResult DownloadFile(string extension, string uid)
         {
-            var translated = Enum.TryParse<OutputExtension>(extension, out var outputExtension);
-
+            var translated = outputExecutor.GetOutputExtensions().Contains(extension);
             if (!translated)
-            {
                 RedirectToAction("ErrorAction", uid);
-            }
 
-            var fileByteArray = app.GetOutput(uid, outputExtension);
+            var user = new User() {Id = uid};
+            var fileByteArray = outputExecutor.GetOutput(user, extension);
             return File(fileByteArray, "application/octet-stream", $"Timetable.{extension.ToLower()}");
         }
 

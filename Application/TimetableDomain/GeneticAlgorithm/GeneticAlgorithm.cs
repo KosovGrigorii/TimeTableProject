@@ -7,7 +7,7 @@ namespace TimetableDomain
 {
     public class GeneticAlgorithm : ITimetableMaker
     {
-        public Algorithm Name => Algorithm.Genetic;
+        public Algorithm Algorithm { get; }
         private readonly EliteSelection eliteSelection;
         private readonly FitnessFunction fitnessFunction;
 
@@ -15,6 +15,7 @@ namespace TimetableDomain
         {
             this.eliteSelection = eliteSelection;
             this.fitnessFunction = fitnessFunction;
+            Algorithm = new Algorithm("Genetic");
         }
         
         public IEnumerable<TimeSlot> GetTimetable(AlgoritmInput input)

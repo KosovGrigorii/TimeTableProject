@@ -4,12 +4,15 @@
     Layout = "_Layout";
 }
 <h1>
-    Error. Please choose existing algorithm
+    Error. Please choose existing algorithm.
 </h1>
 
-<div>
+<div class="button">
     @using (Html.BeginForm("FiltersInput", "FiltersInput"))
     {
-        <input type="submit" value="Got it"/>
+        <label for="ok" class="button">
+            Got it
+        </label>
+        <input id="ok" class="hide" type="submit"/>
     }
 </div>

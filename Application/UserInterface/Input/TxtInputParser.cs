@@ -10,7 +10,12 @@ namespace UserInterface
 {
     class TxtInputParser : IInputParser
     {
-        public ParserExtension Extension => ParserExtension.txt;
+        public ParserExtension Extension{ get; }
+
+        public TxtInputParser()
+        {
+            Extension = new ParserExtension("txt");
+        }
         
         public UserInput ParseFile(IFormFile file)
         {

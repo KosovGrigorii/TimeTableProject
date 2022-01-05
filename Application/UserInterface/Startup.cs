@@ -30,11 +30,16 @@ namespace UserInterface
             services.AddMvc();
 
             ConfigureDatabase(services);
-            services.AddSingleton<DatabaseEntityConverter>();
-            services.AddScoped<TimetableDatabases>();
-            services.AddScoped<DatabaseProvider>();
 
-            services.AddScoped<App>();
+            services.AddSingleton<TimespanDbConverter>(); 
+            services.AddSingleton<TimeslotDbConverter>(); 
+            services.AddSingleton<TimeDurationDbConverter>();
+            services.AddSingleton<SlotInfoDbConverter>();
+
+            services.AddScoped<InputExecutor>();
+            services.AddScoped<FilterInterface>();
+            services.AddScoped<TimetableMaker>();
+            services.AddScoped<OutputExecutor>();  //App
 
             services.AddSingleton<IInputParser, XlsxInputParser>();
             services.AddSingleton<IInputParser, TxtInputParser>();

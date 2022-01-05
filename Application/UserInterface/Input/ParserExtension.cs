@@ -1,8 +1,14 @@
+using System.Collections.Generic;
+
 namespace UserInterface
 {
-    public enum ParserExtension
+    public class ParserExtension
     {
-        xlsx,
-        txt
+        public string Extension { get; }
+
+        public ParserExtension(string extension)
+        {
+            Extension = extension;
+        }
     }
 }

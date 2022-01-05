@@ -5,7 +5,7 @@ namespace TimetableDomain
 {
     public interface ITimetableMaker
     {
-        Algorithm Name { get; }
+        Algorithm Algorithm { get; }
         IEnumerable<TimeSlot> GetTimetable(AlgoritmInput input);
     }
 }

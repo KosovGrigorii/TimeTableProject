@@ -6,10 +6,10 @@ namespace TimetableDomain
     struct TimeSlotChromosome
     {
         public TimeSpan StartAt { get; set; }
-        public TimeSpan EndAt { get; set; }
-        public Course Course { get; set; }
-        public string Teacher { get; set; }
-        public string Group { get; set; }
+        public TimeSpan EndAt { get; init; }
+        public Course Course { get; init; }
+        public string Teacher { get; init; }
+        public string Group { get; init; }
         public int Day { get; set; }
         
         public bool IsOverlappedBy(TimeSlotChromosome other)
