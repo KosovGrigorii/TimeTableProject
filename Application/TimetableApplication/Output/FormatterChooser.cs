@@ -7,9 +7,9 @@ namespace TimetableApplication
     {
         private readonly IReadOnlyDictionary<string, IOutputFormatter> formatters;
 
-        public FormatterChooser(IEnumerable<IOutputFormatter> outputFormatters)
+        public FormatterChooser(OutputFormattersDictionary dictionary)
         {
-            formatters = outputFormatters.ToDictionary(x => x.Extension.Extension);
+            formatters = dictionary.GetDictionary();
         }
 
         public IOutputFormatter ChooseFormatter(string extension) 

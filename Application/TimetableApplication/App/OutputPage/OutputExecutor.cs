@@ -7,22 +7,21 @@ namespace TimetableApplication
 {
     public class OutputExecutor
     {
-        private readonly OutputExtentions extentions;
         private readonly OutputProvider outputProvider;
         private readonly TimetableResultsInterface timetableResults;
+        private readonly Lazy<IEnumerable<string>> extensions;
 
         public OutputExecutor(
-            OutputExtentions extentions, 
             OutputProvider outputProvider,
-            TimetableResultsInterface timetableResults)
+            TimetableResultsInterface timetableResults, OutputFormattersDictionary dictionary)
         {
-            this.extentions = extentions;
             this.outputProvider = outputProvider;
             this.timetableResults = timetableResults;
+            extensions = new Lazy<IEnumerable<string>>(dictionary.GetExtensions());
         }
         
         public IEnumerable<string> GetOutputExtensions()
-            => extentions.Extensions;
+            => extensions.Value;
 
         public bool IsTimetableReadyFor(User user)
             => timetableResults.IsTimetableReadyForUser(user);

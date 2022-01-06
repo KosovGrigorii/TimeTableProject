@@ -1,22 +1,23 @@
+using System;
 using System.Collections.Generic;
 
 namespace TimetableApplication
 {
     public class FiltersPageInterface
     {
-        private Algorithms algorithms;
+        private Lazy<IEnumerable<string>> algorithmNames;
         private FilterNamesGetter filtersGetter;
         private readonly TimetableTaskAdder timetableTaskAdder;
         
-        public FiltersPageInterface(Algorithms algorithms, FilterNamesGetter filtersGetter, TimetableTaskAdder timetableTaskAdder)
+        public FiltersPageInterface(FilterNamesGetter filtersGetter, TimetableTaskAdder timetableTaskAdder, AlgorithmsDictionary algorithmsDictionary)
         {
-            this.algorithms = algorithms;
             this.filtersGetter = filtersGetter;
             this.timetableTaskAdder = timetableTaskAdder;
+            algorithmNames = new Lazy<IEnumerable<string>>(algorithmsDictionary.GetAlgorithms());
         }
-        
+
         public IEnumerable<string> GetAlgorithmNames()
-        => algorithms.NamesList;
+            => algorithmNames.Value;
 
         public IEnumerable<string> GetTeachersNameForFilters(User user)
             => filtersGetter.GetTeachers(user);

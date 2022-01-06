@@ -8,9 +8,9 @@ namespace TimetableApplication
     {
         private readonly IReadOnlyDictionary<string, ITimetableMaker> timetableMakers;
         
-        public AlgorithmChooser(IEnumerable<ITimetableMaker> algorithms)
+        public AlgorithmChooser(AlgorithmsDictionary algorithmsDictionary)
         {
-            timetableMakers = algorithms.ToDictionary(x => x.Algorithm.Name);
+            timetableMakers = algorithmsDictionary.GetDictionary();
         }
 
         public ITimetableMaker ChooseAlgorithm(string name)

@@ -4,7 +4,7 @@ using Infrastructure;
 
 namespace TimetableApplication
 {
-    public class InputExecutor
+    public class InputRecipient
     {
         private readonly SlotInfoDbConverter slotConverter;
         private readonly TimeDurationDbConverter durationConverter;
@@ -13,7 +13,7 @@ namespace TimetableApplication
         private readonly IDatabaseWrapper<string, DatabaseTimeSchedule> timeScheduleWrapper;
         private readonly IDatabaseWrapper<string, DatabaseLessonMinutesDuration> durationWrapper;
         
-        public InputExecutor(SlotInfoDbConverter slotConverter,
+        public InputRecipient(SlotInfoDbConverter slotConverter,
             TimeDurationDbConverter durationConverter,
             TimespanDbConverter timespanConverter,
             IDatabaseWrapper<string, DatabaseSlot> slotWrapper,

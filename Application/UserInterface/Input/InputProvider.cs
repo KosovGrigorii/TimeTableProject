@@ -7,19 +7,20 @@ namespace UserInterface
     public class InputProvider
     {
         private readonly ParserChooser chooser;
-        //private readonly IEnumerable<string> extensions;
 
-        public InputProvider(ParserChooser chooser) //, IEnumerable<IInputParser> inputParsers)
+        private readonly ExtensionDictionary extensionDictionary;
+
+        public InputProvider(ParserChooser chooser, ExtensionDictionary extensionDictionary)
         {
             this.chooser = chooser;
-            //extensions = chooser.GetExtension();  //inputParsers.Select(x => x.Extension.Extension);
+            this.extensionDictionary = extensionDictionary;
         }
 
         public IEnumerable<string> GetExtensions()
-            => chooser.GetExtension();
+            => extensionDictionary.GetExtensions();
 
         public bool IsExtensionAvailable(string extension)
-            => chooser.GetExtension().Contains(extension);
+            => extensionDictionary.GetExtensions().Contains(extension);
 
         public UserInput ParseInput(IFormFile file, string extension)
         {

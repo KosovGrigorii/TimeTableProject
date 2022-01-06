@@ -14,8 +14,5 @@ namespace UserInterface
 
         public IInputParser ChooseParser(string parserExtension)
             => extensionDictionary.GetParser(parserExtension);
-
-        public IEnumerable<string> GetExtension()
-            => extensionDictionary.GetExtension();
     }
 }

@@ -36,16 +36,17 @@ namespace UserInterface
             services.AddSingleton<TimeDurationDbConverter>();
             services.AddSingleton<SlotInfoDbConverter>();
 
+            services.AddSingleton<AlgorithmsDictionary>();
+            services.AddSingleton<OutputFormattersDictionary>();
             services.AddScoped<FiltersPageInterface>();
             services.AddScoped<TimetableResultsInterface>();
-            services.AddSingleton<Algorithms>();
-            services.AddSingleton<OutputExtentions>();
-            services.AddScoped<InputExecutor>();
+            services.AddScoped<InputRecipient>();
             services.AddScoped<FilterNamesGetter>();
             services.AddScoped<TimetableLauncher>();
             services.AddScoped<TimetableTaskAdder>();
             services.AddScoped<OutputExecutor>();  //App
 
+            services.AddSingleton<ExtensionDictionary>();
             services.AddSingleton<IInputParser, XlsxInputParser>();
             services.AddSingleton<IInputParser, TxtInputParser>();
             services.AddSingleton<ParserChooser>();

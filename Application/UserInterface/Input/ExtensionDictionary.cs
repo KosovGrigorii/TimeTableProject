@@ -14,7 +14,7 @@ namespace UserInterface
             this.inputParsers = inputParsers.ToDictionary(x => x.Extension.Extension);
         }
 
-        public IEnumerable<string> GetExtension()
+        public IEnumerable<string> GetExtensions()
         => inputParsers.Keys;
 
         public IInputParser GetParser(string parserExtension)

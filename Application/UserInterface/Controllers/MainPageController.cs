@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Linq;
-using Infrastructure;
 using TimetableApplication;
 
 
@@ -13,19 +11,17 @@ namespace UserInterface
     public class MainPageController : Controller
     {
         private readonly InputProvider inputProvider;
-        private readonly InputExecutor appInputExecutor;
-        private readonly IEnumerable<string> extensions;
+        private readonly InputRecipient appInputRecipient;
 
-        public MainPageController(InputProvider inputProvider, InputExecutor appInputExecutor)
+        public MainPageController(InputProvider inputProvider, InputRecipient appInputRecipient)
         {
             this.inputProvider = inputProvider;
-            this.appInputExecutor = appInputExecutor; 
-            extensions = inputProvider.GetExtensions();
+            this.appInputRecipient = appInputRecipient; 
         }
         
         public ActionResult Index()
         {
-            return View("Index", string.Join(", .", extensions));
+            return View("Index", string.Join(", .", inputProvider.GetExtensions()));
         }
 
         [HttpPost]
@@ -38,10 +34,10 @@ namespace UserInterface
             var extension = Path.GetExtension(fileInfo.FileName).Split('.').Last();
             var availableExtension = inputProvider.IsExtensionAvailable(extension);
             if (!availableExtension)
-                return View("ErrorFileFormat", '.' + string.Join(", .", extensions));
+                return View("ErrorFileFormat", '.' + string.Join(", .", inputProvider.GetExtensions()));
 
             var userInput = inputProvider.ParseInput(fileInfo, extension);
-            appInputExecutor.SaveInput(user, userInput.CourseSlots, userInput.TimeSchedule);
+            appInputRecipient.SaveInput(user, userInput.CourseSlots, userInput.TimeSchedule);
             
             return RedirectToAction("ToFiltersInput", new { uid = uid});
         }
