@@ -1,9 +1,10 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Linq;
 using TimetableApplication;
-using UserInterface.Models;
+
 
 
 namespace UserInterface
@@ -12,18 +13,18 @@ namespace UserInterface
     {
         private readonly InputProvider inputProvider;
         private readonly InputExecutor appInputExecutor;
-        private readonly PageAcceptedExtensions extensions;
+        private readonly IEnumerable<string> extensions;
 
         public MainPageController(InputProvider inputProvider, InputExecutor appInputExecutor)
         {
             this.inputProvider = inputProvider;
-            this.appInputExecutor = appInputExecutor;
-            extensions = new PageAcceptedExtensions(inputProvider.GetExtensions());
+            this.appInputExecutor = appInputExecutor; 
+            extensions = inputProvider.GetExtensions();
         }
         
         public ActionResult Index()
         {
-            return View(extensions);
+            return View("Index", string.Join(", .", extensions));
         }
 
         [HttpPost]
@@ -36,7 +37,7 @@ namespace UserInterface
             var extension = Path.GetExtension(fileInfo.FileName).Split('.').Last();
             var availableExtension = inputProvider.IsExtensionAvailable(extension);
             if (!availableExtension)
-                return View("ErrorFileFormat", extensions);
+                return View("ErrorFileFormat", '.' + string.Join(", .", extensions));
 
             var userInput = inputProvider.ParseInput(fileInfo, extension);
             appInputExecutor.SaveInput(user, userInput.CourseSlots, userInput.TimeSchedule);
