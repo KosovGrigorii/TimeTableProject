@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using ExcelDataReader;
 using Microsoft.AspNetCore.Http;
 using TimetableApplication;
-using UserInterface.Models;
 
 namespace UserInterface
 {

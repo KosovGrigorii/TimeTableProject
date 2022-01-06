@@ -11,12 +11,10 @@ namespace UserInterface
     public class OutputController: Controller
     {
         private readonly OutputExecutor outputExecutor;
-        private readonly IncompleteTasksKeys incompleteTasks;
 
-        public OutputController(OutputExecutor outputExecutor, IncompleteTasksKeys incompleteTasks)
+        public OutputController(OutputExecutor outputExecutor)
         {
             this.outputExecutor = outputExecutor;
-            this.incompleteTasks = incompleteTasks;
         }
 
         [HttpGet]
@@ -32,7 +30,7 @@ namespace UserInterface
         
         public void CheckCompleteness(string uid)
         {
-            while (incompleteTasks.UserIds.Contains(uid))
+            while (!outputExecutor.IsTimetableReadyFor(new User() {Id = uid}))
                 Thread.Sleep(300);
         }
 

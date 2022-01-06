@@ -2,9 +2,8 @@ using System;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
-using UserInterface.Models;
 
-namespace UserInterface
+namespace TimetableApplication
 {
     public class BackgroundTaskQueue : IBackgroundTaskQueue
     {

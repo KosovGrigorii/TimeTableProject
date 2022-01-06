@@ -14,6 +14,11 @@ namespace Infrastructure
             else
                 throw new ArgumentException($"Key {key} is already added");
         }
+        
+        public bool ContainsKey(TKey key)
+        {
+        return dictionary.ContainsKey(key);
+        }
 
         public IEnumerable<TValue> ReadBy(TKey key)
         {

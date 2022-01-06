@@ -36,9 +36,14 @@ namespace UserInterface
             services.AddSingleton<TimeDurationDbConverter>();
             services.AddSingleton<SlotInfoDbConverter>();
 
+            services.AddScoped<FiltersPageInterface>();
+            services.AddScoped<TimetableResultsInterface>();
+            services.AddSingleton<Algorithms>();
+            services.AddSingleton<OutputExtentions>();
             services.AddScoped<InputExecutor>();
-            services.AddScoped<FilterInterface>();
-            services.AddScoped<TimetableMaker>();
+            services.AddScoped<FilterNamesGetter>();
+            services.AddScoped<TimetableLauncher>();
+            services.AddScoped<TimetableTaskAdder>();
             services.AddScoped<OutputExecutor>();  //App
 
             services.AddSingleton<IInputParser, XlsxInputParser>();
@@ -60,7 +65,6 @@ namespace UserInterface
             services.AddSingleton<FormatterChooser>(); 
             services.AddSingleton<OutputProvider>();          //Output
 
-            services.AddSingleton<IncompleteTasksKeys>();
             services.AddHostedService<QueuedHostedService>();
             services.AddSingleton<IBackgroundTaskQueue>(ctx => new BackgroundTaskQueue(100));
         }

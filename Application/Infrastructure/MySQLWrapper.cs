@@ -17,6 +17,11 @@ namespace Infrastructure
             context.Table.AddRange(content);
             context.SaveChanges();
         }
+        
+         public bool ContainsKey(TKey key)
+         {
+         return context.Table.Where(x => x.KeyId.Equals(key)).Any();
+         }
 
         public IEnumerable<TValue> ReadBy(TKey key)
         {

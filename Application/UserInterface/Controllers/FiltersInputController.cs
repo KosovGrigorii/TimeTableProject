@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using TimetableApplication;
@@ -12,27 +11,22 @@ namespace UserInterface
 {
     public class FiltersInputController : Controller
     {
-        private readonly FilterInterface filterInterface;
-        private readonly TimetableMaker timetableMaker;
-        private readonly IBackgroundTaskQueue taskQueue;
-        private readonly CancellationToken cancellationToken;
+        private readonly FiltersPageInterface appInterface;
         private readonly IReadOnlyDictionary<string, Func<IEnumerable<string>, string, PartialViewResult>> filterToInputForm;
 
-        public FiltersInputController(FilterInterface filterInterface, TimetableMaker timetableMaker, IBackgroundTaskQueue taskQueue)
+        public FiltersInputController(FiltersPageInterface appInterface)
         {
-            this.filterInterface = filterInterface;
-            this.timetableMaker = timetableMaker;
+            this.appInterface = appInterface;
             filterToInputForm = new Dictionary<string, Func<IEnumerable<string>, string, PartialViewResult>>()
             {
                 { "Working days amount", GetWorkingDaysCountFilter },
                 { "Choose working days in week", GetSpecifiedWorkingDaysFilter }
             };
-            this.taskQueue = taskQueue;
         }
         
         public IActionResult FiltersInput(string uid)
         {
-            var model = new FiltersPageData() { Algorithms = new SelectList(filterInterface.GetAlgorithmNames()), UserID = uid };
+            var model = new FiltersPageData() { Algorithms = new SelectList(appInterface.GetAlgorithmNames()), UserID = uid };
             return View(model);
         }
         
@@ -50,7 +44,7 @@ namespace UserInterface
         public PartialViewResult ChooseSingleFilter(string filterName, string userId, string elementId)
         {
             var user = new User() {Id = userId};
-            var specifiedFilters = filterInterface.GetTeachers(user);
+            var specifiedFilters = appInterface.GetTeachersNameForFilters(user);
             return filterToInputForm[filterName](specifiedFilters, elementId);
         }
         
@@ -77,27 +71,11 @@ namespace UserInterface
         public IActionResult GetFilters(IEnumerable<FilterUI> filters, string algorithm, string uid)
         {
             var applicationFilters = filters.Select(x => new Filter(x.Name, x.DaysCount, x.Days));
-            var algoAvailable = timetableMaker.Algoorithms.Contains(algorithm);
+            var algoAvailable = appInterface.GetAlgorithmNames().Contains(algorithm);
             if (!algoAvailable)
                 return View("ErrorPage");
             var user = new User() {Id = uid};
-            timetableMaker.AddUserWaitingForTimetable(user);
-            taskQueue.QueueBackgroundWorkItemAsync(
-                async  (token) =>
-                {
-                    if (!token.IsCancellationRequested)
-                    {
-                        try
-                        {
-                            var task = new Task(() => timetableMaker.MakeTimetable(user, algorithm, applicationFilters));
-                            task.Start();
-                            await task;
-                        }
-                        catch (OperationCanceledException)
-                        {
-                        }
-                    }
-                });
+            appInterface.AddTimetableMakingTask(user, algorithm, applicationFilters);
             return RedirectToAction("ToOutputPage", new { uid = uid });
         }
         

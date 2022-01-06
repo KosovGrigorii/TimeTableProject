@@ -21,6 +21,16 @@ namespace Infrastructure
             foreach (var item in content)
                 firebaseClient.Child($"{key}/{category}").PostAsync(item);
         }
+        
+        public bool ContainsKey(TKey key)
+        {
+            return firebaseClient
+                .Child(key.ToString())
+                .Child(category)
+                .OnceAsync<TStoredObject>()
+                .Result
+                .Any();
+        }
 
         public IEnumerable<TStoredObject> ReadBy(TKey key)
         {
