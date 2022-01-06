@@ -21,7 +21,7 @@ namespace UserInterface
         
         public ActionResult Index()
         {
-            return View("Index", string.Join(", .", inputProvider.GetExtensions()));
+            return View("Index", '.' + string.Join(", .", inputProvider.GetExtensions()));
         }
 
         [HttpPost]
