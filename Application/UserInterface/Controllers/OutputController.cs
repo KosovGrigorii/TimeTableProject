@@ -31,7 +31,8 @@ namespace UserInterface
         public void CheckCompleteness(string uid)
         {
             while (!outputExecutor.IsTimetableReadyFor(new User() {Id = uid}))
-                Thread.Sleep(300);
+            {
+            }
         }
 
         public FileResult DownloadFile(string extension, string uid)

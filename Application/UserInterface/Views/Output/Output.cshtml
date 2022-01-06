@@ -26,15 +26,23 @@
 </div>
 
 <script>
-     window.onload = function() {
-         var loading_div = document.getElementById('loading');
-         var download_div = document.getElementById('downloadDiv');
+    function checkCompleteness() {
          $.ajax({
          url: '@Url.Action("CheckCompleteness", "Output", new { uid = Model.UserID })',
+         timeout: 1000,
          success: function () {
-             loading_div.remove();
-             download_div.style.display = 'block';
+             document.getElementById('loading').style.display = 'none';
+             document.getElementById('downloadDiv').style.display = 'block';
+         },
+         error: function ()
+         {
+             setTimeout(checkCompleteness, 15000);
          }
-         })
-      }
+      });
+    }
+    
+    window.onload = function ()
+    {
+        checkCompleteness();
+    }
 </script>
