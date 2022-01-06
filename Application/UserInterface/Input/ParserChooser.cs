@@ -5,14 +5,17 @@ namespace UserInterface
 {
     public class ParserChooser
     {
-        private readonly IReadOnlyDictionary<string, IInputParser> inputParsers;
+        private readonly ExtensionDictionary extensionDictionary;
 
         public ParserChooser(IEnumerable<IInputParser> inputParsers)
         {
-            this.inputParsers = inputParsers.ToDictionary(x => x.Extension.Extension);
+            extensionDictionary = new ExtensionDictionary(inputParsers);
         }
 
         public IInputParser ChooseParser(string parserExtension)
-            => inputParsers[parserExtension];
+            => extensionDictionary.GetParser(parserExtension);
+
+        public IEnumerable<string> GetExtension()
+            => extensionDictionary.GetExtension();
     }
 }
