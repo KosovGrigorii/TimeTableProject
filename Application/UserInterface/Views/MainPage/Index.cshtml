@@ -1,4 +1,4 @@
-﻿@model UserInterface.Models.PageAcceptedExtensions
+﻿@model string
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
@@ -13,7 +13,7 @@
         <label for="file-upload" class="button">
             Upload file
         </label>
-        <input id="file-upload" class="hide" type="file" name="file" accept="@Model.Extensions" required/>
+        <input id="file-upload" class="hide" type="file" name="file" accept="@Model" required/>
     </div>
     <div class="button">
         <label for="upload-submit" class="button">
