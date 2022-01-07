@@ -28,11 +28,9 @@ namespace UserInterface
             });
         }
         
-        public void CheckCompleteness(string uid)
+        public ActionResult CheckCompleteness(string uid)
         {
-            while (!outputExecutor.IsTimetableReadyFor(new User() {Id = uid}))
-            {
-            }
+            return Ok(new { isCompleted = outputExecutor.IsTimetableReadyFor(new (){Id = uid}) });
         }
 
         public FileResult DownloadFile(string extension, string uid)

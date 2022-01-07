@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using TimetableApplication;
@@ -12,16 +13,14 @@ namespace UserInterface
     public class FiltersInputController : Controller
     {
         private readonly FiltersPageInterface appInterface;
-        private readonly IReadOnlyDictionary<string, Func<IEnumerable<string>, string, PartialViewResult>> filterToInputForm;
+        private readonly DependenciesDictionary<FilterGetterParameters, FilterPartialViewData, IDictionaryType<FilterGetterParameters, FilterPartialViewData>> filtersInputProvider;
 
-        public FiltersInputController(FiltersPageInterface appInterface)
+        public FiltersInputController(
+            FiltersPageInterface appInterface, 
+            DependenciesDictionary<FilterGetterParameters, FilterPartialViewData, IDictionaryType<FilterGetterParameters, FilterPartialViewData>> filtersInputProvider)
         {
             this.appInterface = appInterface;
-            filterToInputForm = new Dictionary<string, Func<IEnumerable<string>, string, PartialViewResult>>()
-            {
-                { "Working days amount", GetWorkingDaysCountFilter },
-                { "Choose working days in week", GetSpecifiedWorkingDaysFilter }
-            };
+            this.filtersInputProvider = filtersInputProvider;
         }
         
         public IActionResult FiltersInput(string uid)
@@ -34,7 +33,7 @@ namespace UserInterface
         {
             var model = new FilterChoose 
             { 
-                Categories = new SelectList(filterToInputForm.Keys), 
+                Categories = new SelectList(filtersInputProvider.GetTypes()), 
                 UserId = userId, 
                 FilterId = elementId
             };
@@ -45,26 +44,8 @@ namespace UserInterface
         {
             var user = new User() {Id = userId};
             var specifiedFilters = appInterface.GetTeachersNameForFilters(user);
-            return filterToInputForm[filterName](specifiedFilters, elementId);
-        }
-        
-        public PartialViewResult GetWorkingDaysCountFilter(IEnumerable<string> specifiedFilters, string elementId)
-        {
-            var userFilters = new UserFilters() {Filters = specifiedFilters, Index = elementId};
-            return PartialView("_DaysCountFilter", userFilters);
-        }
-
-        public PartialViewResult GetSpecifiedWorkingDaysFilter(IEnumerable<string> specifiedFilters, string elementId)
-        {
-            var weekDayFilters = new UserWeekdayFilters() 
-            { 
-                WeekDays = Enum.GetValues(typeof(DayOfWeek))
-                    .OfType<DayOfWeek>()
-                    .Skip(1),
-                Filters = specifiedFilters, 
-                Index = elementId
-            };
-            return PartialView("_DaysFilter", weekDayFilters);
+            var (partialViewName, model) = filtersInputProvider.GetResult(filterName, new(specifiedFilters, elementId));
+            return PartialView(partialViewName, model);
         }
         
         [HttpPost]

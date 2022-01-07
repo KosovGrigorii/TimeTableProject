@@ -31,6 +31,12 @@ namespace UserInterface
 
             ConfigureDatabase(services);
 
+            services
+                .AddSingleton<DependenciesDictionary<FilterGetterParameters, FilterPartialViewData,
+                    IDictionaryType<FilterGetterParameters, FilterPartialViewData>>>();
+            services.AddSingleton<IDictionaryType<FilterGetterParameters, FilterPartialViewData>, FilterDays>();
+            services.AddSingleton<IDictionaryType<FilterGetterParameters, FilterPartialViewData>, FilterDaysCount>();
+            
             services.AddSingleton<TimespanDbConverter>(); 
             services.AddSingleton<TimeslotDbConverter>(); 
             services.AddSingleton<TimeDurationDbConverter>();

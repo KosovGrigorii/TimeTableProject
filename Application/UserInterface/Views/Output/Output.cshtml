@@ -11,6 +11,8 @@
     <div class="loading loading--full-height"></div>
 </div>
 
+<div id="errorid" style="display:none">Error</div>
+
 <div id="downloadDiv" style="display:none">
     @using (Html.BeginForm("DownloadFile", "Output", new { uid = Model.UserID }))
     {
@@ -26,23 +28,40 @@
 </div>
 
 <script>
-    function checkCompleteness() {
-         $.ajax({
-         url: '@Url.Action("CheckCompleteness", "Output", new { uid = Model.UserID })',
-         timeout: 1000,
-         success: function () {
-             document.getElementById('loading').style.display = 'none';
-             document.getElementById('downloadDiv').style.display = 'block';
-         },
-         error: function ()
-         {
-             setTimeout(checkCompleteness, 15000);
-         }
-      });
-    }
-    
-    window.onload = function ()
-    {
-        checkCompleteness();
-    }
+function showElement(elementId, style) {
+  document.getElementById(elementId).style.display = style;
+}
+
+function changeView(elementId) {
+  showElement('loading', 'none');
+  showElement(elementId, 'block');
+}
+
+function showError(data) {
+  console.error('Error', data);
+  changeView('errorid');
+}
+
+function checkCompleteness() {
+  $.ajax({
+    url: '@Url.Action("CheckCompleteness", "Output", new { uid = Model.UserID })',
+    timeout: 1000,
+    success(data) {
+      if (data.isCompleted === true) {
+        changeView('downloadDiv');
+      } else if (data.isCompleted === false) {
+        setTimeout(checkCompleteness, 15000);
+      } else {
+        showError(data);
+      }
+    },
+    error(data) {
+      showError(data);
+    },
+  });
+}
+
+window.onload = function () {
+  checkCompleteness();
+};
 </script>
