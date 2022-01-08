@@ -1,22 +1,26 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Accord.Math;
+using Infrastructure;
 
 namespace TimetableDomain
 {
-    public class GraphAlgorithm : ITimetableMaker
+    public class GraphAlgorithm : IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>
     {
-        public Algorithm Algorithm { get; }
         private readonly FilterHandler handler;
+        public string Name => "Graph";
 
         public GraphAlgorithm(FilterHandler handler)
         {
             this.handler = handler;
-            Algorithm = new Algorithm("Graph");
         }
         
-        public IEnumerable<TimeSlot> GetTimetable(AlgoritmInput input)
+        public IEnumerable<TimeSlot> GetResult(AlgoritmInput parameters)
+        {
+            return GetTimetable(parameters);
+        }
+        
+        private IEnumerable<TimeSlot> GetTimetable(AlgoritmInput input)
         {
             var teacherTime = input.Courses.Select(c => c.Teacher).Distinct()
                 .ToDictionary(t => t, t => new List<(int, TimeSpan)>());

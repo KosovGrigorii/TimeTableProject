@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Accord.Genetic;
 using Castle.Core.Internal;
 using Firebase.Database;
@@ -42,8 +43,9 @@ namespace UserInterface
             services.AddSingleton<TimeslotDbConverter>(); 
             services.AddSingleton<TimeDurationDbConverter>();
             services.AddSingleton<SlotInfoDbConverter>();
-
-            services.AddSingleton<AlgorithmsDictionary>();
+            
+            services.AddSingleton<DependenciesDictionary<AlgoritmInput, IEnumerable<TimeSlot>,
+                IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>>>();
             services.AddScoped<FiltersPageInterface>();
             services.AddScoped<TimetableResultsInterface>();
             services.AddScoped<InputRecipient>();
@@ -59,12 +61,11 @@ namespace UserInterface
             services.AddSingleton<InputProvider>(); //Input
 
             services.AddSingleton<ConverterToAlgorithmInput>();
-            services.AddSingleton<ITimetableMaker, GeneticAlgorithm>();
-            services.AddSingleton<ITimetableMaker, GraphAlgorithm>();
+            services.AddSingleton<IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>, GeneticAlgorithm>();
+            services.AddSingleton<IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>, GraphAlgorithm>();
             services.AddSingleton<FilterHandler>();
             services.AddSingleton<EliteSelection>();
-            services.AddSingleton<FitnessFunction>();
-            services.AddSingleton<AlgorithmChooser>();    //Algo
+            services.AddSingleton<FitnessFunction>();    //Algo
             
             services
                 .AddSingleton<DependenciesDictionary<ParticularTimetable, byte[],
