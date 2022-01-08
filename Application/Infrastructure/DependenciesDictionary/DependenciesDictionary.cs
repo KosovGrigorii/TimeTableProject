@@ -16,6 +16,6 @@ namespace Infrastructure
             => implementatinsDict.Keys;
 
         public TOut GetResult(string name, TIn parameters)
-            => implementatinsDict[name].GetImplementation(parameters);
+            => implementatinsDict[name].GetResult(parameters);
     }
 }

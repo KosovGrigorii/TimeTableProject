@@ -8,7 +8,7 @@ namespace UserInterface
     class FilterDaysCount : IDictionaryType<FilterGetterParameters, FilterPartialViewData>
     {
         public string Name => "Working days amount";
-        public FilterPartialViewData GetImplementation(FilterGetterParameters parameters)
+        public FilterPartialViewData GetResult(FilterGetterParameters parameters)
         {
             var (teachers, elementId) = parameters;
             var userFilters = new UserFilters() {Filters = teachers, Index = elementId};

@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Infrastructure;
 using Microsoft.AspNetCore.Http;
 using TimetableApplication;
 
-
-
 namespace UserInterface
 {
-    class TxtInputParser : IInputParser
+    class TxtInputParser : IDictionaryType<IFormFile, UserInput>
     {
-        public ParserExtension Extension{ get; }
-
-        public TxtInputParser()
-        {
-            Extension = new ParserExtension("txt");
-        }
+        public string Name => "txt";
         
-        public UserInput ParseFile(IFormFile file)
+        public UserInput GetResult(IFormFile parameters)
+        {
+            return ParseFile(parameters);
+        }
+
+        private UserInput ParseFile(IFormFile file)
         {
             using var stream = file.OpenReadStream();
             var slots = new List<SlotInfo>();
@@ -35,12 +34,12 @@ namespace UserInterface
                         break;
                     }
                     var slot = line.Split('|');
-                    slots.Add(new SlotInfo
+                    slots.Add(new ()
                     {
-                        Course = slot[0].ToString(),
-                        Group = slot[1].ToString(),
-                        Teacher = slot[2].ToString(),
-                        Room = slot[3].ToString()
+                        Course = slot[0],
+                        Group = slot[1],
+                        Teacher = slot[2],
+                        Room = slot[3]
                     });
                     line = reader.ReadLine();
                 }
@@ -50,10 +49,10 @@ namespace UserInterface
             {
                 throw new ArgumentException(".xlsx file was filled out wrongly");
             }
-            return new UserInput() {CourseSlots = slots, TimeSchedule = times};
+            return new () {CourseSlots = slots, TimeSchedule = times};
         }
 
-        public Times GetTimes(StreamReader reader)
+        private Times GetTimes(StreamReader reader)
         {
             var info = reader.ReadLine().Split();
             var (begin, end) = GetSpan(info[0], info[1]);
@@ -80,7 +79,7 @@ namespace UserInterface
             return times;
         }
 
-        public (double, double) GetSpan(string begin, string end)
+        private (double, double) GetSpan(string begin, string end)
         {
             var temp = begin.Split();
             begin = temp[temp.Length - 1];

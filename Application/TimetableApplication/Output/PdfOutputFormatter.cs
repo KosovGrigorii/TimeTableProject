@@ -1,20 +1,19 @@
 using System.Collections.Generic;
 using System.IO;
+using Infrastructure;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 
 namespace TimetableApplication
 {
-    public class PdfOutputFormatter: IOutputFormatter
+    public class PdfOutputFormatter: IDictionaryType<ParticularTimetable, byte[]>
     {
-        public OutputExtension Extension { get; }
+        public string Name => "pdf";
 
-        public PdfOutputFormatter()
-        {
-            Extension = new OutputExtension("pdf");
-        }
+        public byte[] GetResult(ParticularTimetable parameters)
+            => MakeOutputFile(parameters.Table);
 
-        public byte[] MakeOutputFile(Dictionary<string, string[,]> tables)
+        internal byte[] MakeOutputFile(Dictionary<string, string[,]> tables)
         {
             var doc = new Document();
             using var resultStream = new MemoryStream();

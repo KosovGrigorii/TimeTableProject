@@ -30,7 +30,7 @@ namespace UserInterface
         
         public ActionResult CheckCompleteness(string uid)
         {
-            return Ok(new { isCompleted = outputExecutor.IsTimetableReadyFor(new (){Id = uid}) });
+            return Ok(new { isCompleted = outputExecutor.IsTimetableReadyFor(new (uid)) });
         }
 
         public FileResult DownloadFile(string extension, string uid)
@@ -39,8 +39,7 @@ namespace UserInterface
             if (!translated)
                 RedirectToAction("ErrorAction", uid);
 
-            var user = new User() {Id = uid};
-            var fileByteArray = outputExecutor.GetOutput(user, extension);
+            var fileByteArray = outputExecutor.GetOutput(new (uid), extension);
             return File(fileByteArray, "application/octet-stream", $"Timetable.{extension.ToLower()}");
         }
 

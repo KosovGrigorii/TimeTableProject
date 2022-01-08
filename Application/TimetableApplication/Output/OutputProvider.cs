@@ -1,24 +1,26 @@
 using System.Collections.Generic;
-using System.IO;
+using Infrastructure;
 using TimetableDomain;
 
 namespace TimetableApplication
 {
     public class OutputProvider
     {
-        private readonly FormatterChooser chooser;
         private readonly OutputConverter converter;
+        private readonly DependenciesDictionary<ParticularTimetable, byte[], IDictionaryType<ParticularTimetable, byte[]>> dictionary;
 
-        public OutputProvider(FormatterChooser chooser, OutputConverter converter)
+        public OutputProvider(
+            OutputConverter converter,
+            DependenciesDictionary<ParticularTimetable, byte[], IDictionaryType<ParticularTimetable, byte[]>> dictionary)
         {
-            this.chooser = chooser;
             this.converter = converter;
+            this.dictionary = dictionary;
         }
+        
+        public IEnumerable<string> GetOutputExtensions()
+            => dictionary.GetTypes();
 
         public byte[] GetOutputFileStream(string extension, IEnumerable<TimeSlot> timeslots)
-        {
-            var formatter = chooser.ChooseFormatter(extension);
-            return formatter.MakeOutputFile(converter.ConvertTimeslotsToDictionary(timeslots));
-        }
+            => dictionary.GetResult(extension, new (converter.ConvertTimeslotsToDictionary(timeslots)));
     }
 }

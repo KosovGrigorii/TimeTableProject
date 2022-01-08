@@ -1,21 +1,22 @@
 using System;
 using System.Collections.Generic;
 using ExcelDataReader;
+using Infrastructure;
 using Microsoft.AspNetCore.Http;
 using TimetableApplication;
 
 namespace UserInterface
 {
-    public class XlsxInputParser : IInputParser
+    public class XlsxInputParser : IDictionaryType<IFormFile, UserInput>
     {
-        public ParserExtension Extension{ get; }
-
-        public XlsxInputParser()
-        {
-            Extension = new ParserExtension("xlsx");
-        }
+        public string Name => "xlsx";
         
-        public UserInput ParseFile(IFormFile file)
+        public UserInput GetResult(IFormFile parameters)
+        {
+            return ParseFile(parameters);
+        }
+
+        private UserInput ParseFile(IFormFile file)
         {
             using var stream = file.OpenReadStream();
             var slots = new List<SlotInfo>();
@@ -48,10 +49,10 @@ namespace UserInterface
                 throw new ArgumentException(".xlsx file was filled out wrongly");
             }
 
-            return new UserInput() {CourseSlots = slots, TimeSchedule = times};
+            return new () {CourseSlots = slots, TimeSchedule = times};
         }
-        
-        public Times GetTimes(IExcelDataReader reader)
+
+        private Times GetTimes(IExcelDataReader reader)
         {
             reader.Read();
             var (begin, end) = GetSpan(reader.GetValue(0).ToString(), reader.GetValue(1).ToString());
@@ -80,7 +81,7 @@ namespace UserInterface
             return times;
         }
 
-        public (double, double) GetSpan(string begin, string end)
+        private (double, double) GetSpan(string begin, string end)
         {
             var temp = begin.Split();
             begin = temp[temp.Length - 1];

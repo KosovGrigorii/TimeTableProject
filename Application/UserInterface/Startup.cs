@@ -4,6 +4,7 @@ using Firebase.Database;
 using Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -43,7 +44,6 @@ namespace UserInterface
             services.AddSingleton<SlotInfoDbConverter>();
 
             services.AddSingleton<AlgorithmsDictionary>();
-            services.AddSingleton<OutputFormattersDictionary>();
             services.AddScoped<FiltersPageInterface>();
             services.AddScoped<TimetableResultsInterface>();
             services.AddScoped<InputRecipient>();
@@ -52,10 +52,10 @@ namespace UserInterface
             services.AddScoped<TimetableTaskAdder>();
             services.AddScoped<OutputExecutor>();  //App
 
-            services.AddSingleton<ExtensionDictionary>();
-            services.AddSingleton<IInputParser, XlsxInputParser>();
-            services.AddSingleton<IInputParser, TxtInputParser>();
-            services.AddSingleton<ParserChooser>();
+            services
+                .AddSingleton<DependenciesDictionary<IFormFile, UserInput, IDictionaryType<IFormFile, UserInput>>>();
+            services.AddSingleton<IDictionaryType<IFormFile, UserInput>, XlsxInputParser>();
+            services.AddSingleton<IDictionaryType<IFormFile, UserInput>, TxtInputParser>();
             services.AddSingleton<InputProvider>(); //Input
 
             services.AddSingleton<ConverterToAlgorithmInput>();
@@ -66,10 +66,12 @@ namespace UserInterface
             services.AddSingleton<FitnessFunction>();
             services.AddSingleton<AlgorithmChooser>();    //Algo
             
-            services.AddSingleton<IOutputFormatter, XlsxOutputFormatter>();
-            services.AddSingleton<IOutputFormatter, PdfOutputFormatter>();
+            services
+                .AddSingleton<DependenciesDictionary<ParticularTimetable, byte[],
+                    IDictionaryType<ParticularTimetable, byte[]>>>();
+            services.AddSingleton<IDictionaryType<ParticularTimetable, byte[]>, XlsxOutputFormatter>();
+            services.AddSingleton<IDictionaryType<ParticularTimetable, byte[]>, PdfOutputFormatter>();
             services.AddSingleton<OutputConverter>();
-            services.AddSingleton<FormatterChooser>(); 
             services.AddSingleton<OutputProvider>();          //Output
 
             services.AddHostedService<QueuedHostedService>();

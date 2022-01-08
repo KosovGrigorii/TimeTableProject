@@ -10,7 +10,7 @@ namespace UserInterface
     class FilterDays: IDictionaryType<FilterGetterParameters, FilterPartialViewData>
     {
         public string Name => "Choose working days in week";
-        public FilterPartialViewData GetImplementation(FilterGetterParameters parameters)
+        public FilterPartialViewData GetResult(FilterGetterParameters parameters)
         {
             var (teachers, elementId) = parameters;
             var weekDayFilters = new UserWeekdayFilters() 

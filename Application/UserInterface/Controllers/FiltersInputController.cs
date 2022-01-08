@@ -1,10 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using TimetableApplication;
 using UserInterface.Models;
 
@@ -25,7 +22,7 @@ namespace UserInterface
         
         public IActionResult FiltersInput(string uid)
         {
-            var model = new FiltersPageData() { Algorithms = new SelectList(appInterface.GetAlgorithmNames()), UserID = uid };
+            var model = new FiltersPageData() { Algorithms = new (appInterface.GetAlgorithmNames()), UserID = uid };
             return View(model);
         }
         
@@ -33,7 +30,7 @@ namespace UserInterface
         {
             var model = new FilterChoose 
             { 
-                Categories = new SelectList(filtersInputProvider.GetTypes()), 
+                Categories = new (filtersInputProvider.GetTypes()), 
                 UserId = userId, 
                 FilterId = elementId
             };
@@ -42,8 +39,7 @@ namespace UserInterface
 
         public PartialViewResult ChooseSingleFilter(string filterName, string userId, string elementId)
         {
-            var user = new User() {Id = userId};
-            var specifiedFilters = appInterface.GetTeachersNameForFilters(user);
+            var specifiedFilters = appInterface.GetTeachersNameForFilters(new (userId));
             var (partialViewName, model) = filtersInputProvider.GetResult(filterName, new(specifiedFilters, elementId));
             return PartialView(partialViewName, model);
         }
@@ -55,8 +51,7 @@ namespace UserInterface
             var algoAvailable = appInterface.GetAlgorithmNames().Contains(algorithm);
             if (!algoAvailable)
                 return View("ErrorPage");
-            var user = new User() {Id = uid};
-            appInterface.AddTimetableMakingTask(user, algorithm, applicationFilters);
+            appInterface.AddTimetableMakingTask(new (uid), algorithm, applicationFilters);
             return RedirectToAction("ToOutputPage", new { uid = uid });
         }
         

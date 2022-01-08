@@ -28,7 +28,6 @@ namespace UserInterface
         public IActionResult FileFormUpload()
         {
             var uid = Guid.NewGuid().ToString();
-            var user = new User() {Id = uid};
             
             var fileInfo = Request.Form.Files[0];
             var extension = Path.GetExtension(fileInfo.FileName).Split('.').Last();
@@ -37,7 +36,7 @@ namespace UserInterface
                 return View("ErrorFileFormat", '.' + string.Join(", .", inputProvider.GetExtensions()));
 
             var userInput = inputProvider.ParseInput(fileInfo, extension);
-            appInputRecipient.SaveInput(user, userInput.CourseSlots, userInput.TimeSchedule);
+            appInputRecipient.SaveInput(new (uid), userInput.CourseSlots, userInput.TimeSchedule);
             
             return RedirectToAction("ToFiltersInput", new { uid = uid});
         }

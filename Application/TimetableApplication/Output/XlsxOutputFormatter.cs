@@ -1,19 +1,18 @@
 using System.Collections.Generic;
+using Infrastructure;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 
 namespace TimetableApplication
 {
-    public class XlsxOutputFormatter: IOutputFormatter
+    public class XlsxOutputFormatter: IDictionaryType<ParticularTimetable, byte[]>
     {
-        public OutputExtension Extension { get; }
+        public string Name => "xlsx";
 
-        public XlsxOutputFormatter()
-        {
-            Extension = new OutputExtension("xlsx");
-        }
+        public byte[] GetResult(ParticularTimetable parameters)
+            => MakeOutputFile(parameters.Table);
         
-        public byte[] MakeOutputFile(Dictionary<string, string[,]> tables)
+        private byte[] MakeOutputFile(Dictionary<string, string[,]> tables)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using var package = new ExcelPackage();
