@@ -2,23 +2,27 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Accord.Genetic;
+using Infrastructure;
 
 namespace TimetableDomain
 {
-    public class GeneticAlgorithm : ITimetableMaker
+    public class GeneticAlgorithm : IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>
     {
-        public Algorithm Algorithm { get; }
+        public string Name => "Genetic";
         private readonly EliteSelection eliteSelection;
         private readonly FitnessFunction fitnessFunction;
-
+        
         public GeneticAlgorithm(EliteSelection eliteSelection, FitnessFunction fitnessFunction)
         {
             this.eliteSelection = eliteSelection;
             this.fitnessFunction = fitnessFunction;
-            Algorithm = new Algorithm("Genetic");
         }
-        
-        public IEnumerable<TimeSlot> GetTimetable(AlgoritmInput input)
+        public IEnumerable<TimeSlot> GetImplementation(AlgoritmInput parameters)
+        {
+            return GetTimetable(parameters);
+        }
+
+        private IEnumerable<TimeSlot> GetTimetable(AlgoritmInput input)
         {
             fitnessFunction.SetTeachersFilters(input.TeacherFilters);
             
