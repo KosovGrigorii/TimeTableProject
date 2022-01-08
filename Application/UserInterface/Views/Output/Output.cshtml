@@ -50,7 +50,7 @@ function checkCompleteness() {
       if (data.isCompleted === true) {
         changeView('downloadDiv');
       } else if (data.isCompleted === false) {
-        setTimeout(checkCompleteness, 15000);
+        setTimeout(checkCompleteness, 5000);
       } else {
         showError(data);
       }

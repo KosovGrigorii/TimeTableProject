@@ -7,7 +7,7 @@ namespace TimetableApplication
 {
     public class TimetableLauncher
     {
-        private readonly ConverterToAlgoritmInput algoInputConverter;
+        private readonly ConverterToAlgorithmInput algoInputConverter;
         private readonly AlgorithmChooser chooser;
         private readonly SlotInfoDbConverter slotConverter;
         private readonly TimeDurationDbConverter durationConverter;
@@ -18,7 +18,7 @@ namespace TimetableApplication
         private readonly IDatabaseWrapper<string, DatabaseTimeSchedule> timeScheduleWrapper;
         private readonly IDatabaseWrapper<string, DatabaseLessonMinutesDuration> durationWrapper;
         
-        public TimetableLauncher(ConverterToAlgoritmInput algoInputConverter,
+        public TimetableLauncher(ConverterToAlgorithmInput algoInputConverter,
             AlgorithmChooser chooser,
             SlotInfoDbConverter slotConverter,
             TimeDurationDbConverter durationConverter,

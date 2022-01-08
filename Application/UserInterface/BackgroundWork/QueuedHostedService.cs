@@ -6,15 +6,15 @@ using TimetableApplication;
 
 namespace UserInterface
 {
-    public class QueuedHostedService : BackgroundService
+    public class QueuedHostedService : BackgroundService, IBackgroundWorker
     {
+        public IBackgroundTaskQueue TaskQueue { get; }
+
         public QueuedHostedService(IBackgroundTaskQueue taskQueue)
         {
             TaskQueue = taskQueue;
         }
-
-        public IBackgroundTaskQueue TaskQueue { get; }
-
+        
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             await BackgroundProcessing(stoppingToken);

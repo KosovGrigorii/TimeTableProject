@@ -58,7 +58,7 @@ namespace UserInterface
             services.AddSingleton<ParserChooser>();
             services.AddSingleton<InputProvider>(); //Input
 
-            services.AddSingleton<ConverterToAlgoritmInput>();
+            services.AddSingleton<ConverterToAlgorithmInput>();
             services.AddSingleton<ITimetableMaker, GeneticAlgorithm>();
             services.AddSingleton<ITimetableMaker, GraphAlgorithm>();
             services.AddSingleton<FilterHandler>();
@@ -73,6 +73,7 @@ namespace UserInterface
             services.AddSingleton<OutputProvider>();          //Output
 
             services.AddHostedService<QueuedHostedService>();
+            services.AddSingleton<IBackgroundWorker, QueuedHostedService>();
             services.AddSingleton<IBackgroundTaskQueue>(ctx => new BackgroundTaskQueue(100));
         }
 

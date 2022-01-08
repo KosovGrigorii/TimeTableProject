@@ -28,35 +28,32 @@
     </div>
 }
 
-
-
 <script>
 function ChooseFilter(div_to_insert, input, uid, insert_index) {
-    $.ajax({
-        url: '@Url.Action("ChooseSingleFilter", "FiltersInput")',
-        data: {filterName: input, userId: uid, elementId: insert_index},
-        type: "POST",
-        success: function(data) {
-            $('#' + div_to_insert).html(data);
-        }
-    })
+  $.ajax({
+    url: '@Url.Action("ChooseSingleFilter", "FiltersInput")',
+    data: { filterName: input, userId: uid, elementId: insert_index },
+    type: 'POST',
+    success(data) {
+      $(`#${div_to_insert}`).html(data);
+    },
+  });
 }
 
-function AddInputDiv(){
-    var filterForm = document.getElementById('filtersForm');
-    var div = document.createElement('div');
-    div.classList.add('filter');
-    var insert_id = filterForm.childElementCount.toString();
-    div.id = insert_id;
-    filterForm.appendChild(div);
-    $.ajax({
-        url: '@Url.Action("_FilterChoosingForm", "FiltersInput", new { userId = Model.UserID })',
-        data: {elementId: insert_id},
-        success: function (data) {
-            $('#' + insert_id).html(data);
-        }
-    })
-    return false;
+function AddInputDiv() {
+  const filterForm = document.getElementById('filtersForm');
+  const div = document.createElement('div');
+  div.classList.add('filter');
+  const insert_id = filterForm.childElementCount.toString();
+  div.id = insert_id;
+  filterForm.appendChild(div);
+  $.ajax({
+    url: '@Url.Action("_FilterChoosingForm", "FiltersInput", new { userId = Model.UserID })',
+    data: { elementId: insert_id },
+    success(data) {
+      $(`#${insert_id}`).html(data);
+    },
+  });
+  return false;
 }
-
 </script>

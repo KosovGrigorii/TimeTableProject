@@ -5,7 +5,7 @@ using TimetableDomain;
 
 namespace TimetableApplication
 {
-    public class ConverterToAlgoritmInput
+    public class ConverterToAlgorithmInput
     {
         public AlgoritmInput Convert(IEnumerable<SlotInfo> inputCourses, IEnumerable<Filter> filters,
             IEnumerable<TimeSpan> lessonStarts, int lessonDurationMinutes)
@@ -24,7 +24,7 @@ namespace TimetableApplication
                     ? new Teacher(x.Name, x.DaysCount.Value) 
                     : new Teacher(x.Name, x.Days));
             
-            return new AlgoritmInput()
+            return new ()
             {
                 Courses = courses,
                 TeacherFilters = teachers,
