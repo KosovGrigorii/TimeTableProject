@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Infrastructure;
 using TimetableDomain;
 
 namespace TimetableApplication
 {
-    public class TimetableLauncher
+    public class TimetableTaskLauncher
     {
         private readonly ConverterToAlgorithmInput algoInputConverter;
         private readonly SlotInfoDbConverter slotConverter;
@@ -19,7 +21,7 @@ namespace TimetableApplication
         private readonly IDatabaseWrapper<string, DatabaseLessonMinutesDuration> durationWrapper;
         private readonly DependenciesDictionary<AlgoritmInput, IEnumerable<TimeSlot>, IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>> algorithmsDict;
 
-        public TimetableLauncher(ConverterToAlgorithmInput algoInputConverter,
+        public TimetableTaskLauncher(ConverterToAlgorithmInput algoInputConverter,
             SlotInfoDbConverter slotConverter,
             TimeDurationDbConverter durationConverter,
             TimespanDbConverter timespanConverter,
@@ -42,7 +44,7 @@ namespace TimetableApplication
             this.algorithmsDict = algorithmsDict;
         }
         
-        public void MakeTimetable(User user, string algorithmName, IEnumerable<Filter> filters)
+        public Task MakeTimetable(User user, string algorithmName, IEnumerable<Filter> filters)
         {
             var lessonStarts = timeScheduleWrapper.ReadBy(user.Id)
                 .Select(x => timespanConverter.DbClassToTimeSpan(x)).ToArray();
@@ -54,8 +56,15 @@ namespace TimetableApplication
             var lessonDuration = durationConverter.DbDurationToInt(durationWrapper.ReadBy(user.Id).First());
             
             var algoInput = algoInputConverter.Convert(courses, filters, lessonStarts, lessonDuration);
-            var timeslots = algorithmsDict.GetResult(algorithmName, algoInput);
-            timeslotWrapper.AddRange(user.Id, timeslots.Select(t => timeslotConverter.TimeslotToDatabaseClass(t, user.Id)));
+            var timetableTask = new Task(() =>
+            {
+                Thread.Sleep(5000);
+                var timeslots = algorithmsDict.GetResult(algorithmName, algoInput);
+                timeslotWrapper.AddRange(user.Id,
+                    timeslots.Select(t => timeslotConverter.TimeslotToDatabaseClass(t, user.Id)));
+            });
+            timetableTask.Start();
+            return timetableTask;
         }
     }
 }
