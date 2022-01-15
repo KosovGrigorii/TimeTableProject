@@ -28,7 +28,6 @@ namespace UserInterface
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
             services.AddMvc();
 
             ConfigureDatabase(services);
@@ -50,8 +49,7 @@ namespace UserInterface
             services.AddScoped<TimetableResultsInterface>();
             services.AddScoped<InputRecipient>();
             services.AddScoped<FilterNamesGetter>();
-            services.AddScoped<TimetableLauncher>();
-            services.AddScoped<TimetableTaskAdder>();
+            services.AddScoped<TimetableTaskLauncher>();
             services.AddScoped<OutputExecutor>();  //App
 
             services
@@ -74,10 +72,6 @@ namespace UserInterface
             services.AddSingleton<IDictionaryType<ParticularTimetable, byte[]>, PdfOutputFormatter>();
             services.AddSingleton<OutputConverter>();
             services.AddSingleton<OutputProvider>();          //Output
-
-            services.AddHostedService<QueuedHostedService>();
-            services.AddSingleton<IBackgroundWorker, QueuedHostedService>();
-            services.AddSingleton<IBackgroundTaskQueue>(ctx => new BackgroundTaskQueue(100));
         }
 
         private void ConfigureDatabase(IServiceCollection services)
