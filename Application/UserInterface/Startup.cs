@@ -31,47 +31,52 @@ namespace UserInterface
             services.AddMvc();
 
             ConfigureDatabase(services);
-
+            
+            //UI
+                //Filters
             services
                 .AddSingleton<DependenciesDictionary<FilterGetterParameters, FilterPartialViewData,
                     IDictionaryType<FilterGetterParameters, FilterPartialViewData>>>();
             services.AddSingleton<IDictionaryType<FilterGetterParameters, FilterPartialViewData>, FilterDays>();
             services.AddSingleton<IDictionaryType<FilterGetterParameters, FilterPartialViewData>, FilterDaysCount>();
-            
-            services.AddSingleton<TimespanDbConverter>(); 
-            services.AddSingleton<TimeslotDbConverter>(); 
-            services.AddSingleton<TimeDurationDbConverter>();
-            services.AddSingleton<SlotInfoDbConverter>();
-            
-            services.AddSingleton<DependenciesDictionary<AlgoritmInput, IEnumerable<TimeSlot>,
-                IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>>>();
-            services.AddScoped<FiltersPageInterface>();
-            services.AddScoped<TimetableResultsInterface>();
-            services.AddScoped<InputRecipient>();
-            services.AddScoped<FilterNamesGetter>();
-            services.AddScoped<TimetableTaskLauncher>();
-            services.AddScoped<OutputExecutor>();  //App
-
+                //InputParsers
             services
                 .AddSingleton<DependenciesDictionary<IFormFile, UserInput, IDictionaryType<IFormFile, UserInput>>>();
             services.AddSingleton<IDictionaryType<IFormFile, UserInput>, XlsxInputParser>();
             services.AddSingleton<IDictionaryType<IFormFile, UserInput>, TxtInputParser>();
-            services.AddSingleton<InputProvider>(); //Input
-
-            services.AddSingleton<ConverterToAlgorithmInput>();
-            services.AddSingleton<IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>, GeneticAlgorithm>();
-            services.AddSingleton<IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>, GraphAlgorithm>();
-            services.AddSingleton<FilterHandler>();
-            services.AddSingleton<EliteSelection>();
-            services.AddSingleton<FitnessFunction>();    //Algo
+            services.AddSingleton<InputProvider>();
             
+            //Application
+                //Layers connection
+            services.AddScoped<InputRecipient>();
+            services.AddScoped<FiltersPageInterface>();
+            services.AddScoped<FilterNamesGetter>();
+            services.AddScoped<TimetableResultsInterface>();
+            services.AddScoped<TimetableTaskLauncher>();
+            services.AddScoped<OutputExecutor>();
+                //Converters
+            services.AddSingleton<TimespanDbConverter>(); 
+            services.AddSingleton<TimeslotDbConverter>(); 
+            services.AddSingleton<TimeDurationDbConverter>();
+            services.AddSingleton<SlotInfoDbConverter>();
+                //Output
             services
                 .AddSingleton<DependenciesDictionary<ParticularTimetable, byte[],
                     IDictionaryType<ParticularTimetable, byte[]>>>();
             services.AddSingleton<IDictionaryType<ParticularTimetable, byte[]>, XlsxOutputFormatter>();
             services.AddSingleton<IDictionaryType<ParticularTimetable, byte[]>, PdfOutputFormatter>();
             services.AddSingleton<OutputConverter>();
-            services.AddSingleton<OutputProvider>();          //Output
+            services.AddSingleton<OutputProvider>();    
+
+            //Domain
+            services.AddSingleton<DependenciesDictionary<AlgoritmInput, IEnumerable<TimeSlot>,
+                IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>>>();
+            services.AddSingleton<IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>, GeneticAlgorithm>();
+            services.AddSingleton<IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>, GraphAlgorithm>();
+            services.AddSingleton<ConverterToAlgorithmInput>();
+            services.AddSingleton<FilterHandler>();
+            services.AddSingleton<EliteSelection>();
+            services.AddSingleton<FitnessFunction>();
         }
 
         private void ConfigureDatabase(IServiceCollection services)
