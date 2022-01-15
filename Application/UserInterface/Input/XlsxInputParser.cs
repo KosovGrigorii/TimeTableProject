@@ -4,24 +4,24 @@ using ExcelDataReader;
 using Infrastructure;
 using Microsoft.AspNetCore.Http;
 using TimetableApplication;
+using System.IO;
 
 namespace UserInterface
 {
-    public class XlsxInputParser : IDictionaryType<IFormFile, UserInput>
+    public class XlsxInputParser : IDictionaryType<Stream, UserInput>
     {
         public string Name => "xlsx";
         
-        public UserInput GetResult(IFormFile parameters)
+        public UserInput GetResult(Stream parameters)
         {
             return ParseFile(parameters);
         }
 
-        private UserInput ParseFile(IFormFile file)
+        private UserInput ParseFile(Stream stream)
         {
-            using var stream = file.OpenReadStream();
+            //using var stream = file.OpenReadStream();
             var slots = new List<SlotInfo>();
             var times = new Times() { LessonStarts = new List<TimeSpan>() };
-            stream.Position = 0;
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             using var reader = ExcelReaderFactory.CreateReader(stream);
             try
@@ -48,7 +48,6 @@ namespace UserInterface
             {
                 throw new ArgumentException(".xlsx file was filled out wrongly");
             }
-
             return new () {CourseSlots = slots, TimeSchedule = times};
         }
 

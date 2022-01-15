@@ -35,7 +35,7 @@ namespace UserInterface
             if (!availableExtension)
                 return View("ErrorFileFormat", '.' + string.Join(", .", inputProvider.GetExtensions()));
 
-            var userInput = inputProvider.ParseInput(fileInfo, extension);
+            var userInput = inputProvider.ParseInput(fileInfo.OpenReadStream(), extension);
             appInputRecipient.SaveInput(new (uid), userInput.CourseSlots, userInput.TimeSchedule);
             
             return RedirectToAction("ToFiltersInput", new { uid = uid});

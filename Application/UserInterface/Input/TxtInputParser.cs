@@ -7,21 +7,20 @@ using TimetableApplication;
 
 namespace UserInterface
 {
-    class TxtInputParser : IDictionaryType<IFormFile, UserInput>
+    class TxtInputParser : IDictionaryType<Stream, UserInput>
     {
         public string Name => "txt";
         
-        public UserInput GetResult(IFormFile parameters)
+        public UserInput GetResult(Stream parameters)
         {
             return ParseFile(parameters);
         }
 
-        private UserInput ParseFile(IFormFile file)
+        private UserInput ParseFile(Stream stream)
         {
-            using var stream = file.OpenReadStream();
+            //using var stream = new StreamReader(stream1) .OpenReadStream();
             var slots = new List<SlotInfo>();
             var times = new Times();
-            stream.Position = 0;
             using var reader = new StreamReader(stream);
             try
             {
@@ -34,7 +33,7 @@ namespace UserInterface
                         break;
                     }
                     var slot = line.Split('|');
-                    slots.Add(new ()
+                    slots.Add(new()
                     {
                         Course = slot[0],
                         Group = slot[1],
@@ -48,6 +47,14 @@ namespace UserInterface
             catch (NullReferenceException)
             {
                 throw new ArgumentException(".xlsx file was filled out wrongly");
+            }
+            if (slots.Count == 0)
+            {
+                throw new ArgumentException("No information about slots");
+            }
+            if (times.LessonStarts == null || times.Duration == 0)
+            {
+                throw new ArgumentException("No call schedule");
             }
             return new () {CourseSlots = slots, TimeSchedule = times};
         }

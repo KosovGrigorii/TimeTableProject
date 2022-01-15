@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Accord.Genetic;
 using Castle.Core.Internal;
 using Firebase.Database;
+using System.IO;
 using Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -56,8 +57,8 @@ namespace UserInterface
 
             services
                 .AddSingleton<DependenciesDictionary<IFormFile, UserInput, IDictionaryType<IFormFile, UserInput>>>();
-            services.AddSingleton<IDictionaryType<IFormFile, UserInput>, XlsxInputParser>();
-            services.AddSingleton<IDictionaryType<IFormFile, UserInput>, TxtInputParser>();
+            services.AddSingleton<IDictionaryType<Stream, UserInput>, XlsxInputParser>();
+            services.AddSingleton<IDictionaryType<Stream, UserInput>, TxtInputParser>();
             services.AddSingleton<InputProvider>(); //Input
 
             services.AddSingleton<ConverterToAlgorithmInput>();
