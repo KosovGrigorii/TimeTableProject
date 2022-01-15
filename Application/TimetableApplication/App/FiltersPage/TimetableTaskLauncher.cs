@@ -58,7 +58,6 @@ namespace TimetableApplication
             var algoInput = algoInputConverter.Convert(courses, filters, lessonStarts, lessonDuration);
             var timetableTask = new Task(() =>
             {
-                Thread.Sleep(5000);
                 var timeslots = algorithmsDict.GetResult(algorithmName, algoInput);
                 timeslotWrapper.AddRange(user.Id,
                     timeslots.Select(t => timeslotConverter.TimeslotToDatabaseClass(t, user.Id)));
