@@ -50,8 +50,6 @@ namespace UserInterface
             services.AddScoped<TimetableResultsInterface>();
             services.AddScoped<InputRecipient>();
             services.AddScoped<FilterNamesGetter>();
-            services.AddScoped<TimetableLauncher>();
-            services.AddScoped<TimetableTaskAdder>();
             services.AddScoped<OutputExecutor>();  //App
 
             services
@@ -74,10 +72,6 @@ namespace UserInterface
             services.AddSingleton<IDictionaryType<ParticularTimetable, byte[]>, PdfOutputFormatter>();
             services.AddSingleton<OutputConverter>();
             services.AddSingleton<OutputProvider>();          //Output
-
-            services.AddHostedService<QueuedHostedService>();
-            services.AddSingleton<IBackgroundWorker, QueuedHostedService>();
-            services.AddSingleton<IBackgroundTaskQueue>(ctx => new BackgroundTaskQueue(100));
         }
 
         private void ConfigureDatabase(IServiceCollection services)

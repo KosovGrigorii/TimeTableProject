@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Infrastructure;
@@ -10,7 +9,12 @@ namespace TimetableDomain
     [TestFixture]
     public class AlgorithmTests
     {
-        private readonly IEnumerable<IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>> algorithms;
+        private readonly IEnumerable<IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>> algorithms = 
+            new IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>[]
+        {
+            new GeneticAlgorithm(new (), new ()),
+            new GraphAlgorithm(new ())
+        };
         private readonly List<Course> fiveSameCourses = Enumerable.Range(0, 5).Select(x => new Course()
         {
             Group = "FirstGroup",
@@ -18,11 +22,6 @@ namespace TimetableDomain
             Teacher = "Teacher 1",
             Title = "Course 1"
         }).ToList();
-
-        public AlgorithmTests(IEnumerable<IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>> algorithms)
-        {
-            this.algorithms = algorithms;
-        }
         
         [Test]
         public void RegularInputNoFilters()
@@ -31,7 +30,7 @@ namespace TimetableDomain
             {
                 Courses = fiveSameCourses,
                 LessonLengthMinutes = 90,
-                LessonStarts = new List<TimeSpan>() {new TimeSpan(1, 30, 0)},
+                LessonStarts = new List<TimeSpan>() {new (9, 0, 0), new (10, 40, 0)},
                 TeacherFilters = Array.Empty<Teacher>()
             };
             foreach(var algorithm in algorithms)
@@ -50,16 +49,14 @@ namespace TimetableDomain
                 }
                 courseList.Add(course);
             }
-            
-            var lessonStarts = new[] {input.LessonStarts};
+
+            var lessonStarts = input.LessonStarts.ToArray();
             foreach (var timeslot in timeslots)
             {
                 Assert.Contains(timeslot.Start, lessonStarts, $"Start time for course is not valid: {timeslot.Start}");
-                Assert.Contains(timeslot.End - TimeSpan.FromMinutes(input.LessonLengthMinutes), lessonStarts, 
-                    $"End time with lesson duration {input.LessonLengthMinutes} minutes is not valid: {timeslot.End}");
                 AssertNoNonexistentCourses(groupToCourses, timeslot);
-                AssertNoUnaccountedCourses(groupToCourses);
             }
+            AssertNoUnaccountedCourses(groupToCourses);
         }
 
         private void AssertNoNonexistentCourses(IReadOnlyDictionary<string, List<Course>> groupToCourses, TimeSlot timeslot)
