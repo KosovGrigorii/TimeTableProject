@@ -36,6 +36,20 @@ namespace TimetableDomain
             foreach(var algorithm in algorithms)
                 AssertCreatesValidTimetable(input, algorithm.GetResult(input));
         }
+        
+        [Test]
+        public void ImpossibleFilterHandler()
+        {
+            var input = new AlgoritmInput()
+            {
+                Courses = fiveSameCourses,
+                LessonLengthMinutes = 90,
+                LessonStarts = new List<TimeSpan>() {new (9, 0, 0), new (10, 40, 0)},
+                TeacherFilters = new List<Teacher>(){new Teacher("Teacher 1", 1)}
+            };
+            foreach(var algorithm in algorithms)
+                AssertCreatesValidTimetable(input, algorithm.GetResult(input));
+        }
 
         private void AssertCreatesValidTimetable(AlgoritmInput input, IEnumerable<TimeSlot> timeslots)
         {

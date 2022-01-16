@@ -40,7 +40,7 @@ namespace TimetableDomain
                     var transformedCourse = handler.HandleFilters(teachersFilter[course.Teacher].WorkingDays, course,
                         courseTime);
                                 
-                    if (!transformedCourse.Equals(null))
+                    if (transformedCourse != null)
                     {
                         FindAvailablePosition(transformedCourse, courseTime, teacherTime,
                             groupTime, input.LessonStarts, teachersFilter);
