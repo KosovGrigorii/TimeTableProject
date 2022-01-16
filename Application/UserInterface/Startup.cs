@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Accord.Genetic;
 using Castle.Core.Internal;
 using Firebase.Database;
+using System.IO;
 using Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -40,10 +41,9 @@ namespace UserInterface
             services.AddSingleton<IDictionaryType<FilterGetterParameters, FilterPartialViewData>, FilterDays>();
             services.AddSingleton<IDictionaryType<FilterGetterParameters, FilterPartialViewData>, FilterDaysCount>();
                 //InputParsers
-            services
-                .AddSingleton<DependenciesDictionary<IFormFile, UserInput, IDictionaryType<IFormFile, UserInput>>>();
-            services.AddSingleton<IDictionaryType<IFormFile, UserInput>, XlsxInputParser>();
-            services.AddSingleton<IDictionaryType<IFormFile, UserInput>, TxtInputParser>();
+            services.AddSingleton<DependenciesDictionary<Stream, UserInput, IDictionaryType<Stream, UserInput>>>();
+            services.AddSingleton<IDictionaryType<Stream, UserInput>, XlsxInputParser>();
+            services.AddSingleton<IDictionaryType<Stream, UserInput>, TxtInputParser>();
             services.AddSingleton<InputProvider>();
             
             //Application

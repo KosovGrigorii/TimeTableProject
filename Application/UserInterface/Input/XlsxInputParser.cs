@@ -4,51 +4,47 @@ using ExcelDataReader;
 using Infrastructure;
 using Microsoft.AspNetCore.Http;
 using TimetableApplication;
+using System.IO;
 
 namespace UserInterface
 {
-    public class XlsxInputParser : IDictionaryType<IFormFile, UserInput>
+    public class XlsxInputParser : IDictionaryType<Stream, UserInput>
     {
         public string Name => "xlsx";
         
-        public UserInput GetResult(IFormFile parameters)
+        public UserInput GetResult(Stream parameters)
         {
             return ParseFile(parameters);
         }
 
-        private UserInput ParseFile(IFormFile file)
+        private UserInput ParseFile(Stream stream)
         {
-            using var stream = file.OpenReadStream();
             var slots = new List<SlotInfo>();
             var times = new Times() { LessonStarts = new List<TimeSpan>() };
-            stream.Position = 0;
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             using var reader = ExcelReaderFactory.CreateReader(stream);
-            try
+            while (reader.Read())
             {
-                while (reader.Read())
+                if (reader.GetValue(0) != null && reader.GetValue(0).ToString() == "-")
                 {
-                    if (reader.GetValue(0).ToString() == "-")
-                    {
-                        times = GetTimes(reader);
-                        break; 
-                    }
-                    slots.Add(new SlotInfo
-                    {
-                        Course = reader.GetValue(0).ToString(),
-                        Group = reader.GetValue(1).ToString(),
-                        Teacher = reader.GetValue(2).ToString(), 
-                        Room = reader.GetValue(3).ToString()
-                        
-                    });
+                    times = GetTimes(reader);
+                    break;
                 }
-                reader.Close();
-            }
-            catch (NullReferenceException)
-            {
-                throw new ArgumentException(".xlsx file was filled out wrongly");
-            }
+                if (reader.GetValue(0) == null || reader.GetValue(1) == null || reader.GetValue(2) == null || reader.GetValue(3) == null)
+                {
+                    slots.Add(null);
+                    break;
+                }
+                slots.Add(new SlotInfo
+                {
+                    Course = reader.GetValue(0).ToString(),
+                    Group = reader.GetValue(1).ToString(),
+                    Teacher = reader.GetValue(2).ToString(),
+                    Room = reader.GetValue(3).ToString()
 
+                });
+            }
+            reader.Close();
             return new () {CourseSlots = slots, TimeSchedule = times};
         }
 
@@ -60,8 +56,17 @@ namespace UserInterface
             var special_rest = new List<double>();
             var times = new Times() { Duration = duration, LessonStarts = new List<TimeSpan>() };
             var temp = 4;
-            while (reader.GetValue(temp) != null)
+            while (true)
             {
+                try
+                {
+                    reader.GetValue(temp);
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    break;
+                }
+                if (reader.GetValue(temp) == null) break;
                 var (start_rest, end_rest) = GetSpan(reader.GetValue(temp).ToString(), reader.GetValue(temp + 1).ToString());
                 special_rest.Add(start_rest);
                 special_rest.Add(end_rest);
