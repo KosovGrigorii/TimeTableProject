@@ -24,30 +24,24 @@ namespace UserInterface
             var times = new Times() { LessonStarts = new List<TimeSpan>() };
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             using var reader = ExcelReaderFactory.CreateReader(stream);
-            try
+            while (reader.Read())
             {
-                while (reader.Read())
+                if (reader.GetValue(0) == null) break;
+                if (reader.GetValue(0).ToString() == "-")
                 {
-                    if (reader.GetValue(0).ToString() == "-")
-                    {
-                        times = GetTimes(reader);
-                        break; 
-                    }
-                    slots.Add(new SlotInfo
-                    {
-                        Course = reader.GetValue(0).ToString(),
-                        Group = reader.GetValue(1).ToString(),
-                        Teacher = reader.GetValue(2).ToString(), 
-                        Room = reader.GetValue(3).ToString()
-                        
-                    });
+                    times = GetTimes(reader);
+                    break;
                 }
-                reader.Close();
+                slots.Add(new SlotInfo
+                {
+                    Course = reader.GetValue(0).ToString(),
+                    Group = reader.GetValue(1).ToString(),
+                    Teacher = reader.GetValue(2).ToString(),
+                    Room = reader.GetValue(3).ToString()
+
+                });
             }
-            catch (NullReferenceException)
-            {
-                throw new ArgumentException(".xlsx file was filled out wrongly");
-            }
+            reader.Close();
             return new () {CourseSlots = slots, TimeSchedule = times};
         }
 
@@ -59,8 +53,17 @@ namespace UserInterface
             var special_rest = new List<double>();
             var times = new Times() { Duration = duration, LessonStarts = new List<TimeSpan>() };
             var temp = 4;
-            while (reader.GetValue(temp) != null)
+            while (true)
             {
+                try
+                {
+                    reader.GetValue(temp);
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    break;
+                }
+                if (reader.GetValue(temp) == null) break;
                 var (start_rest, end_rest) = GetSpan(reader.GetValue(temp).ToString(), reader.GetValue(temp + 1).ToString());
                 special_rest.Add(start_rest);
                 special_rest.Add(end_rest);

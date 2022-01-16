@@ -22,33 +22,26 @@ namespace UserInterface
             var slots = new List<SlotInfo>();
             var times = new Times();
             using var reader = new StreamReader(stream);
-            try
+            var line = reader.ReadLine();
+            while (line != null)
             {
-                var line = reader.ReadLine();
-                while (line != null)
+                if (line == "-")
                 {
-                    if (line == "-")
-                    {
-                        times = GetTimes(reader);
-                        break;
-                    }
-                    var slot = line.Split('|');
-                    slots.Add(new()
-                    {
-                        Course = slot[0],
-                        Group = slot[1],
-                        Teacher = slot[2],
-                        Room = slot[3]
-                    });
-                    line = reader.ReadLine();
+                    times = GetTimes(reader);
+                    break;
                 }
-                reader.Close();
+                var slot = line.Split('|');
+                slots.Add(new()
+                {
+                    Course = slot[0],
+                    Group = slot[1],
+                    Teacher = slot[2],
+                    Room = slot[3]
+                });
+                line = reader.ReadLine();
             }
-            catch (NullReferenceException)
-            {
-                throw new ArgumentException(".xlsx file was filled out wrongly");
-            }
-            return new () {CourseSlots = slots, TimeSchedule = times};
+            reader.Close();
+            return new() { CourseSlots = slots, TimeSchedule = times };
         }
 
         private Times GetTimes(StreamReader reader)

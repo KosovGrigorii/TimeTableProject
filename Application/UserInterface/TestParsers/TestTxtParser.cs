@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using System.IO;
 using TimetableApplication;
@@ -10,7 +9,7 @@ namespace UserInterface
 {
 
     [TestFixture]
-    public class TestParsers
+    public class TestTxtParser
     {
         private bool CheckResult(UserInput expected, UserInput result)
         {
@@ -43,7 +42,7 @@ namespace UserInterface
             var parser = new TxtInputParser();
             var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
             exePath = exePath.Take(exePath.Length - 4).ToArray();
-            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\Запрос расписания1.txt");
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\txtInput1.txt");
             using FileStream stream = new FileStream(path, FileMode.Open);
             var result = parser.GetResult(stream);
             Assert.IsTrue(CheckResult(new UserInput() { CourseSlots = slots, TimeSchedule = times }, result));
@@ -61,7 +60,7 @@ namespace UserInterface
             var parser = new TxtInputParser();
             var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
             exePath = exePath.Take(exePath.Length - 4).ToArray();
-            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\Запрос расписания2.txt");
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\txtInput2.txt");
             using FileStream stream = new FileStream(path, FileMode.Open);
             var result = parser.GetResult(stream);
             Assert.IsTrue(CheckResult(new UserInput() { CourseSlots = slots, TimeSchedule = times }, result));
@@ -73,7 +72,7 @@ namespace UserInterface
             var parser = new TxtInputParser();
             var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
             exePath = exePath.Take(exePath.Length - 4).ToArray();
-            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\Запрос расписания3.txt");
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\txtInput3.txt");
             using FileStream stream = new FileStream(path, FileMode.Open);
             var result = parser.GetResult(stream);
             Assert.IsTrue(result.TimeSchedule.Duration == 0 && result.TimeSchedule.LessonStarts == null);
@@ -85,7 +84,7 @@ namespace UserInterface
             var parser = new TxtInputParser();
             var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
             exePath = exePath.Take(exePath.Length - 4).ToArray();
-            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\Запрос расписания4.txt");
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\txtInput4.txt");
             using FileStream stream = new FileStream(path, FileMode.Open);
             var result = parser.GetResult(stream);
             Assert.IsTrue(result.CourseSlots.Count() == 0);
@@ -97,7 +96,7 @@ namespace UserInterface
             var parser = new TxtInputParser();
             var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
             exePath = exePath.Take(exePath.Length - 4).ToArray();
-            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\Запрос расписания4.txt");
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\txtInput5.txt");
             using FileStream stream = new FileStream(path, FileMode.Open);
             var result = parser.GetResult(stream);
             Assert.IsTrue(result.CourseSlots.Count() == 0);
