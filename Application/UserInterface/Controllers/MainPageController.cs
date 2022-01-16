@@ -6,7 +6,6 @@ using System.Linq;
 using TimetableApplication;
 
 
-
 namespace UserInterface
 {
     public class MainPageController : Controller

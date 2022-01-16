@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Infrastructure;
 using TimetableDomain;
@@ -8,17 +7,17 @@ namespace TimetableApplication
     public class FiltersPageInterface
     {
         private FilterNamesGetter filtersGetter;
-        private readonly TimetableTaskAdder timetableTaskAdder;
+        private readonly TimetableTaskLauncher taskLauncher;
 
         private readonly
             DependenciesDictionary<AlgoritmInput, IEnumerable<TimeSlot>,
                 IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>> algorithmsDictionary;
         
-        public FiltersPageInterface(FilterNamesGetter filtersGetter, TimetableTaskAdder timetableTaskAdder, DependenciesDictionary<AlgoritmInput, IEnumerable<TimeSlot>, IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>> algorithmsDictionary)
+        public FiltersPageInterface(FilterNamesGetter filtersGetter, DependenciesDictionary<AlgoritmInput, IEnumerable<TimeSlot>, IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>> algorithmsDictionary, TimetableTaskLauncher taskLauncher)
         {
             this.filtersGetter = filtersGetter;
-            this.timetableTaskAdder = timetableTaskAdder;
             this.algorithmsDictionary = algorithmsDictionary;
+            this.taskLauncher = taskLauncher;
         }
 
         public IEnumerable<string> GetAlgorithmNames()
@@ -27,7 +26,7 @@ namespace TimetableApplication
         public IEnumerable<string> GetTeachersNameForFilters(User user)
             => filtersGetter.GetTeachers(user);
 
-        public void AddTimetableMakingTask(User user, string algorithm, IEnumerable<Filter> filters)
-            => timetableTaskAdder.AddTaskFor(user, algorithm, filters);
+        public async void AddTimetableMakingTask(User user, string algorithm, IEnumerable<Filter> filters)
+            => await taskLauncher.MakeTimetable(user, algorithm, filters);
     }
 }

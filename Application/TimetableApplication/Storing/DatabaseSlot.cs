@@ -1,4 +1,3 @@
-using System;
 using Infrastructure;
 
 namespace TimetableApplication
