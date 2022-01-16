@@ -75,7 +75,7 @@ namespace UserInterface
             var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\txtInput3.txt");
             using FileStream stream = new FileStream(path, FileMode.Open);
             var result = parser.GetResult(stream);
-            Assert.IsTrue(result.TimeSchedule.Duration == 0 && result.TimeSchedule.LessonStarts == null);
+            Assert.IsTrue(result.TimeSchedule.Duration == 0 && result.TimeSchedule.LessonStarts.Count() == 0);
         }
 
         [Test]
