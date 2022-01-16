@@ -1,4 +1,5 @@
 using System;
+using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Linq;
@@ -34,16 +35,16 @@ namespace UserInterface
             var availableExtension = inputProvider.IsExtensionAvailable(extension);
             if (!availableExtension)
                 return View("ErrorFileFormat", '.' + string.Join(", .", inputProvider.GetExtensions()));
-            var userInput = inputProvider.ParseInput(fileInfo.OpenReadStream(), extension);
-            if (userInput.CourseSlots.Count() == 0)
+
+            try
             {
-                throw new ArgumentException("No information about slots");
+                var userInput = inputProvider.ParseInput(fileInfo.OpenReadStream(), extension);
+                appInputRecipient.SaveInput(new (uid), userInput.CourseSlots, userInput.TimeSchedule);
             }
-            if (userInput.TimeSchedule.LessonStarts == null || userInput.TimeSchedule.Duration == 0)
+            catch (ArgumentException e)
             {
-                throw new ArgumentException("No call schedule");
+                return View("ErrorFileContent", e.Message);
             }
-            appInputRecipient.SaveInput(new (uid), userInput.CourseSlots, userInput.TimeSchedule);
             
             return RedirectToAction("ToFiltersInput", new { uid = uid});
         }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Infrastructure;
@@ -22,6 +23,12 @@ namespace UserInterface
             => extensionDictionary.GetTypes().Contains(extension);
 
         public UserInput ParseInput(Stream stream, string extension)
-            => extensionDictionary.GetResult(extension, stream);
+        {
+            var parsed = extensionDictionary.GetResult(extension, stream);
+            if (!parsed.CourseSlots.Any())
+                throw new ArgumentException("No information about slots");
+
+            return parsed;
+        }
     }
 }
