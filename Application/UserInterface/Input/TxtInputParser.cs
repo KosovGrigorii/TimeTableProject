@@ -20,7 +20,7 @@ namespace UserInterface
         {
             //using var stream = new StreamReader(stream1) .OpenReadStream();
             var slots = new List<SlotInfo>();
-            var times = new Times();
+            var times = new Times() { LessonStarts = new List<TimeSpan>() };
             using var reader = new StreamReader(stream);
             var line = reader.ReadLine();
             while (line != null)

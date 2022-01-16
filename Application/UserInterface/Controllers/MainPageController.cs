@@ -39,10 +39,10 @@ namespace UserInterface
             {
                 throw new ArgumentException("No information about slots");
             }
-            if (userInput.TimeSchedule.LessonStarts == null || userInput.TimeSchedule.Duration == 0)
-            {
-                throw new ArgumentException("No call schedule");
-            }
+            //if (userInput.TimeSchedule.LessonStarts == null || userInput.TimeSchedule.Duration == 0)
+            //{
+            //    throw new ArgumentException("No call schedule");
+            //}
             appInputRecipient.SaveInput(new (uid), userInput.CourseSlots, userInput.TimeSchedule);
             
             return RedirectToAction("ToFiltersInput", new { uid = uid});
