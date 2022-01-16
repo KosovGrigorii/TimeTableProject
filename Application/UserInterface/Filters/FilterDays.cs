@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Infrastructure;
-using Microsoft.AspNetCore.Mvc;
 using UserInterface.Models;
 
 namespace UserInterface

@@ -19,7 +19,6 @@ namespace UserInterface
 
         private UserInput ParseFile(Stream stream)
         {
-            //using var stream = file.OpenReadStream();
             var slots = new List<SlotInfo>();
             var times = new Times() { LessonStarts = new List<TimeSpan>() };
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);

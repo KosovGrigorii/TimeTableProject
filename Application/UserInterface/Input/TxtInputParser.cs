@@ -18,7 +18,6 @@ namespace UserInterface
 
         private UserInput ParseFile(Stream stream)
         {
-            //using var stream = new StreamReader(stream1) .OpenReadStream();
             var slots = new List<SlotInfo>();
             var times = new Times() { LessonStarts = new List<TimeSpan>() };
             using var reader = new StreamReader(stream);

@@ -1,9 +1,9 @@
 using System;
+using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Linq;
 using TimetableApplication;
-
 
 
 namespace UserInterface
@@ -34,20 +34,16 @@ namespace UserInterface
             var availableExtension = inputProvider.IsExtensionAvailable(extension);
             if (!availableExtension)
                 return View("ErrorFileFormat", '.' + string.Join(", .", inputProvider.GetExtensions()));
-            var userInput = inputProvider.ParseInput(fileInfo.OpenReadStream(), extension);
-            if (userInput.CourseSlots.Count() == 0)
+
+            try
             {
-                throw new ArgumentException("No information about slots");
+                var userInput = inputProvider.ParseInput(fileInfo.OpenReadStream(), extension);
+                appInputRecipient.SaveInput(new (uid), userInput.CourseSlots, userInput.TimeSchedule);
             }
-            if (userInput.CourseSlots.Contains(null))
+            catch (ArgumentException e)
             {
-                throw new ArgumentException("All columns were not filled in when entering");
+                return View("ErrorFileContent", e.Message);
             }
-            //if (userInput.TimeSchedule.LessonStarts == null || userInput.TimeSchedule.Duration == 0)
-            //{
-            //    throw new ArgumentException("No call schedule");
-            //}
-            appInputRecipient.SaveInput(new (uid), userInput.CourseSlots, userInput.TimeSchedule);
             
             return RedirectToAction("ToFiltersInput", new { uid = uid});
         }
