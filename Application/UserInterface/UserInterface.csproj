@@ -38,6 +38,7 @@
       <PackageReference Include="Ninject" Version="4.0.0-beta-0134" />
       <PackageReference Include="Ninject.Extensions.Conventions" Version="3.3.0" />
       <PackageReference Include="NUnit" Version="3.13.2" />
+      <PackageReference Include="NUnit3TestAdapter" Version="4.2.0" />
       <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.3" />
       <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
     </ItemGroup>

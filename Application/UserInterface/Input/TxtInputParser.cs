@@ -48,14 +48,6 @@ namespace UserInterface
             {
                 throw new ArgumentException(".xlsx file was filled out wrongly");
             }
-            if (slots.Count == 0)
-            {
-                throw new ArgumentException("No information about slots");
-            }
-            if (times.LessonStarts == null || times.Duration == 0)
-            {
-                throw new ArgumentException("No call schedule");
-            }
             return new () {CourseSlots = slots, TimeSchedule = times};
         }
 

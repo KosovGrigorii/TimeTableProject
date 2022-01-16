@@ -12,20 +12,95 @@ namespace UserInterface
     [TestFixture]
     public class TestParsers
     {
-        //private static readonly Stream stream = new FileStream("Запрос расписания1.txt", FileMode.Open);
+        private bool CheckResult(UserInput expected, UserInput result)
+        {
+            if (!expected.TimeSchedule.Duration.Equals(result.TimeSchedule.Duration)) return false;
+            if (!expected.TimeSchedule.LessonStarts.SequenceEqual(result.TimeSchedule.LessonStarts)) return false;
+            if (!expected.CourseSlots.Count().Equals(result.CourseSlots.Count())) return false;
+            for (var i = 0; i < expected.CourseSlots.Count(); i++)
+            {
+                var expSlot = expected.CourseSlots.First();
+                var resSlot = result.CourseSlots.First();
+                if (expSlot.Course != resSlot.Course || expSlot.Group != resSlot.Group || 
+                    expSlot.Room != resSlot.Room || expSlot.Teacher != resSlot.Teacher) return false;
+                expected.CourseSlots.Skip(1);
+                result.CourseSlots.Skip(1);
+            }
+            return true;
+        }
 
         [Test]
-        public void SingleTest()
+        public void FreeTimeTest()
         {
             var slots = new List<SlotInfo>();
-            slots[0] = new SlotInfo() { Course = "Математика", Group = "1", Room = "100", Teacher = "Тичер" };
-            slots[1] = new SlotInfo() { Course = "Физика", Group = "1", Room = "200", Teacher = "Тичер2" };
+            slots.Add(new SlotInfo() { Course = "Математика", Group = "1", Room = "100", Teacher = "Тичер" });
+            slots.Add(new SlotInfo() { Course = "Физика", Group = "1", Room = "200", Teacher = "Тичер2" });
             var times = new Times() { Duration = 90, LessonStarts = new List<TimeSpan>()};
-            times.LessonStarts.Append(new TimeSpan(9, 0, 0));
-            times.LessonStarts.Append(new TimeSpan(10, 40, 0));
-            times.LessonStarts.Append(new TimeSpan(12, 50, 0));
-            times.LessonStarts.Append(new TimeSpan(14, 30, 0));
-            Assert.AreEqual(new UserInput() {CourseSlots = slots, TimeSchedule = times}, new TxtInputParser().GetResult(null));
+            times.LessonStarts.Add(new TimeSpan(9, 0, 0));
+            times.LessonStarts.Add(new TimeSpan(10, 40, 0));
+            times.LessonStarts.Add(new TimeSpan(12, 50, 0));
+            times.LessonStarts.Add(new TimeSpan(14, 30, 0));
+            var parser = new TxtInputParser();
+            var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
+            exePath = exePath.Take(exePath.Length - 4).ToArray();
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\Запрос расписания1.txt");
+            using FileStream stream = new FileStream(path, FileMode.Open);
+            var result = parser.GetResult(stream);
+            Assert.IsTrue(CheckResult(new UserInput() { CourseSlots = slots, TimeSchedule = times }, result));
+        }
+
+        [Test]
+        public void WithoutFreeTimeTest()
+        {
+            var slots = new List<SlotInfo>();
+            slots.Add(new SlotInfo() { Course = "Математика", Group = "1", Room = "100", Teacher = "Тичер" });
+            slots.Add(new SlotInfo() { Course = "Физика", Group = "1", Room = "200", Teacher = "Тичер2" });
+            var times = new Times() { Duration = 90, LessonStarts = new List<TimeSpan>() };
+            times.LessonStarts.Add(new TimeSpan(9, 0, 0));
+            times.LessonStarts.Add(new TimeSpan(10, 40, 0));
+            var parser = new TxtInputParser();
+            var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
+            exePath = exePath.Take(exePath.Length - 4).ToArray();
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\Запрос расписания2.txt");
+            using FileStream stream = new FileStream(path, FileMode.Open);
+            var result = parser.GetResult(stream);
+            Assert.IsTrue(CheckResult(new UserInput() { CourseSlots = slots, TimeSchedule = times }, result));
+        }
+
+        [Test]
+        public void NoTimeTest()
+        {
+            var parser = new TxtInputParser();
+            var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
+            exePath = exePath.Take(exePath.Length - 4).ToArray();
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\Запрос расписания3.txt");
+            using FileStream stream = new FileStream(path, FileMode.Open);
+            var result = parser.GetResult(stream);
+            Assert.IsTrue(result.TimeSchedule.Duration == 0 && result.TimeSchedule.LessonStarts == null);
+        }
+
+        [Test]
+        public void NoInformationTest()
+        {
+            var parser = new TxtInputParser();
+            var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
+            exePath = exePath.Take(exePath.Length - 4).ToArray();
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\Запрос расписания4.txt");
+            using FileStream stream = new FileStream(path, FileMode.Open);
+            var result = parser.GetResult(stream);
+            Assert.IsTrue(result.CourseSlots.Count() == 0);
+        }
+
+        [Test]
+        public void NoSlotsTest()
+        {
+            var parser = new TxtInputParser();
+            var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
+            exePath = exePath.Take(exePath.Length - 4).ToArray();
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\Запрос расписания4.txt");
+            using FileStream stream = new FileStream(path, FileMode.Open);
+            var result = parser.GetResult(stream);
+            Assert.IsTrue(result.CourseSlots.Count() == 0);
         }
     }
 }

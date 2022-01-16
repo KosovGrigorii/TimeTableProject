@@ -56,7 +56,7 @@ namespace UserInterface
             services.AddScoped<OutputExecutor>();  //App
 
             services
-                .AddSingleton<DependenciesDictionary<IFormFile, UserInput, IDictionaryType<IFormFile, UserInput>>>();
+                .AddSingleton<DependenciesDictionary<Stream, UserInput, IDictionaryType<Stream, UserInput>>>();
             services.AddSingleton<IDictionaryType<Stream, UserInput>, XlsxInputParser>();
             services.AddSingleton<IDictionaryType<Stream, UserInput>, TxtInputParser>();
             services.AddSingleton<InputProvider>(); //Input
