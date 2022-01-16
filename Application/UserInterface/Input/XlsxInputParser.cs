@@ -26,10 +26,14 @@ namespace UserInterface
             using var reader = ExcelReaderFactory.CreateReader(stream);
             while (reader.Read())
             {
-                if (reader.GetValue(0) == null) break;
-                if (reader.GetValue(0).ToString() == "-")
+                if (reader.GetValue(0) != null && reader.GetValue(0).ToString() == "-")
                 {
                     times = GetTimes(reader);
+                    break;
+                }
+                if (reader.GetValue(0) == null || reader.GetValue(1) == null || reader.GetValue(2) == null || reader.GetValue(3) == null)
+                {
+                    slots.Add(null);
                     break;
                 }
                 slots.Add(new SlotInfo

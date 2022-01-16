@@ -31,6 +31,15 @@ namespace UserInterface
                     break;
                 }
                 var slot = line.Split('|');
+                try
+                {
+                    var test = slot[3];
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    slots.Add(null);
+                    break;
+                }
                 slots.Add(new()
                 {
                     Course = slot[0],

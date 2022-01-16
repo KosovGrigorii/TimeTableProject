@@ -39,6 +39,10 @@ namespace UserInterface
             {
                 throw new ArgumentException("No information about slots");
             }
+            if (userInput.CourseSlots.Contains(null))
+            {
+                throw new ArgumentException("All columns were not filled in when entering");
+            }
             //if (userInput.TimeSchedule.LessonStarts == null || userInput.TimeSchedule.Duration == 0)
             //{
             //    throw new ArgumentException("No call schedule");
