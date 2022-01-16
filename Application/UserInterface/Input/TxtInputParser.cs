@@ -7,49 +7,49 @@ using TimetableApplication;
 
 namespace UserInterface
 {
-    class TxtInputParser : IDictionaryType<IFormFile, UserInput>
+    class TxtInputParser : IDictionaryType<Stream, UserInput>
     {
         public string Name => "txt";
         
-        public UserInput GetResult(IFormFile parameters)
+        public UserInput GetResult(Stream parameters)
         {
             return ParseFile(parameters);
         }
 
-        private UserInput ParseFile(IFormFile file)
+        private UserInput ParseFile(Stream stream)
         {
-            using var stream = file.OpenReadStream();
             var slots = new List<SlotInfo>();
-            var times = new Times();
-            stream.Position = 0;
+            var times = new Times() { LessonStarts = new List<TimeSpan>() };
             using var reader = new StreamReader(stream);
-            try
+            var line = reader.ReadLine();
+            while (line != null)
             {
-                var line = reader.ReadLine();
-                while (line != null)
+                if (line == "-")
                 {
-                    if (line == "-")
-                    {
-                        times = GetTimes(reader);
-                        break;
-                    }
-                    var slot = line.Split('|');
-                    slots.Add(new ()
-                    {
-                        Course = slot[0],
-                        Group = slot[1],
-                        Teacher = slot[2],
-                        Room = slot[3]
-                    });
-                    line = reader.ReadLine();
+                    times = GetTimes(reader);
+                    break;
                 }
-                reader.Close();
+                var slot = line.Split('|');
+                try
+                {
+                    var test = slot[3];
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    slots.Add(null);
+                    break;
+                }
+                slots.Add(new()
+                {
+                    Course = slot[0],
+                    Group = slot[1],
+                    Teacher = slot[2],
+                    Room = slot[3]
+                });
+                line = reader.ReadLine();
             }
-            catch (NullReferenceException)
-            {
-                throw new ArgumentException(".xlsx file was filled out wrongly");
-            }
-            return new () {CourseSlots = slots, TimeSchedule = times};
+            reader.Close();
+            return new() { CourseSlots = slots, TimeSchedule = times };
         }
 
         private Times GetTimes(StreamReader reader)

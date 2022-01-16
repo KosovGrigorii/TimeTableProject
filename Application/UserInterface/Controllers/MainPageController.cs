@@ -1,9 +1,9 @@
 using System;
+using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Linq;
 using TimetableApplication;
-
 
 
 namespace UserInterface
@@ -35,8 +35,15 @@ namespace UserInterface
             if (!availableExtension)
                 return View("ErrorFileFormat", '.' + string.Join(", .", inputProvider.GetExtensions()));
 
-            var userInput = inputProvider.ParseInput(fileInfo, extension);
-            appInputRecipient.SaveInput(new (uid), userInput.CourseSlots, userInput.TimeSchedule);
+            try
+            {
+                var userInput = inputProvider.ParseInput(fileInfo.OpenReadStream(), extension);
+                appInputRecipient.SaveInput(new (uid), userInput.CourseSlots, userInput.TimeSchedule);
+            }
+            catch (ArgumentException e)
+            {
+                return View("ErrorFileContent", e.Message);
+            }
             
             return RedirectToAction("ToFiltersInput", new { uid = uid});
         }

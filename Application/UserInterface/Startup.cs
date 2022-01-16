@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Accord.Genetic;
 using Castle.Core.Internal;
 using Firebase.Database;
+using System.IO;
 using Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -28,50 +29,56 @@ namespace UserInterface
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
             services.AddMvc();
 
             ConfigureDatabase(services);
-
+            
+            //UI
+                //Filters
             services
                 .AddSingleton<DependenciesDictionary<FilterGetterParameters, FilterPartialViewData,
                     IDictionaryType<FilterGetterParameters, FilterPartialViewData>>>();
             services.AddSingleton<IDictionaryType<FilterGetterParameters, FilterPartialViewData>, FilterDays>();
             services.AddSingleton<IDictionaryType<FilterGetterParameters, FilterPartialViewData>, FilterDaysCount>();
+                //InputParsers
+            services.AddSingleton<DependenciesDictionary<Stream, UserInput, IDictionaryType<Stream, UserInput>>>();
+            services.AddSingleton<IDictionaryType<Stream, UserInput>, XlsxInputParser>();
+            services.AddSingleton<IDictionaryType<Stream, UserInput>, TxtInputParser>();
+            services.AddSingleton<InputProvider>();
             
+            //Application
+                //Layers connection
+            services.AddScoped<InputRecipient>();
+            services.AddScoped<FiltersPageInterface>();
+            services.AddScoped<FilterNamesGetter>();
+            services.AddScoped<TimetableResultsInterface>();
+            services.AddScoped<TimetableTaskLauncher>();
+            services.AddScoped<OutputExecutor>();
+                //Converters
             services.AddSingleton<TimespanDbConverter>(); 
             services.AddSingleton<TimeslotDbConverter>(); 
             services.AddSingleton<TimeDurationDbConverter>();
             services.AddSingleton<SlotInfoDbConverter>();
-            
-            services.AddSingleton<DependenciesDictionary<AlgoritmInput, IEnumerable<TimeSlot>,
-                IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>>>();
-            services.AddScoped<FiltersPageInterface>();
-            services.AddScoped<TimetableResultsInterface>();
-            services.AddScoped<InputRecipient>();
-            services.AddScoped<FilterNamesGetter>();
-            services.AddScoped<OutputExecutor>();  //App
 
-            services
-                .AddSingleton<DependenciesDictionary<IFormFile, UserInput, IDictionaryType<IFormFile, UserInput>>>();
-            services.AddSingleton<IDictionaryType<IFormFile, UserInput>, XlsxInputParser>();
-            services.AddSingleton<IDictionaryType<IFormFile, UserInput>, TxtInputParser>();
-            services.AddSingleton<InputProvider>(); //Input
-
-            services.AddSingleton<ConverterToAlgorithmInput>();
-            services.AddSingleton<IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>, GeneticAlgorithm>();
-            services.AddSingleton<IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>, GraphAlgorithm>();
-            services.AddSingleton<FilterHandler>();
-            services.AddSingleton<EliteSelection>();
-            services.AddSingleton<FitnessFunction>();    //Algo
-            
+                //Output
             services
                 .AddSingleton<DependenciesDictionary<ParticularTimetable, byte[],
                     IDictionaryType<ParticularTimetable, byte[]>>>();
             services.AddSingleton<IDictionaryType<ParticularTimetable, byte[]>, XlsxOutputFormatter>();
             services.AddSingleton<IDictionaryType<ParticularTimetable, byte[]>, PdfOutputFormatter>();
             services.AddSingleton<OutputConverter>();
-            services.AddSingleton<OutputProvider>();          //Output
+
+            services.AddSingleton<OutputProvider>();    
+
+            //Domain
+            services.AddSingleton<DependenciesDictionary<AlgoritmInput, IEnumerable<TimeSlot>,
+                IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>>>();
+            services.AddSingleton<IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>, GeneticAlgorithm>();
+            services.AddSingleton<IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>, GraphAlgorithm>();
+            services.AddSingleton<ConverterToAlgorithmInput>();
+            services.AddSingleton<FilterHandler>();
+            services.AddSingleton<EliteSelection>();
+            services.AddSingleton<FitnessFunction>();
         }
 
         private void ConfigureDatabase(IServiceCollection services)
