@@ -27,11 +27,5 @@ namespace Infrastructure
         {
             return context.Table.Where(x => x.KeyId.Equals(key));
         }
-
-        public void DeleteKey(TKey key)
-        {
-            context.Table.RemoveRange(context.Table.Where(x => x.KeyId.Equals(key)));
-            context.SaveChanges();
-        }
     }
 }

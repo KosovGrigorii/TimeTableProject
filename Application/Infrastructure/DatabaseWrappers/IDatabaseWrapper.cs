@@ -7,6 +7,5 @@ namespace Infrastructure
         void AddRange(TKey key, IEnumerable<TStoredObject> content);
         bool ContainsKey(TKey key);
         IEnumerable<TStoredObject> ReadBy(TKey key);
-        void DeleteKey(TKey key);
     }
 }

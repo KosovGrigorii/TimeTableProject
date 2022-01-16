@@ -24,10 +24,5 @@ namespace Infrastructure
         {
             return dictionary[key];
         }
-
-        public void DeleteKey(TKey key)
-        {
-            dictionary.Remove(key);
-        }
     }
 }

@@ -41,12 +41,5 @@ namespace Infrastructure
                 .Result
                 .Select(x => x.Object);
         }
-
-        public void DeleteKey(TKey key)
-        {
-            firebaseClient
-                .Child(key.ToString())
-                .DeleteAsync();
-        }
     }
 }
