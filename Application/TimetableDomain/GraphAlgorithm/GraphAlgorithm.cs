@@ -40,7 +40,7 @@ namespace TimetableDomain
                     var transformedCourse = handler.HandleFilters(teachersFilter[course.Teacher].WorkingDays, course,
                         courseTime);
                                 
-                    if (!transformedCourse.Equals(null))
+                    if (transformedCourse != null)
                     {
                         FindAvailablePosition(transformedCourse, courseTime, teacherTime,
                             groupTime, input.LessonStarts, teachersFilter);
@@ -73,10 +73,10 @@ namespace TimetableDomain
             return timeTable;
         }
 
-        public bool FindAvailablePosition(Course course, 
-            Dictionary<int, List<CourseTime>> courseTime,
-            Dictionary<string, List<(int, TimeSpan)>> teacherTime,
-            Dictionary<string, List<(int, TimeSpan)>> groupTime,
+        private bool FindAvailablePosition(Course course, 
+            IDictionary<int, List<CourseTime>> courseTime,
+            IReadOnlyDictionary<string, List<(int, TimeSpan)>> teacherTime,
+            IReadOnlyDictionary<string, List<(int, TimeSpan)>> groupTime,
             IEnumerable<TimeSpan> lessonStarts,
             Dictionary<string, Teacher> teachersFilter)
         {

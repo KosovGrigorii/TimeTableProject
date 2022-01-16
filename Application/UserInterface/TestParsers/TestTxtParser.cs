@@ -20,6 +20,7 @@ namespace UserInterface
             {
                 var expSlot = expected.CourseSlots.First();
                 var resSlot = result.CourseSlots.First();
+                if (expSlot == null && resSlot == null) break;
                 if (expSlot.Course != resSlot.Course || expSlot.Group != resSlot.Group || 
                     expSlot.Room != resSlot.Room || expSlot.Teacher != resSlot.Teacher) return false;
                 expected.CourseSlots.Skip(1);
@@ -100,6 +101,21 @@ namespace UserInterface
             using FileStream stream = new FileStream(path, FileMode.Open);
             var result = parser.GetResult(stream);
             Assert.IsTrue(result.CourseSlots.Count() == 0);
+        }
+
+        [Test]
+        public void UnfullCollomnsTest()
+        {
+            var slots = new List<SlotInfo>();
+            slots.Add(null);
+            var times = new Times() { LessonStarts = new List<TimeSpan>() };
+            var parser = new TxtInputParser();
+            var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
+            exePath = exePath.Take(exePath.Length - 4).ToArray();
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\txtInput6.txt");
+            using FileStream stream = new FileStream(path, FileMode.Open);
+            var result = parser.GetResult(stream);
+            Assert.IsTrue(CheckResult(new UserInput() { CourseSlots = slots, TimeSchedule = times }, result));
         }
     }
 }
