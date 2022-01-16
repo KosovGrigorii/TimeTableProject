@@ -27,6 +27,8 @@ namespace UserInterface
             var parsed = extensionDictionary.GetResult(extension, stream);
             if (!parsed.CourseSlots.Any())
                 throw new ArgumentException("No information about slots");
+            if (parsed.CourseSlots.Contains(null))
+                throw new ArgumentException("All columns were not filled in when entering");
 
             return parsed;
         }
