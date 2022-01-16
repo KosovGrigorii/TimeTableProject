@@ -59,6 +59,7 @@ namespace UserInterface
             services.AddSingleton<TimeslotDbConverter>(); 
             services.AddSingleton<TimeDurationDbConverter>();
             services.AddSingleton<SlotInfoDbConverter>();
+
                 //Output
             services
                 .AddSingleton<DependenciesDictionary<ParticularTimetable, byte[],
@@ -66,6 +67,7 @@ namespace UserInterface
             services.AddSingleton<IDictionaryType<ParticularTimetable, byte[]>, XlsxOutputFormatter>();
             services.AddSingleton<IDictionaryType<ParticularTimetable, byte[]>, PdfOutputFormatter>();
             services.AddSingleton<OutputConverter>();
+
             services.AddSingleton<OutputProvider>();    
 
             //Domain

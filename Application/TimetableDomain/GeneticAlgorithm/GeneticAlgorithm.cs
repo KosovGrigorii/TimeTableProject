@@ -33,7 +33,7 @@ namespace TimetableDomain
             for(var i = 1; ; i++)
             {
                 population.RunEpoch();
-                if (population.FitnessMax >= 0.99 || i >= 1000)
+                if (population.FitnessMax >= 0.99 || i >= 100)
                 {
                     break;
                 }
