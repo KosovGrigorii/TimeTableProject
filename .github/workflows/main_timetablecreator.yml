@@ -54,4 +54,4 @@ jobs:
           app-name: 'TimetableCreator'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1D64A2CC4B58464BB77FF03459F4AE0B }}
-          package: ./Application
+          package: https://github.com/KosovGrigorii/TimeTableProject/blob/main/Application/UserInterface/UserInterface.csproj
