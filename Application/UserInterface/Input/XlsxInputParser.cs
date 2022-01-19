@@ -8,7 +8,7 @@ using System.IO;
 
 namespace UserInterface
 {
-    public class XlsxInputParser : IDictionaryType<Stream, UserInput>
+    public class XlsxInputParser : IImplementation<Stream, UserInput>
     {
         public string Name => "xlsx";
         

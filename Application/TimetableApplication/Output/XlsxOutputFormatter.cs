@@ -5,7 +5,7 @@ using OfficeOpenXml.Style;
 
 namespace TimetableApplication
 {
-    public class XlsxOutputFormatter: IDictionaryType<ParticularTimetable, byte[]>
+    public class XlsxOutputFormatter: IImplementation<ParticularTimetable, byte[]>
     {
         public string Name => "xlsx";
 

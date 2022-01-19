@@ -1,6 +1,6 @@
 namespace Infrastructure
 {
-    public interface IDictionaryType<TIn, TOut>
+    public interface IImplementation<TIn, TOut>
     {
         string Name { get; }
         TOut GetResult(TIn parameters);

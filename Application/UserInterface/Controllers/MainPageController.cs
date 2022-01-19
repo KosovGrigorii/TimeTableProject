@@ -19,7 +19,7 @@ namespace UserInterface
             this.appInputRecipient = appInputRecipient; 
         }
         
-        public ActionResult Index()
+        public IActionResult Index()
         {
             return View("Index", '.' + string.Join(", .", inputProvider.GetExtensions()));
         }

@@ -36,14 +36,14 @@ namespace UserInterface
             //UI
                 //Filters
             services
-                .AddSingleton<DependenciesDictionary<FilterGetterParameters, FilterPartialViewData,
-                    IDictionaryType<FilterGetterParameters, FilterPartialViewData>>>();
-            services.AddSingleton<IDictionaryType<FilterGetterParameters, FilterPartialViewData>, FilterDays>();
-            services.AddSingleton<IDictionaryType<FilterGetterParameters, FilterPartialViewData>, FilterDaysCount>();
+                .AddSingleton<ImplementationSelector<FilterGetterParameters, FilterPartialViewData,
+                    IImplementation<FilterGetterParameters, FilterPartialViewData>>>();
+            services.AddSingleton<IImplementation<FilterGetterParameters, FilterPartialViewData>, FilterDays>();
+            services.AddSingleton<IImplementation<FilterGetterParameters, FilterPartialViewData>, FilterDaysCount>();
                 //InputParsers
-            services.AddSingleton<DependenciesDictionary<Stream, UserInput, IDictionaryType<Stream, UserInput>>>();
-            services.AddSingleton<IDictionaryType<Stream, UserInput>, XlsxInputParser>();
-            services.AddSingleton<IDictionaryType<Stream, UserInput>, TxtInputParser>();
+            services.AddSingleton<ImplementationSelector<Stream, UserInput, IImplementation<Stream, UserInput>>>();
+            services.AddSingleton<IImplementation<Stream, UserInput>, XlsxInputParser>();
+            services.AddSingleton<IImplementation<Stream, UserInput>, TxtInputParser>();
             services.AddSingleton<InputProvider>();
             
             //Application
@@ -62,19 +62,19 @@ namespace UserInterface
 
                 //Output
             services
-                .AddSingleton<DependenciesDictionary<ParticularTimetable, byte[],
-                    IDictionaryType<ParticularTimetable, byte[]>>>();
-            services.AddSingleton<IDictionaryType<ParticularTimetable, byte[]>, XlsxOutputFormatter>();
-            services.AddSingleton<IDictionaryType<ParticularTimetable, byte[]>, PdfOutputFormatter>();
+                .AddSingleton<ImplementationSelector<ParticularTimetable, byte[],
+                    IImplementation<ParticularTimetable, byte[]>>>();
+            services.AddSingleton<IImplementation<ParticularTimetable, byte[]>, XlsxOutputFormatter>();
+            services.AddSingleton<IImplementation<ParticularTimetable, byte[]>, PdfOutputFormatter>();
             services.AddSingleton<OutputConverter>();
 
             services.AddSingleton<OutputProvider>();    
 
             //Domain
-            services.AddSingleton<DependenciesDictionary<AlgoritmInput, IEnumerable<TimeSlot>,
-                IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>>>();
-            services.AddSingleton<IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>, GeneticAlgorithm>();
-            services.AddSingleton<IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>, GraphAlgorithm>();
+            services.AddSingleton<ImplementationSelector<AlgoritmInput, IEnumerable<TimeSlot>,
+                IImplementation<AlgoritmInput, IEnumerable<TimeSlot>>>>();
+            services.AddSingleton<IImplementation<AlgoritmInput, IEnumerable<TimeSlot>>, GeneticAlgorithm>();
+            services.AddSingleton<IImplementation<AlgoritmInput, IEnumerable<TimeSlot>>, GraphAlgorithm>();
             services.AddSingleton<ConverterToAlgorithmInput>();
             services.AddSingleton<FilterHandler>();
             services.AddSingleton<EliteSelection>();

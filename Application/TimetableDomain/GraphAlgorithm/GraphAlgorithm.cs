@@ -5,7 +5,7 @@ using Infrastructure;
 
 namespace TimetableDomain
 {
-    public class GraphAlgorithm : IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>
+    public class GraphAlgorithm : IImplementation<AlgoritmInput, IEnumerable<TimeSlot>>
     {
         private readonly FilterHandler handler;
         public string Name => "Graph";

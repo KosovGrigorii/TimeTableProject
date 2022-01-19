@@ -9,9 +9,9 @@ namespace UserInterface
 {
     public class InputProvider
     {
-        private readonly DependenciesDictionary<Stream, UserInput, IDictionaryType<Stream, UserInput>> extensionDictionary;
+        private readonly ImplementationSelector<Stream, UserInput, IImplementation<Stream, UserInput>> extensionDictionary;
 
-        public InputProvider(DependenciesDictionary<Stream, UserInput, IDictionaryType<Stream, UserInput>> extensionDictionary)
+        public InputProvider(ImplementationSelector<Stream, UserInput, IImplementation<Stream, UserInput>> extensionDictionary)
         {
             this.extensionDictionary = extensionDictionary;
         }

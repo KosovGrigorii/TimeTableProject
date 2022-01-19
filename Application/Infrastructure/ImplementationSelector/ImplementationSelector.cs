@@ -3,11 +3,11 @@ using System.Linq;
 
 namespace Infrastructure
 {
-    public class DependenciesDictionary<TIn, TOut, TDictionaryType> where TDictionaryType : IDictionaryType<TIn, TOut>
+    public class ImplementationSelector<TIn, TOut, TDictionaryType> where TDictionaryType : IImplementation<TIn, TOut>
     {
         private readonly IReadOnlyDictionary<string, TDictionaryType> implementatinsDict;
         
-        public DependenciesDictionary(IEnumerable<TDictionaryType> implementatinsDict)
+        public ImplementationSelector(IEnumerable<TDictionaryType> implementatinsDict)
         {
             this.implementatinsDict = implementatinsDict.ToDictionary(x => x.Name);
         }

@@ -10,11 +10,11 @@ namespace UserInterface
     public class FiltersInputController : Controller
     {
         private readonly FiltersPageInterface appInterface;
-        private readonly DependenciesDictionary<FilterGetterParameters, FilterPartialViewData, IDictionaryType<FilterGetterParameters, FilterPartialViewData>> filtersInputProvider;
+        private readonly ImplementationSelector<FilterGetterParameters, FilterPartialViewData, IImplementation<FilterGetterParameters, FilterPartialViewData>> filtersInputProvider;
 
         public FiltersInputController(
             FiltersPageInterface appInterface, 
-            DependenciesDictionary<FilterGetterParameters, FilterPartialViewData, IDictionaryType<FilterGetterParameters, FilterPartialViewData>> filtersInputProvider)
+            ImplementationSelector<FilterGetterParameters, FilterPartialViewData, IImplementation<FilterGetterParameters, FilterPartialViewData>> filtersInputProvider)
         {
             this.appInterface = appInterface;
             this.filtersInputProvider = filtersInputProvider;

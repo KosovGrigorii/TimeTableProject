@@ -19,7 +19,7 @@ namespace TimetableApplication
         private readonly IDatabaseWrapper<string, DatabaseTimeslot> timeslotWrapper;
         private readonly IDatabaseWrapper<string, DatabaseTimeSchedule> timeScheduleWrapper;
         private readonly IDatabaseWrapper<string, DatabaseLessonMinutesDuration> durationWrapper;
-        private readonly DependenciesDictionary<AlgoritmInput, IEnumerable<TimeSlot>, IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>> algorithmsDict;
+        private readonly ImplementationSelector<AlgoritmInput, IEnumerable<TimeSlot>, IImplementation<AlgoritmInput, IEnumerable<TimeSlot>>> algorithmsDict;
 
         public TimetableTaskLauncher(ConverterToAlgorithmInput algoInputConverter,
             SlotInfoDbConverter slotConverter,
@@ -30,7 +30,7 @@ namespace TimetableApplication
             IDatabaseWrapper<string, DatabaseTimeslot> timeslotWrapper,
             IDatabaseWrapper<string, DatabaseTimeSchedule> timeScheduleWrapper,
             IDatabaseWrapper<string, DatabaseLessonMinutesDuration> durationWrapper,
-        DependenciesDictionary<AlgoritmInput, IEnumerable<TimeSlot>, IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>> algorithmsDict)
+        ImplementationSelector<AlgoritmInput, IEnumerable<TimeSlot>, IImplementation<AlgoritmInput, IEnumerable<TimeSlot>>> algorithmsDict)
         {
             this.algoInputConverter = algoInputConverter;
             this.slotConverter = slotConverter;

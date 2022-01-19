@@ -10,10 +10,10 @@ namespace TimetableApplication
         private readonly TimetableTaskLauncher taskLauncher;
 
         private readonly
-            DependenciesDictionary<AlgoritmInput, IEnumerable<TimeSlot>,
-                IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>> algorithmsDictionary;
+            ImplementationSelector<AlgoritmInput, IEnumerable<TimeSlot>,
+                IImplementation<AlgoritmInput, IEnumerable<TimeSlot>>> algorithmsDictionary;
         
-        public FiltersPageInterface(FilterNamesGetter filtersGetter, DependenciesDictionary<AlgoritmInput, IEnumerable<TimeSlot>, IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>> algorithmsDictionary, TimetableTaskLauncher taskLauncher)
+        public FiltersPageInterface(FilterNamesGetter filtersGetter, ImplementationSelector<AlgoritmInput, IEnumerable<TimeSlot>, IImplementation<AlgoritmInput, IEnumerable<TimeSlot>>> algorithmsDictionary, TimetableTaskLauncher taskLauncher)
         {
             this.filtersGetter = filtersGetter;
             this.algorithmsDictionary = algorithmsDictionary;

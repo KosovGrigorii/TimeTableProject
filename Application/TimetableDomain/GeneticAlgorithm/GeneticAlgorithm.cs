@@ -6,7 +6,7 @@ using Infrastructure;
 
 namespace TimetableDomain
 {
-    public class GeneticAlgorithm : IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>
+    public class GeneticAlgorithm : IImplementation<AlgoritmInput, IEnumerable<TimeSlot>>
     {
         public string Name => "Genetic";
         private readonly EliteSelection eliteSelection;

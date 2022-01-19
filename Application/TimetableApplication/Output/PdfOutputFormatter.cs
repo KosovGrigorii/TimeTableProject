@@ -6,7 +6,7 @@ using iTextSharp.text.pdf;
 
 namespace TimetableApplication
 {
-    public class PdfOutputFormatter: IDictionaryType<ParticularTimetable, byte[]>
+    public class PdfOutputFormatter: IImplementation<ParticularTimetable, byte[]>
     {
         public string Name => "pdf";
 

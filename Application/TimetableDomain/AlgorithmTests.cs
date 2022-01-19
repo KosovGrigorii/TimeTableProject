@@ -9,8 +9,8 @@ namespace TimetableDomain
     [TestFixture]
     public class AlgorithmTests
     {
-        private readonly IEnumerable<IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>> algorithms = 
-            new IDictionaryType<AlgoritmInput, IEnumerable<TimeSlot>>[]
+        private readonly IEnumerable<IImplementation<AlgoritmInput, IEnumerable<TimeSlot>>> algorithms = 
+            new IImplementation<AlgoritmInput, IEnumerable<TimeSlot>>[]
         {
             new GeneticAlgorithm(new (), new ()),
             new GraphAlgorithm(new ())

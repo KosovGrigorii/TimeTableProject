@@ -5,7 +5,7 @@ using UserInterface.Models;
 
 namespace UserInterface
 {
-    class FilterDays: IDictionaryType<FilterGetterParameters, FilterPartialViewData>
+    class FilterDays: IImplementation<FilterGetterParameters, FilterPartialViewData>
     {
         public string Name => "Choose working days in week";
         public FilterPartialViewData GetResult(FilterGetterParameters parameters)

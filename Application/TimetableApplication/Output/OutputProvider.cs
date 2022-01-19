@@ -7,11 +7,11 @@ namespace TimetableApplication
     public class OutputProvider
     {
         private readonly OutputConverter converter;
-        private readonly DependenciesDictionary<ParticularTimetable, byte[], IDictionaryType<ParticularTimetable, byte[]>> dictionary;
+        private readonly ImplementationSelector<ParticularTimetable, byte[], IImplementation<ParticularTimetable, byte[]>> dictionary;
 
         public OutputProvider(
             OutputConverter converter,
-            DependenciesDictionary<ParticularTimetable, byte[], IDictionaryType<ParticularTimetable, byte[]>> dictionary)
+            ImplementationSelector<ParticularTimetable, byte[], IImplementation<ParticularTimetable, byte[]>> dictionary)
         {
             this.converter = converter;
             this.dictionary = dictionary;

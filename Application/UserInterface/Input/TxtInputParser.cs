@@ -7,7 +7,7 @@ using TimetableApplication;
 
 namespace UserInterface
 {
-    class TxtInputParser : IDictionaryType<Stream, UserInput>
+    class TxtInputParser : IImplementation<Stream, UserInput>
     {
         public string Name => "txt";
         

@@ -3,7 +3,7 @@ using UserInterface.Models;
 
 namespace UserInterface
 {
-    class FilterDaysCount : IDictionaryType<FilterGetterParameters, FilterPartialViewData>
+    class FilterDaysCount : IImplementation<FilterGetterParameters, FilterPartialViewData>
     {
         public string Name => "Working days amount";
         public FilterPartialViewData GetResult(FilterGetterParameters parameters)
