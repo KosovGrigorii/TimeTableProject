@@ -15,7 +15,8 @@ namespace UserInterface
             { 
                 WeekDays = Enum.GetValues(typeof(DayOfWeek))
                     .OfType<DayOfWeek>()
-                    .Skip(1),
+                    .Skip(1)
+                    .Take(5),
                 Filters = teachers, 
                 Index = elementId
             };
