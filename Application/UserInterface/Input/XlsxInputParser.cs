@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using ExcelDataReader;
+using System.Linq;
 using Infrastructure;
 using TimetableApplication;
 using System.IO;
@@ -50,6 +51,7 @@ namespace UserInterface
         private Times GetTimes(IExcelDataReader reader)
         {
             reader.Read();
+            if (!TimelineIsCorrectly(reader)) return new Times();
             var (begin, end) = GetSpan(reader.GetValue(0).ToString(), reader.GetValue(1).ToString());
             var (duration, rest) = (int.Parse(reader.GetValue(2).ToString()), int.Parse(reader.GetValue(3).ToString()));
             var special_rest = new List<double>();
@@ -96,6 +98,46 @@ namespace UserInterface
             temp = end.Split(':');
             var end_span = new TimeSpan(int.Parse(temp[0]), int.Parse(temp[1]), int.Parse(temp[2]));
             return (begin_span.TotalMinutes, end_span.TotalMinutes);
+        }
+
+        private bool TimelineIsCorrectly(IExcelDataReader reader)
+        {
+            var info = new List<string>();
+            int temp = 0;
+            while (true)
+            {
+                try
+                {
+                    reader.GetValue(temp);
+                    if (reader.GetValue(temp) == null) break;
+                }
+                catch(IndexOutOfRangeException)
+                {
+                    break;
+                }
+                info.Add(reader.GetValue(temp).ToString().Split().Last());
+                temp += 1;
+            }
+            if (info.Count < 4 || (info.Count - 4) % 2 == 1) return false;
+            try
+            {
+                TimeSpan.Parse(info[0]);
+                if (int.TryParse(info[0], out temp)) return false;
+                TimeSpan.Parse(info[1]);
+                if (int.TryParse(info[1], out temp)) return false;
+                int.Parse(info[2]);
+                int.Parse(info[3]);
+                for (var i = 4; i < info.Count; i++)
+                {
+                    TimeSpan.Parse(info[i]);
+                    if (int.TryParse(info[i], out temp)) return false;
+                }
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

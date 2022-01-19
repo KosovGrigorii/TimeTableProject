@@ -29,6 +29,8 @@ namespace UserInterface
                 throw new ArgumentException("No information about slots");
             if (parsed.CourseSlots.Contains(null))
                 throw new ArgumentException("All columns were not filled in when entering");
+            if (parsed.TimeSchedule.LessonStarts == null)
+                throw new ArgumentException("Incorrect timeline");
 
             return parsed;
         }

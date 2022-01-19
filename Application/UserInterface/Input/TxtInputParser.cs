@@ -54,7 +54,7 @@ namespace UserInterface
         private Times GetTimes(StreamReader reader)
         {
             var line = reader.ReadLine();
-            if (!TimelineIsCorrectly(line)) return new Times() { LessonStarts = new List<TimeSpan>() };
+            if (!TimelineIsCorrectly(line)) return new Times();
             var info = line.Split();
             var (begin, end) = GetSpan(info[0], info[1]);
             var (duration, rest) = (int.Parse(info[2]), int.Parse(info[3]));
@@ -113,7 +113,7 @@ namespace UserInterface
                     if (int.TryParse(info[i], out temp)) return false;
                 }
             }
-            catch(Exception)
+            catch(FormatException)
             {
                 return false;
             }

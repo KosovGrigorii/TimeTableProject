@@ -7,9 +7,8 @@ using TimetableApplication;
 
 namespace UserInterface
 {
-
     [TestFixture]
-    public class TestTxtParser
+    public class TestXlsxParser
     {
         private bool CheckResult(UserInput expected, UserInput result)
         {
@@ -21,7 +20,7 @@ namespace UserInterface
                 var expSlot = expected.CourseSlots.First();
                 var resSlot = result.CourseSlots.First();
                 if (expSlot == null && resSlot == null) break;
-                if (expSlot.Course != resSlot.Course || expSlot.Group != resSlot.Group || 
+                if (expSlot.Course != resSlot.Course || expSlot.Group != resSlot.Group ||
                     expSlot.Room != resSlot.Room || expSlot.Teacher != resSlot.Teacher) return false;
                 expected.CourseSlots.Skip(1);
                 result.CourseSlots.Skip(1);
@@ -35,16 +34,16 @@ namespace UserInterface
             var slots = new List<SlotInfo>();
             slots.Add(new SlotInfo() { Course = "Математика", Group = "1", Room = "100", Teacher = "Тичер" });
             slots.Add(new SlotInfo() { Course = "Физика", Group = "1", Room = "200", Teacher = "Тичер2" });
-            var times = new Times() { Duration = 90, LessonStarts = new List<TimeSpan>()};
+            var times = new Times() { Duration = 90, LessonStarts = new List<TimeSpan>() };
             times.LessonStarts.Add(new TimeSpan(9, 0, 0));
             times.LessonStarts.Add(new TimeSpan(10, 40, 0));
             times.LessonStarts.Add(new TimeSpan(12, 50, 0));
             times.LessonStarts.Add(new TimeSpan(14, 30, 0));
-            var parser = new TxtInputParser();
+            var parser = new XlsxInputParser();
             var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
             exePath = exePath.Take(exePath.Length - 4).ToArray();
-            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\txtInput1.txt");
-            using FileStream stream = new FileStream(path, FileMode.Open);
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\XlsxTest\xlsxInput1.xlsx");
+            using Stream stream = new FileStream(path, FileMode.Open);
             var result = parser.GetResult(stream);
             Assert.IsTrue(CheckResult(new UserInput() { CourseSlots = slots, TimeSchedule = times }, result));
         }
@@ -58,10 +57,10 @@ namespace UserInterface
             var times = new Times() { Duration = 90, LessonStarts = new List<TimeSpan>() };
             times.LessonStarts.Add(new TimeSpan(9, 0, 0));
             times.LessonStarts.Add(new TimeSpan(10, 40, 0));
-            var parser = new TxtInputParser();
+            var parser = new XlsxInputParser();
             var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
             exePath = exePath.Take(exePath.Length - 4).ToArray();
-            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\txtInput2.txt");
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\XlsxTest\xlsxInput2.xlsx");
             using FileStream stream = new FileStream(path, FileMode.Open);
             var result = parser.GetResult(stream);
             Assert.IsTrue(CheckResult(new UserInput() { CourseSlots = slots, TimeSchedule = times }, result));
@@ -70,10 +69,10 @@ namespace UserInterface
         [Test]
         public void NoTimeTest()
         {
-            var parser = new TxtInputParser();
+            var parser = new XlsxInputParser();
             var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
             exePath = exePath.Take(exePath.Length - 4).ToArray();
-            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\txtInput3.txt");
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\XlsxTest\xlsxInput3.xlsx");
             using FileStream stream = new FileStream(path, FileMode.Open);
             var result = parser.GetResult(stream);
             Assert.IsTrue(result.TimeSchedule.Duration == 0 && result.TimeSchedule.LessonStarts.Count() == 0);
@@ -82,10 +81,10 @@ namespace UserInterface
         [Test]
         public void NoInformationTest()
         {
-            var parser = new TxtInputParser();
+            var parser = new XlsxInputParser();
             var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
             exePath = exePath.Take(exePath.Length - 4).ToArray();
-            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\txtInput4.txt");
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\XlsxTest\xlsxInput4.xlsx");
             using FileStream stream = new FileStream(path, FileMode.Open);
             var result = parser.GetResult(stream);
             Assert.IsTrue(result.CourseSlots.Count() == 0);
@@ -94,10 +93,10 @@ namespace UserInterface
         [Test]
         public void NoSlotsTest()
         {
-            var parser = new TxtInputParser();
+            var parser = new XlsxInputParser();
             var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
             exePath = exePath.Take(exePath.Length - 4).ToArray();
-            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\txtInput5.txt");
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\XlsxTest\xlsxInput5.xlsx");
             using FileStream stream = new FileStream(path, FileMode.Open);
             var result = parser.GetResult(stream);
             Assert.IsTrue(result.CourseSlots.Count() == 0);
@@ -109,10 +108,10 @@ namespace UserInterface
             var slots = new List<SlotInfo>();
             slots.Add(null);
             var times = new Times() { LessonStarts = new List<TimeSpan>() };
-            var parser = new TxtInputParser();
+            var parser = new XlsxInputParser();
             var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
             exePath = exePath.Take(exePath.Length - 4).ToArray();
-            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\txtInput6.txt");
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\XlsxTest\xlsxInput6.xlsx");
             using FileStream stream = new FileStream(path, FileMode.Open);
             var result = parser.GetResult(stream);
             Assert.IsTrue(CheckResult(new UserInput() { CourseSlots = slots, TimeSchedule = times }, result));
@@ -121,109 +120,109 @@ namespace UserInterface
         [Test]
         public void NoTransferTest()
         {
-            var parser = new TxtInputParser();
+            var parser = new XlsxInputParser();
             var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
             exePath = exePath.Take(exePath.Length - 4).ToArray();
-            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\txtInput7.txt");
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\XlsxTest\xlsxInput7.xlsx");
             using FileStream stream = new FileStream(path, FileMode.Open);
             var result = parser.GetResult(stream);
-            Assert.IsTrue(result.TimeSchedule.LessonStarts.Count() == 0);
+            Assert.IsTrue(result.TimeSchedule.LessonStarts == null);
         }
 
         [Test]
         public void NotEnoughMainArgumentsTest()
         {
-            var parser = new TxtInputParser();
+            var parser = new XlsxInputParser();
             var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
             exePath = exePath.Take(exePath.Length - 4).ToArray();
-            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\txtInput8.txt");
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\XlsxTest\xlsxInput8.xlsx");
             using FileStream stream = new FileStream(path, FileMode.Open);
             var result = parser.GetResult(stream);
-            Assert.IsTrue(result.TimeSchedule.LessonStarts.Count() == 0);
+            Assert.IsTrue(result.TimeSchedule.LessonStarts == null);
         }
 
         [Test]
         public void NotEnoughMainArgumentsTest2()
         {
-            var parser = new TxtInputParser();
+            var parser = new XlsxInputParser();
             var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
             exePath = exePath.Take(exePath.Length - 4).ToArray();
-            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\txtInput9.txt");
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\XlsxTest\xlsxInput9.xlsx");
             using FileStream stream = new FileStream(path, FileMode.Open);
             var result = parser.GetResult(stream);
-            Assert.IsTrue(result.TimeSchedule.LessonStarts.Count() == 0);
+            Assert.IsTrue(result.TimeSchedule.LessonStarts == null);
         }
 
         [Test]
         public void IncorrectExtraArgumentTest()
         {
-            var parser = new TxtInputParser();
+            var parser = new XlsxInputParser();
             var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
             exePath = exePath.Take(exePath.Length - 4).ToArray();
-            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\txtInput10.txt");
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\XlsxTest\xlsxInput10.xlsx");
             using FileStream stream = new FileStream(path, FileMode.Open);
             var result = parser.GetResult(stream);
-            Assert.IsTrue(result.TimeSchedule.LessonStarts.Count() == 0);
+            Assert.IsTrue(result.TimeSchedule.LessonStarts == null);
         }
 
         [Test]
         public void IncorrectFourthMainArgumentTest()
         {
-            var parser = new TxtInputParser();
+            var parser = new XlsxInputParser();
             var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
             exePath = exePath.Take(exePath.Length - 4).ToArray();
-            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\txtInput11.txt");
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\XlsxTest\xlsxInput11.xlsx");
             using FileStream stream = new FileStream(path, FileMode.Open);
             var result = parser.GetResult(stream);
-            Assert.IsTrue(result.TimeSchedule.LessonStarts.Count() == 0);
+            Assert.IsTrue(result.TimeSchedule.LessonStarts == null);
         }
 
         [Test]
         public void IncorrectThirdMainArgumentTest()
         {
-            var parser = new TxtInputParser();
+            var parser = new XlsxInputParser();
             var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
             exePath = exePath.Take(exePath.Length - 4).ToArray();
-            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\txtInput12.txt");
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\XlsxTest\xlsxInput12.xlsx");
             using FileStream stream = new FileStream(path, FileMode.Open);
             var result = parser.GetResult(stream);
-            Assert.IsTrue(result.TimeSchedule.LessonStarts.Count() == 0);
+            Assert.IsTrue(result.TimeSchedule.LessonStarts == null);
         }
 
         [Test]
         public void IncorrectSecondMainArgumentTest()
         {
-            var parser = new TxtInputParser();
+            var parser = new XlsxInputParser();
             var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
             exePath = exePath.Take(exePath.Length - 4).ToArray();
-            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\txtInput13.txt");
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\XlsxTest\xlsxInput13.xlsx");
             using FileStream stream = new FileStream(path, FileMode.Open);
             var result = parser.GetResult(stream);
-            Assert.IsTrue(result.TimeSchedule.LessonStarts.Count() == 0);
+            Assert.IsTrue(result.TimeSchedule.LessonStarts == null);
         }
 
         [Test]
         public void IncorrectFirstMainArgumentTest()
         {
-            var parser = new TxtInputParser();
+            var parser = new XlsxInputParser();
             var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
             exePath = exePath.Take(exePath.Length - 4).ToArray();
-            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\txtInput14.txt");
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\XlsxTest\xlsxInput14.xlsx");
             using FileStream stream = new FileStream(path, FileMode.Open);
             var result = parser.GetResult(stream);
-            Assert.IsTrue(result.TimeSchedule.LessonStarts.Count() == 0);
+            Assert.IsTrue(result.TimeSchedule.LessonStarts == null);
         }
 
         [Test]
         public void SuperfluousExtraArgumentTest()
         {
-            var parser = new TxtInputParser();
+            var parser = new XlsxInputParser();
             var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
             exePath = exePath.Take(exePath.Length - 4).ToArray();
-            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\txtInput15.txt");
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\XlsxTest\xlsxInput15.xlsx");
             using FileStream stream = new FileStream(path, FileMode.Open);
             var result = parser.GetResult(stream);
-            Assert.IsTrue(result.TimeSchedule.LessonStarts.Count() == 0);
+            Assert.IsTrue(result.TimeSchedule.LessonStarts == null);
         }
     }
 }
