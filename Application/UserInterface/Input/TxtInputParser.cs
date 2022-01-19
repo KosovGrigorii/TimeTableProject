@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using Infrastructure;
-using Microsoft.AspNetCore.Http;
 using TimetableApplication;
 
 namespace UserInterface
@@ -24,7 +23,7 @@ namespace UserInterface
             var line = reader.ReadLine();
             while (line != null)
             {
-                if (line == "-")
+                if (line[0] == '-')
                 {
                     times = GetTimes(reader);
                     break;
@@ -54,7 +53,9 @@ namespace UserInterface
 
         private Times GetTimes(StreamReader reader)
         {
-            var info = reader.ReadLine().Split();
+            var line = reader.ReadLine();
+            if (!TimelineIsCorrectly(line)) return new Times() { LessonStarts = new List<TimeSpan>() };
+            var info = line.Split();
             var (begin, end) = GetSpan(info[0], info[1]);
             var (duration, rest) = (int.Parse(info[2]), int.Parse(info[3]));
             var special_rest = new List<double>();
@@ -90,6 +91,33 @@ namespace UserInterface
             temp = end.Split(':');
             var end_span = new TimeSpan(int.Parse(temp[0]), int.Parse(temp[1]), int.Parse(temp[2]));
             return (begin_span.TotalMinutes, end_span.TotalMinutes);
+        }
+
+        private bool TimelineIsCorrectly(string line)
+        {
+            if (line == null) return false;
+            var info = line.Split();
+            if (info.Length < 4 || (info.Length - 4) % 2 == 1) return false;
+            try
+            {
+                int temp;
+                TimeSpan.Parse(info[0]);
+                if (int.TryParse(info[0], out temp)) return false;
+                TimeSpan.Parse(info[1]);
+                if (int.TryParse(info[1], out temp)) return false;
+                int.Parse(info[2]);
+                int.Parse(info[3]);
+                for (var i = 4; i < info.Length; i++)
+                {
+                    TimeSpan.Parse(info[i]);
+                    if (int.TryParse(info[i], out temp)) return false;
+                }
+            }
+            catch(Exception)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

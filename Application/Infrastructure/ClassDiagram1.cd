@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Infrastructure.DatabaseEntity&lt;TKey&gt;" Collapsed="true">
+    <Position X="5.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DatabaseWrappers\DatabaseEntity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Infrastructure.DictionaryWrapper&lt;TKey, TValue&gt;" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAAAEAAAAAAAAAAAEAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>DatabaseWrappers\DictionaryWrapper.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.183" Collapsed="true" />
+  </Class>
+  <Class Name="Infrastructure.FirebaseWrapper&lt;TKey, TStoredObject&gt;" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAAgEAAAAAAAAAAAAAAAAAAAAAAAIAAAEAAA=</HashCode>
+      <FileName>DatabaseWrappers\FirebaseWrapper.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Infrastructure.MySQLContext&lt;TKey, TValue&gt;" Collapsed="true">
+    <Position X="5.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAQAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DatabaseWrappers\MySQLContext.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Infrastructure.MySQLWrapper&lt;TKey, TValue&gt;" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAACAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>DatabaseWrappers\MySQLWrapper.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Infrastructure.DependenciesDictionary&lt;TIn, TOut, TDictionaryType&gt;">
+    <Position X="9" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAQEAAAAAAAAA=</HashCode>
+      <FileName>DependenciesDictionary\DependenciesDictionary.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Infrastructure.IDatabaseWrapper&lt;TKey, TStoredObject&gt;" Collapsed="true">
+    <Position X="5.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>DatabaseWrappers\IDatabaseWrapper.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Infrastructure.IDictionaryType&lt;TIn, TOut&gt;">
+    <Position X="9" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAEAAAAAAAAA=</HashCode>
+      <FileName>DependenciesDictionary\IDictionaryType.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

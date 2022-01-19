@@ -117,5 +117,113 @@ namespace UserInterface
             var result = parser.GetResult(stream);
             Assert.IsTrue(CheckResult(new UserInput() { CourseSlots = slots, TimeSchedule = times }, result));
         }
+
+        [Test]
+        public void NoTransferTest()
+        {
+            var parser = new TxtInputParser();
+            var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
+            exePath = exePath.Take(exePath.Length - 4).ToArray();
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\txtInput7.txt");
+            using FileStream stream = new FileStream(path, FileMode.Open);
+            var result = parser.GetResult(stream);
+            Assert.IsTrue(result.TimeSchedule.LessonStarts.Count() == 0);
+        }
+
+        [Test]
+        public void NotEnoughMainArgumentsTest()
+        {
+            var parser = new TxtInputParser();
+            var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
+            exePath = exePath.Take(exePath.Length - 4).ToArray();
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\txtInput8.txt");
+            using FileStream stream = new FileStream(path, FileMode.Open);
+            var result = parser.GetResult(stream);
+            Assert.IsTrue(result.TimeSchedule.LessonStarts.Count() == 0);
+        }
+
+        [Test]
+        public void NotEnoughMainArgumentsTest2()
+        {
+            var parser = new TxtInputParser();
+            var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
+            exePath = exePath.Take(exePath.Length - 4).ToArray();
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\txtInput9.txt");
+            using FileStream stream = new FileStream(path, FileMode.Open);
+            var result = parser.GetResult(stream);
+            Assert.IsTrue(result.TimeSchedule.LessonStarts.Count() == 0);
+        }
+
+        [Test]
+        public void IncorrectExtraArgumentTest()
+        {
+            var parser = new TxtInputParser();
+            var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
+            exePath = exePath.Take(exePath.Length - 4).ToArray();
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\txtInput10.txt");
+            using FileStream stream = new FileStream(path, FileMode.Open);
+            var result = parser.GetResult(stream);
+            Assert.IsTrue(result.TimeSchedule.LessonStarts.Count() == 0);
+        }
+
+        [Test]
+        public void IncorrectFourthMainArgumentTest()
+        {
+            var parser = new TxtInputParser();
+            var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
+            exePath = exePath.Take(exePath.Length - 4).ToArray();
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\txtInput11.txt");
+            using FileStream stream = new FileStream(path, FileMode.Open);
+            var result = parser.GetResult(stream);
+            Assert.IsTrue(result.TimeSchedule.LessonStarts.Count() == 0);
+        }
+
+        [Test]
+        public void IncorrectThirdMainArgumentTest()
+        {
+            var parser = new TxtInputParser();
+            var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
+            exePath = exePath.Take(exePath.Length - 4).ToArray();
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\txtInput12.txt");
+            using FileStream stream = new FileStream(path, FileMode.Open);
+            var result = parser.GetResult(stream);
+            Assert.IsTrue(result.TimeSchedule.LessonStarts.Count() == 0);
+        }
+
+        [Test]
+        public void IncorrectSecondMainArgumentTest()
+        {
+            var parser = new TxtInputParser();
+            var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
+            exePath = exePath.Take(exePath.Length - 4).ToArray();
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\txtInput13.txt");
+            using FileStream stream = new FileStream(path, FileMode.Open);
+            var result = parser.GetResult(stream);
+            Assert.IsTrue(result.TimeSchedule.LessonStarts.Count() == 0);
+        }
+
+        [Test]
+        public void IncorrectFirstMainArgumentTest()
+        {
+            var parser = new TxtInputParser();
+            var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
+            exePath = exePath.Take(exePath.Length - 4).ToArray();
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\txtInput14.txt");
+            using FileStream stream = new FileStream(path, FileMode.Open);
+            var result = parser.GetResult(stream);
+            Assert.IsTrue(result.TimeSchedule.LessonStarts.Count() == 0);
+        }
+
+        [Test]
+        public void SuperfluousExtraArgumentTest()
+        {
+            var parser = new TxtInputParser();
+            var exePath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");
+            exePath = exePath.Take(exePath.Length - 4).ToArray();
+            var path = Path.Combine(string.Join("\\", exePath) + "\\", @"TestParsers\txtInput15.txt");
+            using FileStream stream = new FileStream(path, FileMode.Open);
+            var result = parser.GetResult(stream);
+            Assert.IsTrue(result.TimeSchedule.LessonStarts.Count() == 0);
+        }
     }
 }

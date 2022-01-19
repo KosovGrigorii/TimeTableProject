@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using ExcelDataReader;
 using Infrastructure;
-using Microsoft.AspNetCore.Http;
 using TimetableApplication;
 using System.IO;
 

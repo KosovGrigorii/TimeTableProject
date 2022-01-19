@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="TimetableApplication.FilterNamesGetter" Collapsed="true">
+    <Position X="3.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAABAA=</HashCode>
+      <FileName>App\FiltersPage\FilterNamesGetter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TimetableApplication.FiltersPageInterface" Collapsed="true">
+    <Position X="5.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAABAAAAgAAAAAABAAAAAQAEAAAAgA=</HashCode>
+      <FileName>App\FiltersPage\FiltersPageInterface.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TimetableApplication.TimetableTaskLauncher" Collapsed="true">
+    <Position X="7" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIABAAAAABEAgAAAAAEAAAAAAAACAAAAAAQAASBAA=</HashCode>
+      <FileName>App\FiltersPage\TimetableTaskLauncher.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TimetableApplication.InputRecipient" Collapsed="true">
+    <Position X="7" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABEAgAAAAAACAAAAAAACAAAAAAAAAQBAA=</HashCode>
+      <FileName>App\MainPage\InputRecipient.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TimetableApplication.OutputExecutor" Collapsed="true">
+    <Position X="3.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAAAAAAgAAAAAAAAAAAAQCCAAAAAAAAAAAAA=</HashCode>
+      <FileName>App\OutputPage\OutputExecutor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TimetableApplication.TimetableResultsInterface" Collapsed="true">
+    <Position X="5.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAABAAAAAAAAAAACAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>App\OutputPage\TimetableResultsInterface.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TimetableApplication.OutputConverter" Collapsed="true">
+    <Position X="9.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Output\OutputConverter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TimetableApplication.TimeSlotExtension" Collapsed="true">
+    <Position X="11" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Output\OutputConverter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TimetableApplication.OutputFormatterTests" Collapsed="true">
+    <Position X="11" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAQAAAAAADAAAAAAAEBBAAAAA=</HashCode>
+      <FileName>Output\OutputFormatterTests.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TimetableApplication.OutputProvider" Collapsed="true">
+    <Position X="12.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAABAAAAAAAAAAAAAEAAAQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Output\OutputProvider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TimetableApplication.PdfOutputFormatter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAACAAAAAAQAAAAAAAAAAEAAAAAAAAA=</HashCode>
+      <FileName>Output\PdfOutputFormatter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TimetableApplication.XlsxOutputFormatter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAACAAAAAAQAAAAAAAAAAEAAAAAAAAA=</HashCode>
+      <FileName>Output\XlsxOutputFormatter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
