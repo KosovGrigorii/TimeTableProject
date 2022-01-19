@@ -3,7 +3,8 @@ using System.Linq;
 
 namespace Infrastructure
 {
-    public class MySQLWrapper<TKey, TValue> : IDatabaseWrapper<TKey, TValue> where TValue : DatabaseEntity<TKey>
+    public class MySQLWrapper<TKey, TValue> : 
+        IDatabaseWrapper<TKey, TValue> where TValue : DatabaseEntity<TKey>
     {
         private readonly MySQLContext<TKey, TValue> context;
 

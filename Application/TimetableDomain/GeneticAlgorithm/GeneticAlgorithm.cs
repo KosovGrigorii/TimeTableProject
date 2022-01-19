@@ -6,7 +6,8 @@ using Infrastructure;
 
 namespace TimetableDomain
 {
-    public class GeneticAlgorithm : IImplementation<AlgoritmInput, IEnumerable<TimeSlot>>
+    public class GeneticAlgorithm : 
+        IImplementation<AlgoritmInput, IEnumerable<TimeSlot>>
     {
         public string Name => "Genetic";
         private readonly EliteSelection eliteSelection;
@@ -18,12 +19,9 @@ namespace TimetableDomain
             this.fitnessFunction = fitnessFunction;
         }
         
-        public IEnumerable<TimeSlot> GetResult(AlgoritmInput parameters)
-        {
-            return GetTimetable(parameters);
-        }
+        public IEnumerable<TimeSlot> GetResult(AlgoritmInput parameters) => GetTimetable(parameters);
 
-        private IEnumerable<TimeSlot> GetTimetable(AlgoritmInput input)
+            private IEnumerable<TimeSlot> GetTimetable(AlgoritmInput input)
         {
             fitnessFunction.SetTeachersFilters(input.TeacherFilters);
             
