@@ -54,4 +54,4 @@ jobs:
           app-name: 'TimeTableProject'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_76E0D014F6BA448EAF3C1AD3706253AB }}
-          package: .
+          package: '.'
